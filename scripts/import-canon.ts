@@ -261,7 +261,7 @@ async function main() {
       score: Number(row["score"]),
       match_type: cellStr(row["match_type"]),
       shared_lane: cellStr(row["shared_lane"]) || null,
-      headline_overlap: cellStr(row["headline_overlap"]) || null,
+      headline_overlap: null,
       why_copy: cellStr(row["why_copy"]),
     }));
 

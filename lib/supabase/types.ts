@@ -65,8 +65,38 @@ export type Database = {
       daily_answers: { Row: DailyAnswerRow; Insert: Omit<DailyAnswerRow, "id">; Update: Partial<DailyAnswerRow> };
       connection_pairs: { Row: ConnectionPairRow; Insert: ConnectionPairRow; Update: Partial<ConnectionPairRow> };
       connection_roster: { Row: ConnectionRosterRow; Insert: ConnectionRosterRow; Update: Partial<ConnectionRosterRow> };
+      home_news: { Row: HomeNewsRow; Insert: Omit<HomeNewsRow, "id">; Update: Partial<HomeNewsRow> };
+      home_shows: { Row: HomeShowRow; Insert: Omit<HomeShowRow, "id">; Update: Partial<HomeShowRow> };
+      wrapped_stories: { Row: WrappedStoryRow; Insert: WrappedStoryRow; Update: Partial<WrappedStoryRow> };
     };
   };
+};
+
+export type HomeNewsRow = {
+  id: string;
+  profile_id: string;
+  sort_order: number;
+  art_url: string;
+  source_label: string;
+  time_label: string;
+  headline: string;
+};
+
+export type HomeShowRow = {
+  id: string;
+  profile_id: string;
+  sort_order: number;
+  name: string;
+  venue: string;
+  when_label: string;
+  tag: string;
+  tag_style: "green" | "orange";
+  art_url: string;
+};
+
+export type WrappedStoryRow = {
+  profile_id: string;
+  content: Record<string, unknown>;
 };
 
 export type CanonBundle = {

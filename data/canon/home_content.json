@@ -1,0 +1,998 @@
+{
+  "exported_at": "2026-06-05T16:09:18.737Z",
+  "source": "components/HomeScreen.tsx",
+  "news": {
+    "jordan": [
+      {
+        "art": "/covers/drake-iceman-coverart.jpeg",
+        "src": "Breaking",
+        "when": "1h",
+        "head": "Drake dropped a 43-track, 3-album trifecta. Campus is still processing."
+      },
+      {
+        "art": "/artists/keinemusik-spotify-propic.jpeg",
+        "src": "Ligo Radar",
+        "when": "3h",
+        "head": "Keinemusik just added a DC date \u2014 Echostage, two nights"
+      },
+      {
+        "art": "/covers/futuremixtapepluto-coverart.jpeg",
+        "src": "Campus chart",
+        "when": "5h",
+        "head": "Future's surprise loosie is already #1 at Georgetown"
+      },
+      {
+        "art": "/covers/ANOTR-onatrip-coverart.jpeg",
+        "src": "Ligo Radar",
+        "when": "1d",
+        "head": "ANOTR is the most-added artist on campus this week"
+      },
+      {
+        "art": "/artists/prospa-profile.jpeg",
+        "src": "Pitchfork",
+        "when": "2d",
+        "head": "Prospa teased a B-side. Georgetown is already arguing."
+      }
+    ],
+    "alessia": [
+      {
+        "art": "/covers/lanadelreyultraviolence-coverart.jpeg",
+        "src": "Rumor",
+        "when": "2h",
+        "head": "Lana Del Rey spotted recording in London studio."
+      },
+      {
+        "art": "/covers/adamport-planet9-coverart.jpeg",
+        "src": "Tour",
+        "when": "4h",
+        "head": "Adam Port announces pop-up set in D.C. this Friday."
+      },
+      {
+        "art": "/artists/theweekndprofile.jpeg",
+        "src": "Breaking",
+        "when": "6h",
+        "head": "The Weeknd teases final chapter of his trilogy."
+      },
+      {
+        "art": "/artists/peggygou-profile.jpeg",
+        "src": "Fashion",
+        "when": "14h",
+        "head": "Peggy Gou launches new streetwear collaboration."
+      },
+      {
+        "art": "/artists/chrisstussy-profile.jpeg",
+        "src": "Ligo Radar",
+        "when": "1d",
+        "head": "Chris Stussy tracks are trending on campus tonight."
+      }
+    ],
+    "charlotte": [
+      {
+        "art": "/covers/tswift-1989-coverart.jpeg",
+        "src": "Breaking",
+        "when": "1h",
+        "head": "Taylor Swift announced a surprise acoustic set. Group chats are panicking."
+      },
+      {
+        "art": "/covers/sabrinashortnsweet-coverart.jpeg",
+        "src": "Ligo Radar",
+        "when": "3h",
+        "head": "Sabrina Carpenter is trending at Georgetown after last night."
+      },
+      {
+        "art": "/covers/szasos-coverart.jpeg",
+        "src": "Campus chart",
+        "when": "5h",
+        "head": "\"Snooze\" re-entered the top 10 on campus this morning."
+      },
+      {
+        "art": "/covers/frankocean-blonde.jpeg",
+        "src": "Ligo Radar",
+        "when": "1d",
+        "head": "Frank Ocean rumors are circulating again. Don't get your hopes up."
+      },
+      {
+        "art": "/artists/beyonce-profile.jpeg",
+        "src": "Pitchfork",
+        "when": "2d",
+        "head": "Beyonc\u00e9 Renaissance visuals teased (again). We're still waiting."
+      }
+    ],
+    "cole": [
+      {
+        "art": "/artists/travisscott-profile.jpeg",
+        "src": "Tour",
+        "when": "1h",
+        "head": "Travis Scott announced 4 new dates for the Utopia tour."
+      },
+      {
+        "art": "/covers/futurewedonttrustyou-coverart.jpeg",
+        "src": "Campus chart",
+        "when": "4h",
+        "head": "Future's WE DON'T TRUST YOU hit #1 in your network."
+      },
+      {
+        "art": "/covers/zachbryanamericanheartbreak-coverart.jpeg",
+        "src": "Ligo Radar",
+        "when": "6h",
+        "head": "3 of your friends saved Something in the Orange."
+      },
+      {
+        "art": "/artists/drake-profile.jpeg",
+        "src": "Breaking",
+        "when": "8h",
+        "head": "Drake dropped a new single, Search & Rescue."
+      },
+      {
+        "art": "/covers/morganwallenonethingatatime-coverart.jpeg",
+        "src": "Campus chart",
+        "when": "1d",
+        "head": "Morgan Wallen's Last Night is trending at Georgetown."
+      }
+    ],
+    "sofia": [
+      {
+        "art": "/covers/drake-iceman-coverart.jpeg",
+        "src": "Breaking",
+        "when": "1h",
+        "head": "Drake dropped a 43-track, 3-album trifecta. Campus is still processing."
+      },
+      {
+        "art": "/artists/keinemusik-spotify-propic.jpeg",
+        "src": "Ligo Radar",
+        "when": "3h",
+        "head": "Keinemusik just added a DC date \u2014 Echostage, two nights"
+      },
+      {
+        "art": "/covers/futuremixtapepluto-coverart.jpeg",
+        "src": "Campus chart",
+        "when": "5h",
+        "head": "Future's surprise loosie is already #1 at Georgetown"
+      },
+      {
+        "art": "/covers/ANOTR-onatrip-coverart.jpeg",
+        "src": "Ligo Radar",
+        "when": "1d",
+        "head": "ANOTR is the most-added artist on campus this week"
+      },
+      {
+        "art": "/artists/prospa-profile.jpeg",
+        "src": "Pitchfork",
+        "when": "2d",
+        "head": "Prospa teased a B-side. Georgetown is already arguing."
+      }
+    ],
+    "bennett": [
+      {
+        "art": "/covers/kencarsonagreatchaos-coverart.jpeg",
+        "src": "Tour",
+        "when": "1h",
+        "head": "Ken Carson adds D.C. stop to A Great Chaos tour."
+      },
+      {
+        "art": "/covers/wholelottared-coverart.jpeg",
+        "src": "Campus chart",
+        "when": "3h",
+        "head": "Playboi Carti dominates Georgetown pregame playlists."
+      },
+      {
+        "art": "/artists/gunnaprofile.jpeg",
+        "src": "Ligo Radar",
+        "when": "5h",
+        "head": "fukumean is trending up heading into the weekend."
+      },
+      {
+        "art": "/covers/destroylonelynsultra-coverart.jpeg",
+        "src": "Breaking",
+        "when": "12h",
+        "head": "Destroy Lonely teases NS+ (ULTRA) deluxe tracks."
+      },
+      {
+        "art": "/covers/chrislake-yuma-coverart.jpeg",
+        "src": "Ligo Radar",
+        "when": "1d",
+        "head": "Chris Lake at Echostage is officially sold out."
+      }
+    ],
+    "caroline": [
+      {
+        "art": "/covers/meganlucky-coverart.jpeg",
+        "src": "Tour",
+        "when": "1h",
+        "head": "Megan Moroney announces a second night at The Anthem."
+      },
+      {
+        "art": "/artists/zachbryan-profile.jpeg",
+        "src": "Ligo Radar",
+        "when": "3h",
+        "head": "Zach Bryan teased a new single on Instagram."
+      },
+      {
+        "art": "/covers/morganwallenonethingatatime-coverart.jpeg",
+        "src": "Campus chart",
+        "when": "5h",
+        "head": "\"Last Night\" is the #1 pregame song at Georgetown right now."
+      },
+      {
+        "art": "/artists/kaceymusgraves-profile.jpeg",
+        "src": "Breaking",
+        "when": "12h",
+        "head": "Kacey Musgraves dropped surprise acoustic tracks."
+      },
+      {
+        "art": "/covers/noahkahanstickseason-coverart.jpeg",
+        "src": "Pitchfork",
+        "when": "1d",
+        "head": "Noah Kahan named most-streamed folk artist of the semester."
+      }
+    ],
+    "maddie": [
+      {
+        "art": "/covers/brat-coverart.jpeg",
+        "src": "Tour",
+        "when": "1h",
+        "head": "Charli XCX announces Brat fall tour dates."
+      },
+      {
+        "art": "/artists/pinkpantheress-profile.jpeg",
+        "src": "Ligo Radar",
+        "when": "3h",
+        "head": "PinkPantheress surprise drops new snippet on TikTok."
+      },
+      {
+        "art": "/artists/tameimpala-profile.jpeg",
+        "src": "Campus chart",
+        "when": "5h",
+        "head": "Tame Impala rumors are circulating for a new album."
+      },
+      {
+        "art": "/artists/the1975-profile.jpeg",
+        "src": "Breaking",
+        "when": "12h",
+        "head": "The 1975's Matty Healy says something controversial again."
+      },
+      {
+        "art": "/artists/addisonrae-profile.jpeg",
+        "src": "Pitchfork",
+        "when": "1d",
+        "head": "Addison Rae redefines the pop landscape. Yes, really."
+      }
+    ],
+    "marcus": [
+      {
+        "art": "/artists/tameimpala-profile.jpeg",
+        "src": "Ligo Radar",
+        "when": "1h",
+        "head": "Tame Impala hints at an upcoming B-sides compilation."
+      },
+      {
+        "art": "/artists/MGMT-profile.jpeg",
+        "src": "Campus chart",
+        "when": "3h",
+        "head": "\"Electric Feel\" takes over the Georgetown late night aux."
+      },
+      {
+        "art": "/artists/freddiegibbs-profile.jpeg",
+        "src": "Tour",
+        "when": "5h",
+        "head": "Freddie Gibbs announces a surprise East Coast run."
+      },
+      {
+        "art": "/artists/MK-profile.jpeg",
+        "src": "Breaking",
+        "when": "12h",
+        "head": "MK drops a new house anthem perfect for the pregame."
+      },
+      {
+        "art": "/artists/fleetwoodmac-profike.jpeg",
+        "src": "Pitchfork",
+        "when": "1d",
+        "head": "Fleetwood Mac Rumours experiences a campus resurgence."
+      }
+    ]
+  },
+  "shows": {
+    "jordan": [
+      {
+        "name": "Drake \"Iceman\" listening party",
+        "venue": "Midnight Mug \u00b7 on campus",
+        "when": "Tonight 8:00",
+        "tag": "Free",
+        "tagCls": "green",
+        "art": "/covers/drake-iceman-coverart.jpeg"
+      },
+      {
+        "name": "Deep house basement set",
+        "venue": "Off campus",
+        "when": "Fri 9:30",
+        "tag": "$5",
+        "tagCls": "orange",
+        "art": "/artists/keinemusik-spotify-propic.jpeg"
+      }
+    ],
+    "alessia": [
+      {
+        "name": "Adam Port & Keinemusik Open Air",
+        "venue": "Echostage",
+        "when": "Fri 10:00",
+        "tag": "$40",
+        "tagCls": "orange",
+        "art": "/covers/adamport-planet9-coverart.jpeg"
+      },
+      {
+        "name": "Lana Del Rey Listening Party",
+        "venue": "The Tombs",
+        "when": "Sat 9:00",
+        "tag": "Free",
+        "tagCls": "green",
+        "art": "/covers/lanadelreyultraviolence-coverart.jpeg"
+      }
+    ],
+    "charlotte": [
+      {
+        "name": "Taylor Swift Eras Tour Watch Party",
+        "venue": "Leavey Center \u00b7 on campus",
+        "when": "Tonight 8:00",
+        "tag": "Free",
+        "tagCls": "green",
+        "art": "/covers/tswift-1989-coverart.jpeg"
+      },
+      {
+        "name": "Sabrina Carpenter pre-game",
+        "venue": "Off campus",
+        "when": "Fri 9:30",
+        "tag": "$5",
+        "tagCls": "orange",
+        "art": "/covers/sabrinashortnsweet-coverart.jpeg"
+      }
+    ],
+    "cole": [
+      {
+        "name": "Travis Scott Utopia Tour",
+        "venue": "Capital One Arena",
+        "when": "Thu 8:00",
+        "tag": "$120",
+        "tagCls": "orange",
+        "art": "/covers/travisscott-utopia.jpeg"
+      },
+      {
+        "name": "Morgan Wallen Tailgate",
+        "venue": "Off campus",
+        "when": "Sat 2:00",
+        "tag": "Free",
+        "tagCls": "green",
+        "art": "/covers/morganwallenonethingatatime-coverart.jpeg"
+      }
+    ],
+    "sofia": [
+      {
+        "name": "Drake \"Iceman\" listening party",
+        "venue": "Midnight Mug \u00b7 on campus",
+        "when": "Tonight 8:00",
+        "tag": "Free",
+        "tagCls": "green",
+        "art": "/covers/drake-iceman-coverart.jpeg"
+      },
+      {
+        "name": "Deep house basement set",
+        "venue": "Off campus",
+        "when": "Fri 9:30",
+        "tag": "$5",
+        "tagCls": "orange",
+        "art": "/artists/keinemusik-spotify-propic.jpeg"
+      }
+    ],
+    "bennett": [
+      {
+        "name": "Ken Carson Chaos Tour",
+        "venue": "The Anthem",
+        "when": "Sat 8:00",
+        "tag": "$65",
+        "tagCls": "orange",
+        "art": "/covers/kencarsonagreatchaos-coverart.jpeg"
+      },
+      {
+        "name": "Late Night House Set",
+        "venue": "Flash DC",
+        "when": "Sat 11:30",
+        "tag": "$20",
+        "tagCls": "orange",
+        "art": "/covers/chrislake-morebaby-coverart.jpeg"
+      }
+    ],
+    "caroline": [
+      {
+        "name": "Zach Bryan \"Quittin Time\" Tour",
+        "venue": "Nationals Park",
+        "when": "Fri 7:30",
+        "tag": "$95",
+        "tagCls": "orange",
+        "art": "/covers/zachbryangreatamericanbarscene-coverart.jpeg"
+      },
+      {
+        "name": "Country Singalong Night",
+        "venue": "The Tombs",
+        "when": "Sat 10:00",
+        "tag": "Free",
+        "tagCls": "green",
+        "art": "/covers/meganlucky-coverart.jpeg"
+      }
+    ],
+    "maddie": [
+      {
+        "name": "The Dare DJ Set",
+        "venue": "Flash DC",
+        "when": "Fri 11:00",
+        "tag": "$25",
+        "tagCls": "orange",
+        "art": "/artists/thedare-profile.jpeg"
+      },
+      {
+        "name": "Charli XCX Sweat Tour",
+        "venue": "The Anthem",
+        "when": "Sat 8:00",
+        "tag": "$80",
+        "tagCls": "orange",
+        "art": "/covers/brat-coverart.jpeg"
+      }
+    ],
+    "marcus": [
+      {
+        "name": "Tame Impala Listening Party",
+        "venue": "Leavey Center",
+        "when": "Tonight 9:00",
+        "tag": "Free",
+        "tagCls": "green",
+        "art": "/artists/tameimpala-profile.jpeg"
+      },
+      {
+        "name": "MK Deep House Basement",
+        "venue": "Off campus",
+        "when": "Fri 10:30",
+        "tag": "$10",
+        "tagCls": "orange",
+        "art": "/artists/MK-profile.jpeg"
+      }
+    ]
+  },
+  "wrapped": {
+    "maddie": {
+      "meshClass": "cyan-purple-mesh",
+      "starsColor": "#14B8A6",
+      "sealedText": "Six answers, three shows, twelve twins and one sign \u2014 no listening required.",
+      "theme": {
+        "horoscopeIconColor": "#14B8A6",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(20,184,166,0.15), transparent 62%)",
+        "slide2Eyebrow": "#A78BFA",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(167,139,250,0.20), transparent 62%)",
+        "slide3Eyebrow": "#A78BFA",
+        "slide3Borders": [
+          "#14B8A6",
+          "#A78BFA",
+          "#2DD4BF"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(20,184,166,0.15), transparent 62%)",
+        "slide4Eyebrow": "#14B8A6",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(167,139,250,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The Alt\nSocialite",
+        "subtitle": "Season of the pregame",
+        "text": "You make weird taste feel playable. Your week jumped from Charli to The 1975, proving you can be early without making it your entire personality. The people who matched you aren't a coincidence. Reach out before the week resets."
+      },
+      "slide2": {
+        "big": "6",
+        "unit": "answers",
+        "sub": "A perfect week \u2014 5-day streak, no skips.",
+        "cover": "/covers/brat-coverart.jpeg",
+        "song": "\"360\"",
+        "artist": "Charli XCX",
+        "blurb": "The ultimate alt-social anthem. 12 Hoyas matched the vibe."
+      },
+      "slide3": {
+        "big": "3",
+        "unit": "shows",
+        "sub": "You showed up for the scene.",
+        "events": [
+          "The Dare DJ Set",
+          "Charli XCX at The Anthem",
+          "Off-campus Basement"
+        ]
+      },
+      "slide4": {
+        "big": "12",
+        "unit": "answer twins",
+        "sub": "Your most-matched week yet.",
+        "twins": [
+          {
+            "i": "M",
+            "g": "linear-gradient(140deg,#3F3F46,#18181B)"
+          },
+          {
+            "i": "C",
+            "g": "linear-gradient(140deg,#FFB6C1,#FF69B4)"
+          },
+          {
+            "i": "S",
+            "g": "linear-gradient(140deg,#71C07F,#2F7D3F)"
+          }
+        ],
+        "twinsPlus": "+9"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Alt Socialite.",
+        "sub": "6 answers \u00b7 3 shows \u00b7 12 twins. Post it and see who answered like you."
+      }
+    },
+    "jordan": {
+      "meshClass": "deep-purple-mesh",
+      "starsColor": "#F5D783",
+      "sealedText": "{d.sealedText}",
+      "theme": {
+        "horoscopeIconColor": "#EA8CE1",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(138,43,226,0.15), transparent 62%)",
+        "slide2Eyebrow": "#D8B4E2",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(75,0,130,0.20), transparent 62%)",
+        "slide3Eyebrow": "#9D4EDD",
+        "slide3Borders": [
+          "#C77DFF",
+          "#9D4EDD",
+          "#7B2CBF"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(138,43,226,0.15), transparent 62%)",
+        "slide4Eyebrow": "#C77DFF",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(138,43,226,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The\nHypnotist",
+        "subtitle": "{d.slide1.subtitle}",
+        "text": "{d.slide1.text}"
+      },
+      "slide2": {
+        "big": "6",
+        "unit": "answers",
+        "sub": "A perfect week \u2014 5-day streak, no skips.",
+        "cover": "/covers/drake-iceman-coverart.jpeg",
+        "song": "\"Make Them Pay\"",
+        "artist": "Drake",
+        "blurb": "{d.slide2.blurb}"
+      },
+      "slide3": {
+        "big": "3",
+        "unit": "shows",
+        "sub": "You became a regular in the scene.",
+        "events": [
+          "Drake Listening Party",
+          "Echostage VIP",
+          "Off-campus Basement"
+        ]
+      },
+      "slide4": {
+        "big": "12",
+        "unit": "answer twins",
+        "sub": "Your most-matched week yet.",
+        "twins": [
+          {
+            "i": "A",
+            "g": "linear-gradient(140deg,#F5D783,#F97316)"
+          },
+          {
+            "i": "M",
+            "g": "linear-gradient(140deg,#3F3F46,#18181B)"
+          },
+          {
+            "i": "S",
+            "g": "linear-gradient(140deg,#9CA3AF,#4B5563)"
+          }
+        ],
+        "twinsPlus": "+9"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Hypnotist.",
+        "sub": "6 answers \u00b7 3 shows \u00b7 12 twins. Post it and see who answered like you."
+      }
+    },
+    "charlotte": {
+      "meshClass": "pink-silver-mesh",
+      "starsColor": "#FFB6C1",
+      "sealedText": "Six answers, two shows, twenty-four twins and one sign \u2014 no listening required.",
+      "theme": {
+        "horoscopeIconColor": "#FF69B4",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(255,105,180,0.15), transparent 62%)",
+        "slide2Eyebrow": "#FFB6C1",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(219,112,147,0.20), transparent 62%)",
+        "slide3Eyebrow": "#DB7093",
+        "slide3Borders": [
+          "#FF69B4",
+          "#DB7093",
+          "#FFB6C1"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(255,105,180,0.15), transparent 62%)",
+        "slide4Eyebrow": "#FF69B4",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(255,105,180,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The Main\nPop Girl",
+        "subtitle": "Season of the bridge",
+        "text": "You know all the lyrics and aren't afraid to scream them. Your taste this week was heavy on the pop anthems and heartbreak ballads. Reach out to your matches before the week resets."
+      },
+      "slide2": {
+        "big": "6",
+        "unit": "answers",
+        "sub": "A perfect week \u2014 5-day streak, no skips.",
+        "cover": "/covers/taylorswift-lover-coverart.jpeg",
+        "song": "\"Cruel Summer\"",
+        "artist": "Taylor Swift",
+        "blurb": "The ultimate summer anthem. 24 Hoyas matched the vibe."
+      },
+      "slide3": {
+        "big": "2",
+        "unit": "shows",
+        "sub": "You showed up for the main events.",
+        "events": [
+          "Eras Tour Watch Party",
+          "Sabrina Carpenter pre-game"
+        ]
+      },
+      "slide4": {
+        "big": "24",
+        "unit": "answer twins",
+        "sub": "Your most-matched week yet.",
+        "twins": [
+          {
+            "i": "E",
+            "g": "linear-gradient(140deg,#FFB6C1,#FF69B4)"
+          },
+          {
+            "i": "L",
+            "g": "linear-gradient(140deg,#FFDAB9,#FFA07A)"
+          },
+          {
+            "i": "K",
+            "g": "linear-gradient(140deg,#E6E6FA,#D8BFD8)"
+          }
+        ],
+        "twinsPlus": "+21"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Main Pop Girl.",
+        "sub": "6 answers \u00b7 2 shows \u00b7 24 twins. Post it and see who answered like you."
+      }
+    },
+    "cole": {
+      "meshClass": "deep-purple-mesh",
+      "starsColor": "#60A5FA",
+      "sealedText": "A tailgate, three matches, and the auxiliary cord fully secured.",
+      "theme": {
+        "horoscopeIconColor": "#3B82F6",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(59,130,246,0.15), transparent 62%)",
+        "slide2Eyebrow": "#93C5FD",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(37,99,235,0.20), transparent 62%)",
+        "slide3Eyebrow": "#60A5FA",
+        "slide3Borders": [
+          "#93C5FD",
+          "#60A5FA",
+          "#3B82F6"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(59,130,246,0.15), transparent 62%)",
+        "slide4Eyebrow": "#60A5FA",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(59,130,246,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The\nSocial Aux",
+        "subtitle": "88% more mainstream",
+        "text": "You didn't overthink it. This week, your picks were crowd-pleasers built for a room full of people. You kept the aux cord tightly guarded."
+      },
+      "slide2": {
+        "big": "5",
+        "unit": "answers",
+        "sub": "Consistently on aux.",
+        "cover": "/covers/drakepassionfruitandmorelife-coverart.jpeg",
+        "song": "\"Passionfruit\"",
+        "artist": "Drake",
+        "blurb": "A timeless classic. 18 Hoyas were on the same wavelength."
+      },
+      "slide3": {
+        "big": "2",
+        "unit": "shows",
+        "sub": "You pulled up to the big ones.",
+        "events": [
+          "Travis Scott Utopia Tour",
+          "Morgan Wallen Tailgate"
+        ]
+      },
+      "slide4": {
+        "big": "18",
+        "unit": "answer twins",
+        "sub": "You share taste with the campus.",
+        "twins": [
+          {
+            "i": "B",
+            "g": "linear-gradient(140deg,#93C5FD,#60A5FA)"
+          },
+          {
+            "i": "T",
+            "g": "linear-gradient(140deg,#60A5FA,#3B82F6)"
+          },
+          {
+            "i": "J",
+            "g": "linear-gradient(140deg,#3B82F6,#2563EB)"
+          }
+        ],
+        "twinsPlus": "+15"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Social Aux.",
+        "sub": "5 answers \u00b7 2 shows \u00b7 18 twins. Post it and see who answered like you."
+      }
+    },
+    "caroline": {
+      "meshClass": "orange-yellow-mesh",
+      "starsColor": "#F5D783",
+      "sealedText": "Tailgate anthems, five answers, sixteen twins, and a whole lot of heartbreak.",
+      "theme": {
+        "horoscopeIconColor": "#F5D783",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(245,215,131,0.15), transparent 62%)",
+        "slide2Eyebrow": "#F5D783",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(249,115,22,0.20), transparent 62%)",
+        "slide3Eyebrow": "#F97316",
+        "slide3Borders": [
+          "#F5D783",
+          "#F97316",
+          "#C2410C"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(245,215,131,0.15), transparent 62%)",
+        "slide4Eyebrow": "#F5D783",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(245,215,131,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The Southern\nRomantic",
+        "subtitle": "72% more mainstream",
+        "text": "You didn't overthink it. This week, your picks were tailgate anthems and soft country after midnight. You kept the aux cord tightly guarded."
+      },
+      "slide2": {
+        "big": "5",
+        "unit": "answers",
+        "sub": "Consistently country.",
+        "cover": "/covers/meganlucky-coverart.jpeg",
+        "song": "\"Tennessee Orange\"",
+        "artist": "Megan Moroney",
+        "blurb": "A modern country classic. 16 Hoyas were on the same wavelength."
+      },
+      "slide3": {
+        "big": "2",
+        "unit": "shows",
+        "sub": "You pulled up to the big ones.",
+        "events": [
+          "Zach Bryan Tour",
+          "Country Singalong Night"
+        ]
+      },
+      "slide4": {
+        "big": "16",
+        "unit": "answer twins",
+        "sub": "You share taste with the campus.",
+        "twins": [
+          {
+            "i": "C",
+            "g": "linear-gradient(140deg,#F5D783,#F97316)"
+          },
+          {
+            "i": "M",
+            "g": "linear-gradient(140deg,#F97316,#C2410C)"
+          },
+          {
+            "i": "S",
+            "g": "linear-gradient(140deg,#D97706,#9A3412)"
+          }
+        ],
+        "twinsPlus": "+13"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Southern Romantic.",
+        "sub": "5 answers \u00b7 2 shows \u00b7 16 twins. Post it and see who answered like you."
+      }
+    },
+    "bennett": {
+      "meshClass": "orange-yellow-mesh",
+      "starsColor": "#EF4444",
+      "sealedText": "Rage anthems, low-end bass, and an absolutely menacing presence on the aux.",
+      "theme": {
+        "horoscopeIconColor": "#EF4444",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(239,68,68,0.15), transparent 62%)",
+        "slide2Eyebrow": "#FCA5A5",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(239,68,68,0.20), transparent 62%)",
+        "slide3Eyebrow": "#EF4444",
+        "slide3Borders": [
+          "#FCA5A5",
+          "#EF4444",
+          "#B91C1C"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(239,68,68,0.15), transparent 62%)",
+        "slide4Eyebrow": "#FCA5A5",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(239,68,68,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The Pregame\nMenace",
+        "subtitle": "61% more mainstream",
+        "text": "You didn't overthink it. This week, your picks were pure energy and rage anthems. You kept the aux cord tightly guarded."
+      },
+      "slide2": {
+        "big": "6",
+        "unit": "answers",
+        "sub": "Consistently chaotic.",
+        "cover": "/covers/kencarsonagreatchaos-coverart.jpeg",
+        "song": "\"Yale\"",
+        "artist": "Ken Carson",
+        "blurb": "A modern trap classic. 14 Hoyas were on the same wavelength."
+      },
+      "slide3": {
+        "big": "2",
+        "unit": "shows",
+        "sub": "You pulled up to the big ones.",
+        "events": [
+          "Ken Carson Chaos Tour",
+          "Late Night House Set"
+        ]
+      },
+      "slide4": {
+        "big": "14",
+        "unit": "answer twins",
+        "sub": "You share taste with the campus.",
+        "twins": [
+          {
+            "i": "R",
+            "g": "linear-gradient(140deg,#FCA5A5,#EF4444)"
+          },
+          {
+            "i": "D",
+            "g": "linear-gradient(140deg,#EF4444,#B91C1C)"
+          },
+          {
+            "i": "T",
+            "g": "linear-gradient(140deg,#DC2626,#991B1B)"
+          }
+        ],
+        "twinsPlus": "+11"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Pregame Menace.",
+        "sub": "6 answers \u00b7 2 shows \u00b7 14 twins. Post it and see who answered like you."
+      }
+    },
+    "marcus": {
+      "meshClass": "green-blue-mesh",
+      "starsColor": "#10B981",
+      "sealedText": "You bridge every scene. From organic house to classic rock, you brought everyone together this week.",
+      "theme": {
+        "horoscopeIconColor": "#10B981",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(16,185,129,0.15), transparent 62%)",
+        "slide2Eyebrow": "#34D399",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(5,150,105,0.20), transparent 62%)",
+        "slide3Eyebrow": "#10B981",
+        "slide3Borders": [
+          "#34D399",
+          "#10B981",
+          "#059669"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(16,185,129,0.15), transparent 62%)",
+        "slide4Eyebrow": "#34D399",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(16,185,129,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The Deep Cut\nGeneralist",
+        "subtitle": "Top 38% more niche",
+        "text": "You don't share one lane with everyone; you share a different lane with almost everyone. This week, you bridged the gap between organic house, psych-indie, and underground rap."
+      },
+      "slide2": {
+        "big": "5",
+        "unit": "answers",
+        "sub": "Connecting the scenes.",
+        "cover": "/covers/oracularspectacular-coverart.jpeg",
+        "song": "\"Electric Feel\"",
+        "artist": "MGMT",
+        "blurb": "A true crossover anthem. 12 Hoyas were on the exact same wavelength."
+      },
+      "slide3": {
+        "big": "2",
+        "unit": "shows",
+        "sub": "You pulled up to the eclectic ones.",
+        "events": [
+          "Tame Impala Listening Party",
+          "MK Deep House Basement"
+        ]
+      },
+      "slide4": {
+        "big": "12",
+        "unit": "answer twins",
+        "sub": "Maddie, Alessia, and Jordan felt that.",
+        "twins": [
+          {
+            "i": "M",
+            "g": "linear-gradient(140deg,#F97316,#EA8CE1)"
+          },
+          {
+            "i": "A",
+            "g": "linear-gradient(140deg,#EA8CE1,#A13D99)"
+          },
+          {
+            "i": "J",
+            "g": "linear-gradient(140deg,#6C5CE0,#3B82F6)"
+          }
+        ],
+        "twinsPlus": "+9"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Deep Cut Generalist.",
+        "sub": "5 answers \u00b7 2 shows \u00b7 12 twins. Post it and see who answered like you."
+      }
+    },
+    "alessia": {
+      "meshClass": "pink-purple-mesh",
+      "starsColor": "#EA8CE1",
+      "sealedText": "A perfect split between the floor and the feelings. You peak then melt.",
+      "theme": {
+        "horoscopeIconColor": "#EA8CE1",
+        "slide2Glow": "radial-gradient(460px 460px at 18% 14%, rgba(234,140,225,0.15), transparent 62%)",
+        "slide2Eyebrow": "#F9A8D4",
+        "slide3Glow": "radial-gradient(460px 460px at 82% 16%, rgba(234,140,225,0.20), transparent 62%)",
+        "slide3Eyebrow": "#EA8CE1",
+        "slide3Borders": [
+          "#F9A8D4",
+          "#EA8CE1",
+          "#BE185D"
+        ],
+        "slide4Glow": "radial-gradient(460px 460px at 20% 18%, rgba(234,140,225,0.15), transparent 62%)",
+        "slide4Eyebrow": "#F9A8D4",
+        "slide5Glow": "radial-gradient(460px 460px at 50% 18%, rgba(234,140,225,0.15), transparent 62%)"
+      },
+      "slide1": {
+        "title": "The\nAfterglow",
+        "subtitle": "31% more mainstream",
+        "text": "You needed the party to be loud, but the afters to be devastating. Your picks were built for emotional afters."
+      },
+      "slide2": {
+        "big": "7",
+        "unit": "answers",
+        "sub": "Always setting the mood.",
+        "cover": "/covers/lanadelreyultraviolence-coverart.jpeg",
+        "song": "\"Brooklyn Baby\"",
+        "artist": "Lana Del Rey",
+        "blurb": "The ultimate mood shift. 8 others shared this feeling tonight."
+      },
+      "slide3": {
+        "big": "2",
+        "unit": "shows",
+        "sub": "You showed up for the deep cuts.",
+        "events": [
+          "Adam Port Open Air",
+          "Lana Del Rey Listening Party"
+        ]
+      },
+      "slide4": {
+        "big": "8",
+        "unit": "answer twins",
+        "sub": "You share taste with the campus.",
+        "twins": [
+          {
+            "i": "J",
+            "g": "linear-gradient(140deg,#F97316,#EA8CE1)"
+          },
+          {
+            "i": "S",
+            "g": "linear-gradient(140deg,#71C07F,#2F7D3F)"
+          },
+          {
+            "i": "M",
+            "g": "linear-gradient(140deg,#EA8CE1,#A13D99)"
+          }
+        ],
+        "twinsPlus": "+5"
+      },
+      "slide5": {
+        "title": "That's your week,\nThe Afterglow.",
+        "sub": "7 answers \u00b7 2 shows \u00b7 8 twins. Post it and see who answered like you."
+      }
+    }
+  }
+}

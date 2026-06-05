@@ -36,7 +36,7 @@ export const SHARED_PICK_RULES: Record<string, SharedPickRule> = {
     cardLabel: "You both picked Morgan Wallen",
     type: "exact",
     date: "Thu, May 21",
-    detail: "they both named Morgan Wallen",
+    detail: "You both named Morgan Wallen",
   },
   "caroline+charlotte": {
     show: true,
@@ -44,7 +44,7 @@ export const SHARED_PICK_RULES: Record<string, SharedPickRule> = {
     cardLabel: "You both picked Taylor Swift",
     type: "exact",
     date: "Sun, May 17",
-    detail: "they both named Taylor Swift",
+    detail: "You both named Taylor Swift",
   },
   "charlotte+cole": {
     show: true,

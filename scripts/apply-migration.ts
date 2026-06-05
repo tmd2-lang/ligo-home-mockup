@@ -45,15 +45,23 @@ function getDatabaseUrl(): string {
 
 async function main() {
   loadEnvLocal();
-  const sqlPath = path.join(process.cwd(), "supabase/migrations/001_initial_schema.sql");
-  const sql = fs.readFileSync(sqlPath, "utf8");
+  const migrationsDir = path.join(process.cwd(), "supabase/migrations");
+  const files = fs
+    .readdirSync(migrationsDir)
+    .filter((f) => f.endsWith(".sql"))
+    .sort();
+
   const client = new pg.Client({ connectionString: getDatabaseUrl(), ssl: { rejectUnauthorized: false } });
 
   try {
     await client.connect();
-    console.log("Connected — applying migration...");
-    await client.query(sql);
-    console.log("Migration applied successfully.");
+    console.log("Connected — applying migrations...");
+    for (const file of files) {
+      const sql = fs.readFileSync(path.join(migrationsDir, file), "utf8");
+      console.log(`  → ${file}`);
+      await client.query(sql);
+    }
+    console.log("Migrations applied successfully.");
   } finally {
     await client.end();
   }

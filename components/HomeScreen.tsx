@@ -28,6 +28,7 @@ import { searchMarcusCatalog } from "@/lib/marcus-catalog";
 import { USERS } from "@/lib/users";
 import { useConnectionNight } from "@/hooks/useConnectionNight";
 import { useDailyReveal } from "@/hooks/useDailyReveal";
+import { useHomeContent } from "@/hooks/useHomeContent";
 
 // useState/useEffect aliases the bundle used per-file
 const useStateS = useState, useStateN = useState, useStateC = useState, useStateW = useState, useStateM = useState;
@@ -80,73 +81,8 @@ Icon.Eye = (p) => (
 );
 
 // ── "Your artists this week" — horizontal music-news strip ──
-const NEWS = [
-  { art: '/covers/drake-iceman-coverart.jpeg', src: 'Breaking', when: '1h', head: 'Drake dropped a 43-track, 3-album trifecta. Campus is still processing.' },
-  { art: '/artists/keinemusik-spotify-propic.jpeg', src: 'Ligo Radar', when: '3h', head: 'Keinemusik just added a DC date — Echostage, two nights' },
-  { art: '/covers/futuremixtapepluto-coverart.jpeg', src: 'Campus chart', when: '5h', head: "Future's surprise loosie is already #1 at Georgetown" },
-  { art: '/covers/ANOTR-onatrip-coverart.jpeg', src: 'Ligo Radar', when: '1d', head: 'ANOTR is the most-added artist on campus this week' },
-  { art: '/artists/prospa-profile.jpeg', src: 'Pitchfork', when: '2d', head: 'Prospa teased a B-side. Georgetown is already arguing.' },
-];
-
-const CHARLOTTE_NEWS = [
-  { art: '/covers/tswift-1989-coverart.jpeg', src: 'Breaking', when: '1h', head: 'Taylor Swift announced a surprise acoustic set. Group chats are panicking.' },
-  { art: '/covers/sabrinashortnsweet-coverart.jpeg', src: 'Ligo Radar', when: '3h', head: 'Sabrina Carpenter is trending at Georgetown after last night.' },
-  { art: '/covers/szasos-coverart.jpeg', src: 'Campus chart', when: '5h', head: '"Snooze" re-entered the top 10 on campus this morning.' },
-  { art: '/covers/frankocean-blonde.jpeg', src: 'Ligo Radar', when: '1d', head: 'Frank Ocean rumors are circulating again. Don\'t get your hopes up.' },
-  { art: '/artists/beyonce-profile.jpeg', src: 'Pitchfork', when: '2d', head: 'Beyoncé Renaissance visuals teased (again). We\'re still waiting.' },
-];
-
-const COLE_NEWS = [
-  { art: '/artists/travisscott-profile.jpeg', src: 'Tour', when: '1h', head: 'Travis Scott announced 4 new dates for the Utopia tour.' },
-  { art: '/covers/futurewedonttrustyou-coverart.jpeg', src: 'Campus chart', when: '4h', head: "Future's WE DON'T TRUST YOU hit #1 in your network." },
-  { art: '/covers/zachbryanamericanheartbreak-coverart.jpeg', src: 'Ligo Radar', when: '6h', head: '3 of your friends saved Something in the Orange.' },
-  { art: '/artists/drake-profile.jpeg', src: 'Breaking', when: '8h', head: 'Drake dropped a new single, Search & Rescue.' },
-  { art: '/covers/morganwallenonethingatatime-coverart.jpeg', src: 'Campus chart', when: '1d', head: "Morgan Wallen's Last Night is trending at Georgetown." },
-];
-
-const CAROLINE_NEWS = [
-  { art: '/covers/meganlucky-coverart.jpeg', src: 'Tour', when: '1h', head: 'Megan Moroney announces a second night at The Anthem.' },
-  { art: '/artists/zachbryan-profile.jpeg', src: 'Ligo Radar', when: '3h', head: 'Zach Bryan teased a new single on Instagram.' },
-  { art: '/covers/morganwallenonethingatatime-coverart.jpeg', src: 'Campus chart', when: '5h', head: '"Last Night" is the #1 pregame song at Georgetown right now.' },
-  { art: '/artists/kaceymusgraves-profile.jpeg', src: 'Breaking', when: '12h', head: 'Kacey Musgraves dropped surprise acoustic tracks.' },
-  { art: '/covers/noahkahanstickseason-coverart.jpeg', src: 'Pitchfork', when: '1d', head: 'Noah Kahan named most-streamed folk artist of the semester.' },
-];
-
-const MADDIE_NEWS = [
-  { art: '/covers/brat-coverart.jpeg', src: 'Tour', when: '1h', head: 'Charli XCX announces Brat fall tour dates.' },
-  { art: '/artists/pinkpantheress-profile.jpeg', src: 'Ligo Radar', when: '3h', head: 'PinkPantheress surprise drops new snippet on TikTok.' },
-  { art: '/artists/tameimpala-profile.jpeg', src: 'Campus chart', when: '5h', head: 'Tame Impala rumors are circulating for a new album.' },
-  { art: '/artists/the1975-profile.jpeg', src: 'Breaking', when: '12h', head: 'The 1975\'s Matty Healy says something controversial again.' },
-  { art: '/artists/addisonrae-profile.jpeg', src: 'Pitchfork', when: '1d', head: 'Addison Rae redefines the pop landscape. Yes, really.' },
-];
-
-const BENNETT_NEWS = [
-  { art: '/covers/kencarsonagreatchaos-coverart.jpeg', src: 'Tour', when: '1h', head: 'Ken Carson adds D.C. stop to A Great Chaos tour.' },
-  { art: '/covers/wholelottared-coverart.jpeg', src: 'Campus chart', when: '3h', head: 'Playboi Carti dominates Georgetown pregame playlists.' },
-  { art: '/artists/gunnaprofile.jpeg', src: 'Ligo Radar', when: '5h', head: 'fukumean is trending up heading into the weekend.' },
-  { art: '/covers/destroylonelynsultra-coverart.jpeg', src: 'Breaking', when: '12h', head: 'Destroy Lonely teases NS+ (ULTRA) deluxe tracks.' },
-  { art: '/covers/chrislake-yuma-coverart.jpeg', src: 'Ligo Radar', when: '1d', head: 'Chris Lake at Echostage is officially sold out.' },
-];
-
-const MARCUS_NEWS = [
-  { art: '/artists/tameimpala-profile.jpeg', src: 'Ligo Radar', when: '1h', head: 'Tame Impala hints at an upcoming B-sides compilation.' },
-  { art: '/artists/MGMT-profile.jpeg', src: 'Campus chart', when: '3h', head: '"Electric Feel" takes over the Georgetown late night aux.' },
-  { art: '/artists/freddiegibbs-profile.jpeg', src: 'Tour', when: '5h', head: 'Freddie Gibbs announces a surprise East Coast run.' },
-  { art: '/artists/MK-profile.jpeg', src: 'Breaking', when: '12h', head: 'MK drops a new house anthem perfect for the pregame.' },
-  { art: '/artists/fleetwoodmac-profike.jpeg', src: 'Pitchfork', when: '1d', head: 'Fleetwood Mac Rumours experiences a campus resurgence.' },
-];
-
-const ALESSIA_NEWS = [
-  { art: '/covers/lanadelreyultraviolence-coverart.jpeg', src: 'Rumor', when: '2h', head: 'Lana Del Rey spotted recording in London studio.' },
-  { art: '/covers/adamport-planet9-coverart.jpeg', src: 'Tour', when: '4h', head: 'Adam Port announces pop-up set in D.C. this Friday.' },
-  { art: '/artists/theweekndprofile.jpeg', src: 'Breaking', when: '6h', head: 'The Weeknd teases final chapter of his trilogy.' },
-  { art: '/artists/peggygou-profile.jpeg', src: 'Fashion', when: '14h', head: 'Peggy Gou launches new streetwear collaboration.' },
-  { art: '/artists/chrisstussy-profile.jpeg', src: 'Ligo Radar', when: '1d', head: 'Chris Stussy tracks are trending on campus tonight.' },
-];
-
-function NewsStrip() {
-  const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
-  const newsItems = activeUserId === 'charlotte' ? CHARLOTTE_NEWS : activeUserId === 'cole' ? COLE_NEWS : activeUserId === 'caroline' ? CAROLINE_NEWS : activeUserId === 'bennett' ? BENNETT_NEWS : activeUserId === 'maddie' ? MADDIE_NEWS : activeUserId === 'marcus' ? MARCUS_NEWS : activeUserId === 'alessia' ? ALESSIA_NEWS : NEWS;
+function NewsStrip({ home }) {
+  const { loading, error, news } = home;
   return (
     <div>
       <div style={{ padding: '24px 22px 12px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
@@ -157,15 +93,25 @@ function NewsStrip() {
         display: 'flex', gap: 12, overflowX: 'auto', padding: '0 22px 4px',
         scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch',
       }}>
-        {newsItems.map((n, i) => (
-          <div key={i} style={{
+        {loading ? (
+          <p style={{
+            fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+            color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+          }}>Loading your artists…</p>
+        ) : error ? (
+          <p style={{
+            fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+            color: 'rgba(200,50,50,0.85)', margin: '8px 0 12px',
+          }}>{error}</p>
+        ) : news.map((n, i) => (
+          <div key={n.id || i} style={{
             flex: '0 0 auto', width: 208, background: '#fff', borderRadius: 18,
             border: '1px solid rgba(20,17,13,0.05)',
             boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
             overflow: 'hidden',
           }}>
             <div style={{
-              height: 116, backgroundImage: `url(${n.art})`, backgroundSize: 'cover', backgroundPosition: 'center',
+              height: 116, backgroundImage: `url(${n.art_url})`, backgroundSize: 'cover', backgroundPosition: 'center',
               position: 'relative',
             }}>
               <span style={{
@@ -174,14 +120,14 @@ function NewsStrip() {
                 letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff',
                 background: 'rgba(10,9,7,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
                 padding: '4px 8px', borderRadius: 99,
-              }}>{n.src}</span>
+              }}>{n.source_label}</span>
             </div>
             <div style={{ padding: '12px 14px 14px' }}>
               <div style={{
                 fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14,
                 lineHeight: 1.25, letterSpacing: '-0.01em', color: '#14110D', textWrap: 'pretty',
-              }}>{n.head}</div>
-              <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.45)', marginTop: 8 }}>{n.when} ago</div>
+              }}>{n.headline}</div>
+              <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.45)', marginTop: 8 }}>{n.time_label} ago</div>
             </div>
           </div>
         ))}
@@ -662,48 +608,13 @@ function AvatarStack() {
 }
 
 // ── Near you — small local-shows block ──
-const SHOWS = [
-  { name: 'Drake "Iceman" listening party', venue: 'Midnight Mug · on campus', when: 'Tonight 8:00', tag: 'Free', tagCls: 'green', art: '/covers/drake-iceman-coverart.jpeg' },
-  { name: 'Deep house basement set', venue: 'Off campus', when: 'Fri 9:30', tag: '$5', tagCls: 'orange', art: '/artists/keinemusik-spotify-propic.jpeg' },
-];
-const CHARLOTTE_SHOWS = [
-  { name: 'Taylor Swift Eras Tour Watch Party', venue: 'Leavey Center · on campus', when: 'Tonight 8:00', tag: 'Free', tagCls: 'green', art: '/covers/tswift-1989-coverart.jpeg' },
-  { name: 'Sabrina Carpenter pre-game', venue: 'Off campus', when: 'Fri 9:30', tag: '$5', tagCls: 'orange', art: '/covers/sabrinashortnsweet-coverart.jpeg' },
-];
-const COLE_SHOWS = [
-  { name: 'Travis Scott Utopia Tour', venue: 'Capital One Arena', when: 'Thu 8:00', tag: '$120', tagCls: 'orange', art: '/covers/travisscott-utopia.jpeg' },
-  { name: 'Morgan Wallen Tailgate', venue: 'Off campus', when: 'Sat 2:00', tag: 'Free', tagCls: 'green', art: '/covers/morganwallenonethingatatime-coverart.jpeg' },
-];
-const CAROLINE_SHOWS = [
-  { name: 'Zach Bryan "Quittin Time" Tour', venue: 'Nationals Park', when: 'Fri 7:30', tag: '$95', tagCls: 'orange', art: '/covers/zachbryangreatamericanbarscene-coverart.jpeg' },
-  { name: 'Country Singalong Night', venue: 'The Tombs', when: 'Sat 10:00', tag: 'Free', tagCls: 'green', art: '/covers/meganlucky-coverart.jpeg' },
-];
-const MADDIE_SHOWS = [
-  { name: 'The Dare DJ Set', venue: 'Flash DC', when: 'Fri 11:00', tag: '$25', tagCls: 'orange', art: '/artists/thedare-profile.jpeg' },
-  { name: 'Charli XCX Sweat Tour', venue: 'The Anthem', when: 'Sat 8:00', tag: '$80', tagCls: 'orange', art: '/covers/brat-coverart.jpeg' },
-];
-
-const BENNETT_SHOWS = [
-  { name: 'Ken Carson Chaos Tour', venue: 'The Anthem', when: 'Sat 8:00', tag: '$65', tagCls: 'orange', art: '/covers/kencarsonagreatchaos-coverart.jpeg' },
-  { name: 'Late Night House Set', venue: 'Flash DC', when: 'Sat 11:30', tag: '$20', tagCls: 'orange', art: '/covers/chrislake-morebaby-coverart.jpeg' },
-];
-const MARCUS_SHOWS = [
-  { name: 'Tame Impala Listening Party', venue: 'Leavey Center', when: 'Tonight 9:00', tag: 'Free', tagCls: 'green', art: '/artists/tameimpala-profile.jpeg' },
-  { name: 'MK Deep House Basement', venue: 'Off campus', when: 'Fri 10:30', tag: '$10', tagCls: 'orange', art: '/artists/MK-profile.jpeg' },
-];
-
-const ALESSIA_SHOWS = [
-  { name: 'Adam Port & Keinemusik Open Air', venue: 'Echostage', when: 'Fri 10:00', tag: '$40', tagCls: 'orange', art: '/covers/adamport-planet9-coverart.jpeg' },
-  { name: 'Lana Del Rey Listening Party', venue: 'The Tombs', when: 'Sat 9:00', tag: 'Free', tagCls: 'green', art: '/covers/lanadelreyultraviolence-coverart.jpeg' },
-];
 const TAG_STYLE = {
   green: { background: 'rgba(113,192,127,0.14)', color: '#2F7D3F' },
   orange: { background: 'rgba(249,115,22,0.12)', color: '#C2410C' },
 };
 
-function NearYou() {
-  const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
-  const showsItems = activeUserId === 'charlotte' ? CHARLOTTE_SHOWS : activeUserId === 'cole' ? COLE_SHOWS : activeUserId === 'caroline' ? CAROLINE_SHOWS : activeUserId === 'bennett' ? BENNETT_SHOWS : activeUserId === 'alessia' ? ALESSIA_SHOWS : activeUserId === 'marcus' ? MARCUS_SHOWS : activeUserId === 'maddie' ? MADDIE_SHOWS : SHOWS;
+function NearYou({ home }) {
+  const { loading, error, shows } = home;
   return (
     <div>
       <div style={{ padding: '24px 22px 12px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
@@ -711,15 +622,25 @@ function NearYou() {
         <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 12, fontWeight: 600, color: '#F97316' }}>All shows</span>
       </div>
       <div style={{ padding: '0 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {showsItems.map((s, i) => (
-          <div key={i} style={{
+        {loading ? (
+          <p style={{
+            fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+            color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+          }}>Loading shows near you…</p>
+        ) : error ? (
+          <p style={{
+            fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+            color: 'rgba(200,50,50,0.85)', margin: '8px 0 12px',
+          }}>{error}</p>
+        ) : shows.map((s, i) => (
+          <div key={s.id || i} style={{
             display: 'flex', alignItems: 'center', gap: 12, padding: 10, borderRadius: 18,
             background: '#fff', border: '1px solid rgba(20,17,13,0.05)',
             boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
           }}>
             <div style={{
               width: 48, height: 48, borderRadius: 12, flexShrink: 0,
-              backgroundImage: `url(${s.art})`, backgroundSize: 'cover', backgroundPosition: 'center',
+              backgroundImage: `url(${s.art_url})`, backgroundSize: 'cover', backgroundPosition: 'center',
             }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14.5, letterSpacing: '-0.01em', color: '#14110D', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
@@ -729,10 +650,10 @@ function NearYou() {
             </div>
             <div style={{ textAlign: 'right', flexShrink: 0 }}>
               <span style={{
-                ...TAG_STYLE[s.tagCls], fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 10, fontWeight: 700,
+                ...TAG_STYLE[s.tag_style], fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 10, fontWeight: 700,
                 letterSpacing: '0.06em', textTransform: 'uppercase', padding: '4px 8px', borderRadius: 99,
               }}>{s.tag}</span>
-              <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.5)', marginTop: 6, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600 }}>{s.when}</div>
+              <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.5)', marginTop: 6, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600 }}>{s.when_label}</div>
             </div>
           </div>
         ))}
@@ -741,13 +662,13 @@ function NearYou() {
   );
 }
 
-function HomeNormal({ onOpen }) {
+function HomeNormal({ onOpen, home }) {
   return (
     <div style={{ paddingBottom: 124 }}>
       <DailyPick />
       <WeekTeasers onOpen={onOpen} />
-      <NewsStrip />
-      <NearYou />
+      <NewsStrip home={home} />
+      <NearYou home={home} />
     </div>
   );
 }
@@ -1141,351 +1062,6 @@ function wSlide(i, cur) {
 }
 
 
-const WRAPPED_DATA = {
-  maddie: {
-    meshClass: "cyan-purple-mesh",
-    starsColor: "#14B8A6",
-    sealedText: "Six answers, three shows, twelve twins and one sign — no listening required.",
-    theme: {
-      horoscopeIconColor: "#14B8A6",
-      slide2Glow: "radial-gradient(460px 460px at 18% 14%, rgba(20,184,166,0.15), transparent 62%)",
-      slide2Eyebrow: "#A78BFA",
-      slide3Glow: "radial-gradient(460px 460px at 82% 16%, rgba(167,139,250,0.20), transparent 62%)",
-      slide3Eyebrow: "#A78BFA",
-      slide3Borders: ['#14B8A6', '#A78BFA', '#2DD4BF'],
-      slide4Glow: "radial-gradient(460px 460px at 20% 18%, rgba(20,184,166,0.15), transparent 62%)",
-      slide4Eyebrow: "#14B8A6",
-      slide5Glow: "radial-gradient(460px 460px at 50% 18%, rgba(167,139,250,0.15), transparent 62%)",
-    },
-    slide1: {
-      title: "The Alt\nSocialite",
-      subtitle: "Season of the pregame",
-      text: "You make weird taste feel playable. Your week jumped from Charli to The 1975, proving you can be early without making it your entire personality. The people who matched you aren't a coincidence. Reach out before the week resets."
-    },
-    slide2: {
-      big: "6", unit: "answers",
-      sub: "A perfect week — 5-day streak, no skips.",
-      cover: "/covers/brat-coverart.jpeg",
-      song: "\"360\"", artist: "Charli XCX",
-      blurb: "The ultimate alt-social anthem. 12 Hoyas matched the vibe."
-    },
-    slide3: {
-      big: "3", unit: "shows",
-      sub: "You showed up for the scene.",
-      events: ['The Dare DJ Set', 'Charli XCX at The Anthem', 'Off-campus Basement']
-    },
-    slide4: {
-      big: "12", unit: "answer twins",
-      sub: "Your most-matched week yet.",
-      twins: [
-        { i: 'M', g: 'linear-gradient(140deg,#3F3F46,#18181B)' },
-        { i: 'C', g: 'linear-gradient(140deg,#FFB6C1,#FF69B4)' },
-        { i: 'S', g: 'linear-gradient(140deg,#71C07F,#2F7D3F)' }
-      ],
-      twinsPlus: "+9",
-    },
-    slide5: {
-      title: "That's your week,\nThe Alt Socialite.",
-      sub: "6 answers · 3 shows · 12 twins. Post it and see who answered like you."
-    }
-  },
-  jordan: {
-    meshClass: "deep-purple-mesh",
-    starsColor: "#F5D783",
-    sealedText: "{d.sealedText}",
-    theme: {
-      horoscopeIconColor: "#EA8CE1",
-      slide2Glow: "radial-gradient(460px 460px at 18% 14%, rgba(138,43,226,0.15), transparent 62%)",
-      slide2Eyebrow: "#D8B4E2",
-      slide3Glow: "radial-gradient(460px 460px at 82% 16%, rgba(75,0,130,0.20), transparent 62%)",
-      slide3Eyebrow: "#9D4EDD",
-      slide3Borders: ['#C77DFF', '#9D4EDD', '#7B2CBF'],
-      slide4Glow: "radial-gradient(460px 460px at 20% 18%, rgba(138,43,226,0.15), transparent 62%)",
-      slide4Eyebrow: "#C77DFF",
-      slide5Glow: "radial-gradient(460px 460px at 50% 18%, rgba(138,43,226,0.15), transparent 62%)",
-    },
-    slide1: {
-      title: "The\nHypnotist",
-      subtitle: "{d.slide1.subtitle}",
-      text: "{d.slide1.text}"
-    },
-    slide2: {
-      big: "6", unit: "answers",
-      sub: "A perfect week — 5-day streak, no skips.",
-      cover: "/covers/drake-iceman-coverart.jpeg",
-      song: "\"Make Them Pay\"", artist: "Drake",
-      blurb: "{d.slide2.blurb}"
-    },
-    slide3: {
-      big: "3", unit: "shows",
-      sub: "You became a regular in the scene.",
-      events: ['Drake Listening Party', 'Echostage VIP', 'Off-campus Basement']
-    },
-    slide4: {
-      big: "12", unit: "answer twins",
-      sub: "Your most-matched week yet.",
-      twins: [
-        { i: 'A', g: 'linear-gradient(140deg,#F5D783,#F97316)' },
-        { i: 'M', g: 'linear-gradient(140deg,#3F3F46,#18181B)' },
-        { i: 'S', g: 'linear-gradient(140deg,#9CA3AF,#4B5563)' }
-      ],
-      twinsPlus: "+9",
-    },
-    slide5: {
-      title: "That's your week,\nThe Hypnotist.",
-      sub: "6 answers · 3 shows · 12 twins. Post it and see who answered like you."
-    }
-  },
-  charlotte: {
-    meshClass: "pink-silver-mesh",
-    starsColor: "#FFB6C1",
-    sealedText: "Six answers, two shows, twenty-four twins and one sign — no listening required.",
-    theme: {
-      horoscopeIconColor: "#FF69B4",
-      slide2Glow: "radial-gradient(460px 460px at 18% 14%, rgba(255,105,180,0.15), transparent 62%)",
-      slide2Eyebrow: "#FFB6C1",
-      slide3Glow: "radial-gradient(460px 460px at 82% 16%, rgba(219,112,147,0.20), transparent 62%)",
-      slide3Eyebrow: "#DB7093",
-      slide3Borders: ['#FF69B4', '#DB7093', '#FFB6C1'],
-      slide4Glow: "radial-gradient(460px 460px at 20% 18%, rgba(255,105,180,0.15), transparent 62%)",
-      slide4Eyebrow: "#FF69B4",
-      slide5Glow: "radial-gradient(460px 460px at 50% 18%, rgba(255,105,180,0.15), transparent 62%)",
-    },
-    slide1: {
-      title: "The Main\nPop Girl",
-      subtitle: "Season of the bridge",
-      text: "You know all the lyrics and aren't afraid to scream them. Your taste this week was heavy on the pop anthems and heartbreak ballads. Reach out to your matches before the week resets."
-    },
-    slide2: {
-      big: "6", unit: "answers",
-      sub: "A perfect week — 5-day streak, no skips.",
-      cover: "/covers/taylorswift-lover-coverart.jpeg",
-      song: "\"Cruel Summer\"", artist: "Taylor Swift",
-      blurb: "The ultimate summer anthem. 24 Hoyas matched the vibe."
-    },
-    slide3: {
-      big: "2", unit: "shows",
-      sub: "You showed up for the main events.",
-      events: ['Eras Tour Watch Party', 'Sabrina Carpenter pre-game']
-    },
-    slide4: {
-      big: "24", unit: "answer twins",
-      sub: "Your most-matched week yet.",
-      twins: [
-        { i: 'E', g: 'linear-gradient(140deg,#FFB6C1,#FF69B4)' },
-        { i: 'L', g: 'linear-gradient(140deg,#FFDAB9,#FFA07A)' },
-        { i: 'K', g: 'linear-gradient(140deg,#E6E6FA,#D8BFD8)' }
-      ],
-      twinsPlus: "+21",
-    },
-    slide5: {
-      title: "That's your week,\nThe Main Pop Girl.",
-      sub: "6 answers · 2 shows · 24 twins. Post it and see who answered like you."
-    }
-  },
-  cole: {
-    meshClass: "deep-purple-mesh",
-    starsColor: "#60A5FA",
-    sealedText: "A tailgate, three matches, and the auxiliary cord fully secured.",
-    theme: {
-      horoscopeIconColor: "#3B82F6",
-      slide2Glow: "radial-gradient(460px 460px at 18% 14%, rgba(59,130,246,0.15), transparent 62%)",
-      slide2Eyebrow: "#93C5FD",
-      slide3Glow: "radial-gradient(460px 460px at 82% 16%, rgba(37,99,235,0.20), transparent 62%)",
-      slide3Eyebrow: "#60A5FA",
-      slide3Borders: ['#93C5FD', '#60A5FA', '#3B82F6'],
-      slide4Glow: "radial-gradient(460px 460px at 20% 18%, rgba(59,130,246,0.15), transparent 62%)",
-      slide4Eyebrow: "#60A5FA",
-      slide5Glow: "radial-gradient(460px 460px at 50% 18%, rgba(59,130,246,0.15), transparent 62%)",
-    },
-    slide1: {
-      title: "The\nSocial Aux",
-      subtitle: "88% more mainstream",
-      text: "You didn't overthink it. This week, your picks were crowd-pleasers built for a room full of people. You kept the aux cord tightly guarded."
-    },
-    slide2: {
-      big: "5", unit: "answers",
-      sub: "Consistently on aux.",
-      cover: "/covers/drakepassionfruitandmorelife-coverart.jpeg",
-      song: "\"Passionfruit\"", artist: "Drake",
-      blurb: "A timeless classic. 18 Hoyas were on the same wavelength."
-    },
-    slide3: {
-      big: "2", unit: "shows",
-      sub: "You pulled up to the big ones.",
-      events: ['Travis Scott Utopia Tour', 'Morgan Wallen Tailgate']
-    },
-    slide4: {
-      big: "18", unit: "answer twins",
-      sub: "You share taste with the campus.",
-      twins: [
-        { i: 'B', g: 'linear-gradient(140deg,#93C5FD,#60A5FA)' },
-        { i: 'T', g: 'linear-gradient(140deg,#60A5FA,#3B82F6)' },
-        { i: 'J', g: 'linear-gradient(140deg,#3B82F6,#2563EB)' }
-      ],
-      twinsPlus: "+15",
-    },
-    slide5: {
-      title: "That's your week,\nThe Social Aux.",
-      sub: "5 answers · 2 shows · 18 twins. Post it and see who answered like you."
-    }
-  },
-  caroline: {
-    meshClass: "orange-yellow-mesh",
-    starsColor: "#F5D783",
-    sealedText: "Tailgate anthems, five answers, sixteen twins, and a whole lot of heartbreak.",
-    theme: {
-      horoscopeIconColor: "#F5D783",
-      slide2Glow: "radial-gradient(460px 460px at 18% 14%, rgba(245,215,131,0.15), transparent 62%)",
-      slide2Eyebrow: "#F5D783",
-      slide3Glow: "radial-gradient(460px 460px at 82% 16%, rgba(249,115,22,0.20), transparent 62%)",
-      slide3Eyebrow: "#F97316",
-      slide3Borders: ['#F5D783', '#F97316', '#C2410C'],
-      slide4Glow: "radial-gradient(460px 460px at 20% 18%, rgba(245,215,131,0.15), transparent 62%)",
-      slide4Eyebrow: "#F5D783",
-      slide5Glow: "radial-gradient(460px 460px at 50% 18%, rgba(245,215,131,0.15), transparent 62%)",
-    },
-    slide1: {
-      title: "The Southern\nRomantic",
-      subtitle: "72% more mainstream",
-      text: "You didn't overthink it. This week, your picks were tailgate anthems and soft country after midnight. You kept the aux cord tightly guarded."
-    },
-    slide2: {
-      big: "5", unit: "answers",
-      sub: "Consistently country.",
-      cover: "/covers/meganlucky-coverart.jpeg",
-      song: "\"Tennessee Orange\"", artist: "Megan Moroney",
-      blurb: "A modern country classic. 16 Hoyas were on the same wavelength."
-    },
-    slide3: {
-      big: "2", unit: "shows",
-      sub: "You pulled up to the big ones.",
-      events: ['Zach Bryan Tour', 'Country Singalong Night']
-    },
-    slide4: {
-      big: "16", unit: "answer twins",
-      sub: "You share taste with the campus.",
-      twins: [
-        { i: 'C', g: 'linear-gradient(140deg,#F5D783,#F97316)' },
-        { i: 'M', g: 'linear-gradient(140deg,#F97316,#C2410C)' },
-        { i: 'S', g: 'linear-gradient(140deg,#D97706,#9A3412)' }
-      ],
-      twinsPlus: "+13",
-    },
-    slide5: {
-      title: "That's your week,\nThe Southern Romantic.",
-      sub: "5 answers · 2 shows · 16 twins. Post it and see who answered like you."
-    }
-  },
-  bennett: {
-    meshClass: "orange-yellow-mesh",
-    starsColor: "#EF4444",
-    sealedText: "Rage anthems, low-end bass, and an absolutely menacing presence on the aux.",
-    theme: {
-      horoscopeIconColor: "#EF4444",
-      slide2Glow: "radial-gradient(460px 460px at 18% 14%, rgba(239,68,68,0.15), transparent 62%)",
-      slide2Eyebrow: "#FCA5A5",
-      slide3Glow: "radial-gradient(460px 460px at 82% 16%, rgba(239,68,68,0.20), transparent 62%)",
-      slide3Eyebrow: "#EF4444",
-      slide3Borders: ['#FCA5A5', '#EF4444', '#B91C1C'],
-      slide4Glow: "radial-gradient(460px 460px at 20% 18%, rgba(239,68,68,0.15), transparent 62%)",
-      slide4Eyebrow: "#FCA5A5",
-      slide5Glow: "radial-gradient(460px 460px at 50% 18%, rgba(239,68,68,0.15), transparent 62%)",
-    },
-    slide1: {
-      title: "The Pregame\nMenace",
-      subtitle: "61% more mainstream",
-      text: "You didn't overthink it. This week, your picks were pure energy and rage anthems. You kept the aux cord tightly guarded."
-    },
-    slide2: {
-      big: "6", unit: "answers",
-      sub: "Consistently chaotic.",
-      cover: "/covers/kencarsonagreatchaos-coverart.jpeg",
-      song: "\"Yale\"", artist: "Ken Carson",
-      blurb: "A modern trap classic. 14 Hoyas were on the same wavelength."
-    },
-    slide3: {
-      big: "2", unit: "shows",
-      sub: "You pulled up to the big ones.",
-      events: ['Ken Carson Chaos Tour', 'Late Night House Set']
-    },
-    slide4: {
-      big: "14", unit: "answer twins",
-      sub: "You share taste with the campus.",
-      twins: [
-        { i: 'R', g: 'linear-gradient(140deg,#FCA5A5,#EF4444)' },
-        { i: 'D', g: 'linear-gradient(140deg,#EF4444,#B91C1C)' },
-        { i: 'T', g: 'linear-gradient(140deg,#DC2626,#991B1B)' }
-      ],
-      twinsPlus: "+11",
-    },
-    slide5: {
-      title: "That's your week,\nThe Pregame Menace.",
-      sub: "6 answers · 2 shows · 14 twins. Post it and see who answered like you."
-    }
-  },
-  marcus: {
-    heroAccent: '#3B82F6', heroGrad: 'linear-gradient(140deg, #10B981, #3B82F6)',
-    topPct: 38,
-    label: 'The Deep Cut Generalist',
-    statLabel: 'more niche at Georgetown',
-    sub: 'Tame Impala, MGMT, Fleetwood Mac, MK — you share a different lane with almost everyone.',
-    storyPicks: ['Tame Impala', 'MGMT', 'Fleetwood Mac'],
-    song: { title: 'Electric Feel', artist: 'MGMT' },
-    friends: [
-      { n: 'Maddie R.', t: 'Matched 3x', p: 'MR', c: '#F97316' },
-      { n: 'Cole B.', t: 'Matched 2x', p: 'CB', c: '#3B82F6' },
-    ],
-  },
-  alessia: {
-    meshClass: "pink-purple-mesh",
-    starsColor: "#EA8CE1",
-    sealedText: "A perfect split between the floor and the feelings. You peak then melt.",
-    theme: {
-      horoscopeIconColor: "#EA8CE1",
-      slide2Glow: "radial-gradient(460px 460px at 18% 14%, rgba(234,140,225,0.15), transparent 62%)",
-      slide2Eyebrow: "#F9A8D4",
-      slide3Glow: "radial-gradient(460px 460px at 82% 16%, rgba(234,140,225,0.20), transparent 62%)",
-      slide3Eyebrow: "#EA8CE1",
-      slide3Borders: ['#F9A8D4', '#EA8CE1', '#BE185D'],
-      slide4Glow: "radial-gradient(460px 460px at 20% 18%, rgba(234,140,225,0.15), transparent 62%)",
-      slide4Eyebrow: "#F9A8D4",
-      slide5Glow: "radial-gradient(460px 460px at 50% 18%, rgba(234,140,225,0.15), transparent 62%)",
-    },
-    slide1: {
-      title: "The\nAfterglow",
-      subtitle: "31% more mainstream",
-      text: "You needed the party to be loud, but the afters to be devastating. Your picks were built for emotional afters."
-    },
-    slide2: {
-      big: "7", unit: "answers",
-      sub: "Always setting the mood.",
-      cover: "/covers/lanadelreyultraviolence-coverart.jpeg",
-      song: "\"Brooklyn Baby\"", artist: "Lana Del Rey",
-      blurb: "The ultimate mood shift. 8 others shared this feeling tonight."
-    },
-    slide3: {
-      big: "2", unit: "shows",
-      sub: "You showed up for the deep cuts.",
-      events: ['Adam Port Open Air', 'Lana Del Rey Listening Party']
-    },
-    slide4: {
-      big: "8", unit: "answer twins",
-      sub: "You share taste with the campus.",
-      twins: [
-        { i: 'J', g: 'linear-gradient(140deg,#F97316,#EA8CE1)' },
-        { i: 'S', g: 'linear-gradient(140deg,#71C07F,#2F7D3F)' },
-        { i: 'M', g: 'linear-gradient(140deg,#EA8CE1,#A13D99)' }
-      ],
-      twinsPlus: "+5",
-    },
-    slide5: {
-      title: "That's your week,\nThe Afterglow.",
-      sub: "7 answers · 2 shows · 8 twins. Post it and see who answered like you."
-    }
-  }
-};
-
 // one star field per slide
 function Stars({ color = '#F5D783' }) {
 
@@ -1523,9 +1099,8 @@ function StatSlide({ idx, cur, glow, eyebrow, eyebrowColor, big, unit, sub, mesh
   );
 }
 
-function WrappedExperience({ onNav }) {
-  const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
-  const d = WRAPPED_DATA[activeUserId] || WRAPPED_DATA.jordan;
+function WrappedExperience({ onNav, home }) {
+  const d = home.wrapped;
 
   const [phase, setPhase] = useStateW('sealed');
   const [cur, setCur] = useStateW(0);
@@ -1533,6 +1108,22 @@ function WrappedExperience({ onNav }) {
   const next = () => setCur(c => Math.min(c + 1, TOTAL - 1));
   const prev = () => setCur(c => Math.max(c - 1, 0));
   const replay = () => { setCur(0); setPhase('sealed'); };
+
+  if (home.loading || !d) {
+    return (
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0A0907', color: 'rgba(255,255,255,0.5)' }}>
+        <p style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 15 }}>Loading your Wrapped…</p>
+      </div>
+    );
+  }
+
+  if (home.error) {
+    return (
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0A0907', color: 'rgba(255,255,255,0.5)', padding: 28, textAlign: 'center' }}>
+        <p style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 15, color: 'rgba(255,120,120,0.9)' }}>{home.error}</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#0A0907', color: '#fff' }}>
@@ -1595,6 +1186,24 @@ function WrappedExperience({ onNav }) {
           background: 
             radial-gradient(circle at 20% 30%, rgba(245,215,131,0.25) 0%, transparent 50%),
             radial-gradient(circle at 80% 70%, rgba(249,115,22,0.3) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%);
+          animation: mesh-drift 20s ease-in-out infinite;
+          mix-blend-mode: screen;
+        }
+        .green-blue-mesh {
+          position: absolute; inset: -20%; pointer-events: none;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(16,185,129,0.25) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(59,130,246,0.3) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%);
+          animation: mesh-drift 20s ease-in-out infinite;
+          mix-blend-mode: screen;
+        }
+        .pink-purple-mesh {
+          position: absolute; inset: -20%; pointer-events: none;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(234,140,225,0.25) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(167,139,250,0.3) 0%, transparent 50%),
             radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%);
           animation: mesh-drift 20s ease-in-out infinite;
           mix-blend-mode: screen;
@@ -1795,8 +1404,8 @@ function WrappedExperience({ onNav }) {
   );
 }
 
-function HomeWrapped({ onNav }) {
-  return <WrappedExperience onNav={onNav} />;
+function HomeWrapped({ onNav, home }) {
+  return <WrappedExperience onNav={onNav} home={home} />;
 }
 
 
@@ -2018,6 +1627,7 @@ function TopBar({ activeUser, activeUserId, setActiveUserId }) {
 export function HomeScreen({ state, setState, onNav }) {
   const [activeUserId, setActiveUserId] = usePersistentState('ligo:active_user', 'jordan');
   const activeUser = USERS[activeUserId] || USERS['jordan'];
+  const home = useHomeContent(activeUserId);
 
   const [sheet, setSheet] = useState(null);   // { match, mode } for the meetup sheet
   const [toast, setToast] = useState(null);   // { name, mode }
@@ -2036,13 +1646,13 @@ export function HomeScreen({ state, setState, onNav }) {
       {state === 'connection' ? (
         <HomeConnection key="conn" onMeetup={(match, mode) => setSheet({ match, mode })} onNav={onNav} />
       ) : state === 'wrapped' ? (
-        <HomeWrapped key="wrap" onNav={onNav} />
+        <HomeWrapped key="wrap" onNav={onNav} home={home} />
       ) : (
         <>
           <div ref={scrollRef} className="no-scrollbar" style={{ position: 'absolute', inset: 0, overflowY: 'auto', overflowX: 'hidden' }}>
             <TopBar activeUser={activeUser} activeUserId={activeUserId} setActiveUserId={setActiveUserId} />
             <div key={state} className="phase-fade">
-              <HomeNormal onOpen={setState} />
+              <HomeNormal onOpen={setState} home={home} />
             </div>
           </div>
           <BottomNav active="home" onChange={onNav} />

@@ -10,7 +10,10 @@
     "lint": "next lint",
     "db:migrate": "tsx scripts/apply-migration.ts",
     "import:canon": "tsx scripts/import-canon.ts",
-    "import:canon:dry": "tsx scripts/import-canon.ts --dry-run"
+    "import:canon:dry": "tsx scripts/import-canon.ts --dry-run",
+    "export:home": "tsx scripts/export-home-content.ts",
+    "import:home": "tsx scripts/import-home-content.ts",
+    "import:home:dry": "tsx scripts/import-home-content.ts --dry-run"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
