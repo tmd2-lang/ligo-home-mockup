@@ -53,11 +53,6 @@ export function coverArtForAnswer(answer: DailyAnswerRow | null, fallback = "/ar
   return `/artists/${slug}-profile.jpeg`;
 }
 
-export function tonightAnswerFromDaily(answers: DailyAnswerRow[]): DailyAnswerRow | null {
-  if (!answers.length) return null;
-  return answers.reduce((latest, row) => (row.day_number > latest.day_number ? row : latest));
-}
-
 export function songFromAnswer(answer: DailyAnswerRow | null, fallbackArt: string): ConnectionNightSong | null {
   if (!answer) return null;
   const name = answer.title?.trim() || answer.answer_text.split(" — ")[0]?.trim() || answer.answer_text;

@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import {
   mapRosterToPeople,
   songFromAnswer,
-  tonightAnswerFromDaily,
   type ConnectionNightPerson,
   type ConnectionNightSong,
 } from "@/lib/connectionNight";
+import type { DailyAnswerRow } from "@/lib/supabase/types";
 import { USERS } from "@/lib/users";
 
 type ConnectionNightState = {
@@ -43,8 +43,8 @@ export function useConnectionNight(viewerId: string): ConnectionNightState {
 
         if (cancelled) return;
 
-        const tonight = tonightAnswerFromDaily(data.dailyAnswers ?? []);
-        const song = songFromAnswer(tonight, "/artists/frank-blond.png");
+        const pick: DailyAnswerRow | null = data.currentAnswer ?? null;
+        const song = songFromAnswer(pick, "/artists/frank-blond.png");
         const people = mapRosterToPeople(data.connectionRoster ?? [], USERS);
 
         setState({

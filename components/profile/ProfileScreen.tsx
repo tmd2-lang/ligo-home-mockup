@@ -22,6 +22,7 @@ import {
 } from "@/components/profile/archetypes";
 import { usePersistentState } from "@/lib/usePersistentState";
 import { USERS, PROFILE_PRESENTATION_DEFAULTS, USER_IDENTITY_DEFAULTS } from "@/lib/users";
+import { useDailyReveal } from "@/hooks/useDailyReveal";
 
 const EDGE = 22;
 const DISPLAY = "Bricolage Grotesque, sans-serif";
@@ -767,6 +768,8 @@ function SecretTrackCard({ toast, accentColor = '#F97316', label = 'Late Night A
 function ProfileTabV2() {
   const profile = useActiveUserProfile();
   const activeUser = useActiveUser();
+  const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
+  const { loading: trailLoading, error: trailError, answerTrail } = useDailyReveal(activeUserId);
   const initials = activeUser.name.split(' ').map(n => n[0]).join('.') + '.';
 
   const gate = useProfileGate();
@@ -1022,8 +1025,12 @@ function ProfileTabV2() {
           </span>
         </div>
         <div style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: `0 ${EDGE}px`, scrollbarWidth: 'none' }}>
-          {profile.answerTrail.map((a) => (
-            <div key={a.day} onClick={() => toast(`${a.day} · ${a.song}`)} style={{
+          {trailLoading ? (
+            <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.45)', padding: '10px 4px' }}>Loading answer trail…</div>
+          ) : trailError ? (
+            <div style={{ fontSize: 13, color: 'rgba(200,50,50,0.85)', padding: '10px 4px' }}>{trailError}</div>
+          ) : answerTrail.map((a) => (
+            <div key={a.day_number} onClick={() => toast(`${a.dayLabel} · ${a.song}`)} style={{
               flexShrink: 0, width: 124, padding: '10px 12px', borderRadius: 14, cursor: 'pointer',
               background: a.today ? 'rgba(249,115,22,0.07)' : 'rgba(20,17,13,0.035)',
               border: `1px solid ${a.today ? 'rgba(249,115,22,0.25)' : 'rgba(20,17,13,0.06)'}`,
@@ -1031,7 +1038,7 @@ function ProfileTabV2() {
               <div style={{
                 fontFamily: DISPLAY, fontWeight: 700, fontSize: 9.5, letterSpacing: '0.14em',
                 textTransform: 'uppercase', color: a.today ? '#F97316' : 'rgba(20,17,13,0.40)',
-              }}>{a.day}</div>
+              }}>{a.dayLabel}</div>
               <div style={{ marginTop: 6, fontFamily: DISPLAY, fontWeight: 600, fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{a.song}</div>
               <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.45)', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{a.artist}</div>
             </div>

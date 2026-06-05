@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { buildDailyRevealBundle } from "@/lib/dailyReveal";
-import { getCanonBundle } from "@/lib/supabase/queries/canon";
-import { getDailyQuestions } from "@/lib/supabase/queries/daily";
+import { getDailyRevealForProfile } from "@/lib/supabase/queries/daily";
 import { createServerSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -23,22 +21,22 @@ export async function GET(request: Request) {
 
   try {
     const supabase = createServerSupabaseClient();
-    const [bundle, questions] = await Promise.all([
-      getCanonBundle(supabase, profileId),
-      getDailyQuestions(supabase),
-    ]);
+    const bundle = await getDailyRevealForProfile(supabase, profileId);
     if (!bundle) {
       return NextResponse.json({ error: `Profile not found: ${profileId}` }, { status: 404 });
     }
 
-    const reveal = buildDailyRevealBundle(questions, bundle.dailyAnswers);
-
     return NextResponse.json({
       profileId,
-      currentDayNumber: reveal.currentDayNumber,
-      currentAnswer: reveal.currentAnswer,
-      connectionRoster: bundle.connectionRoster,
-      dailyAnswers: bundle.dailyAnswers,
+      currentDayNumber: bundle.currentDayNumber,
+      currentQuestion: bundle.currentQuestion,
+      currentAnswer: bundle.currentAnswer,
+      answerTrail: bundle.answerTrail,
+      meta: {
+        trailCount: bundle.answerTrail.length,
+        windowStart: "2026-05-08",
+        windowEnd: "2026-06-04",
+      },
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";

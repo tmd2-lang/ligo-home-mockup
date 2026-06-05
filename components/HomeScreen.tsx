@@ -27,6 +27,7 @@ import { searchSofiaCatalog } from "@/lib/sofia-catalog";
 import { searchMarcusCatalog } from "@/lib/marcus-catalog";
 import { USERS } from "@/lib/users";
 import { useConnectionNight } from "@/hooks/useConnectionNight";
+import { useDailyReveal } from "@/hooks/useDailyReveal";
 
 // useState/useEffect aliases the bundle used per-file
 const useStateS = useState, useStateN = useState, useStateC = useState, useStateW = useState, useStateM = useState;
@@ -439,6 +440,7 @@ function DailyPick() {
   const [focused, setFocused] = useStateN(false);
   const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
   const reveal = useReveal();
+  const { loading, error, currentQuestion } = useDailyReveal(activeUserId);
 
   function lockIn() {
     if (!draft.trim()) return;
@@ -500,12 +502,24 @@ function DailyPick() {
               letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(20,17,13,0.4)',
             }}>Everyone answers</span>
           </div>
-          <h2 style={{
-            fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 29,
-            lineHeight: 1.12, letterSpacing: '-0.025em', color: '#14110D', textWrap: 'balance',
-          }}>
-            What artist did you grow up on that <b style={{ fontWeight: 700 }}>still hits different</b>?
-          </h2>
+          {loading ? (
+            <p style={{
+              fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 17,
+              lineHeight: 1.4, color: 'rgba(20,17,13,0.45)', margin: 0,
+            }}>Loading today&apos;s question…</p>
+          ) : error ? (
+            <p style={{
+              fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 17,
+              lineHeight: 1.4, color: 'rgba(200,50,50,0.85)', margin: 0,
+            }}>{error}</p>
+          ) : (
+            <h2 style={{
+              fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 29,
+              lineHeight: 1.12, letterSpacing: '-0.025em', color: '#14110D', textWrap: 'balance',
+            }}>
+              {currentQuestion?.question_text ?? 'Today\u2019s question is unavailable.'}
+            </h2>
+          )}
 
           {/* answer entry — only before locking */}
           {!answered && (
