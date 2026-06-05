@@ -37,5 +37,5 @@ export const SHOWS_CONST_BY_PROFILE: Record<string, string> = {
 export const EXPECTED_HOME_COUNTS = {
   home_news: 45,
   home_shows: 18,
-  wrapped_stories: 8,
+  wrapped_stories: 9,
 } as const;
