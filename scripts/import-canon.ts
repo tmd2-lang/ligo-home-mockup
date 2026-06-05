@@ -140,7 +140,7 @@ async function main() {
     if (!shuffled) continue;
     const serial = Number(row["Scheduled Date"]);
     bankByShuffledDay.set(shuffled, {
-      original_number: Number(row["Original #"]) || null,
+      original_number: Number(row["Original #"]) || 0,
       scheduled_date: Number.isFinite(serial) ? excelSerialToIsoDate(serial) : cellStr(row["Scheduled Date"]),
     });
   }
