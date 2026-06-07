@@ -35,9 +35,10 @@ export async function getDailyAnswersForProfiles(
     .order("day_number", { ascending: true });
   if (error) throw error;
 
+  const rows = (data ?? []) as DailyAnswerRow[];
   const byProfile: Record<string, DailyAnswerRow[]> = {};
   for (const id of profileIds) byProfile[id] = [];
-  for (const row of data ?? []) {
+  for (const row of rows) {
     byProfile[row.profile_id]?.push(row);
   }
   return byProfile;
