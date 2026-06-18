@@ -16,7 +16,7 @@ LIGO is not a generic social feed. The loop is:
 
 1. **Daily pick** — Everyone on campus gets the same question each day. You lock in one answer (song, artist, or vibe).
 2. **Nightly reveal (8 PM)** — Aurora full-screen experience: campus pulse, your standing, campus mood, forward hook. This happens **every night**.
-3. **Connection Night** *(later)* — Random 1–2× per week; cumulative answers surface matches. Vibe or Spark. Code parked in repo.
+3. **Connection Night** *(in progress)* — Hardcoded demo for all 9 profiles inside the nightly reveal when CN preview is on. See [docs/CONNECTION_NIGHT_HARDCODED_PLAN.md](docs/CONNECTION_NIGHT_HARDCODED_PLAN.md). Dynamic Supabase matching later.
 4. **Ligo Wrap Night** *(later)* — End-of-week summary. Separate from the daily reveal. Code parked in repo.
 5. **Profile** — Archetype, taste signals, synced catalogs, answer trail.
 

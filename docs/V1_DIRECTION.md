@@ -57,7 +57,7 @@ flowchart LR
 | Night type | Frequency | Status on v1 mockup |
 |------------|-----------|---------------------|
 | **Reveal Night** | Every night at 8 PM | **Building now** — Aurora UI, one demo night |
-| **Connection Night** | Random 1–2× per week, unpredictable | Parked — code kept, UI entry removed |
+| **Connection Night** | Random 1–2× per week, unpredictable | **In progress** — hardcoded demo plan; see [CONNECTION_NIGHT_HARDCODED_PLAN.md](./CONNECTION_NIGHT_HARDCODED_PLAN.md) |
 | **Ligo Wrap Night** | End of week, separate moment | Parked — code kept, UI entry removed |
 
 Connection Night and Wrap are real product moments but **not this slice**. The old mockup wrongly treated Connection Night as *the* reveal. v1 corrects that: reveal happens **every night**.

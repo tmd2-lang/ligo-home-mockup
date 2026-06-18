@@ -74,7 +74,7 @@ Switch profiles from the home top bar. Expect:
 - **Games Hub** — banner on home; trivia, ranking, soundmoji
 - **Night Preview** — N1–N10 picker above the phone (internal demo tool)
 - **News / Near you** — per-profile fidelity cards from `lib/homeFidelity.ts` (not stored in Supabase on v1)
-- **Connection Night / Wrapped** — not on home (legacy code parked in repo)
+- **Connection Night / Wrapped** — not on home (legacy carousel parked); Connection Night hardcoded plan: [CONNECTION_NIGHT_HARDCODED_PLAN.md](./CONNECTION_NIGHT_HARDCODED_PLAN.md)
 - **Profile answer trail** — “No answers yet” (API empty)
 
 APIs return HTTP 200 with empty payloads when content tables are missing or empty.

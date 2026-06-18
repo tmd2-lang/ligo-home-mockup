@@ -7,6 +7,8 @@ import {
   type ConnectionNightPerson,
   type ConnectionNightSong,
 } from "@/lib/connectionNight";
+import { getConnectionNightDemoResponse } from "@/lib/connectionNightDemo";
+import { isConnectionNightPreview } from "@/lib/revealConstants";
 import type { DailyAnswerRow } from "@/lib/supabase/types";
 import { USERS } from "@/lib/users";
 
@@ -15,6 +17,7 @@ type ConnectionNightState = {
   error: string | null;
   people: ConnectionNightPerson[];
   song: ConnectionNightSong | null;
+  isDemo: boolean;
 };
 
 const EMPTY: ConnectionNightState = {
@@ -22,7 +25,40 @@ const EMPTY: ConnectionNightState = {
   error: null,
   people: [],
   song: null,
+  isDemo: false,
 };
+
+function mapPayload(
+  viewerId: string,
+  data: {
+    currentAnswer?: DailyAnswerRow | null;
+    connectionRoster?: unknown[];
+    dailyAnswers?: DailyAnswerRow[];
+    matchAnswersById?: Record<string, DailyAnswerRow[]>;
+    dailyQuestions?: { day_number: number; weekday: string }[];
+    currentDayNumber?: number | null;
+  },
+  isDemo: boolean
+): Omit<ConnectionNightState, "loading"> {
+  const pick: DailyAnswerRow | null = data.currentAnswer ?? null;
+  const song = songFromAnswer(pick, "/artists/frank-blond.png");
+  const people = mapRosterToPeople(
+    (data.connectionRoster ?? []) as Parameters<typeof mapRosterToPeople>[0],
+    USERS,
+    viewerId,
+    data.dailyAnswers ?? [],
+    data.matchAnswersById ?? {},
+    (data.dailyQuestions ?? []) as Parameters<typeof mapRosterToPeople>[5],
+    data.currentDayNumber ?? 28
+  );
+
+  return {
+    error: people.length ? null : "No matches surfaced for this profile yet.",
+    people,
+    song,
+    isDemo,
+  };
+}
 
 export function useConnectionNight(viewerId: string): ConnectionNightState {
   const [state, setState] = useState<ConnectionNightState>(EMPTY);
@@ -43,32 +79,40 @@ export function useConnectionNight(viewerId: string): ConnectionNightState {
 
         if (cancelled) return;
 
-        const pick: DailyAnswerRow | null = data.currentAnswer ?? null;
-        const song = songFromAnswer(pick, "/artists/frank-blond.png");
-        const people = mapRosterToPeople(
-          data.connectionRoster ?? [],
-          USERS,
-          viewerId,
-          data.dailyAnswers ?? [],
-          data.matchAnswersById ?? {},
-          data.dailyQuestions ?? [],
-          data.currentDayNumber ?? 28
-        );
+        const roster = data.connectionRoster ?? [];
+        const useDemo =
+          isConnectionNightPreview() ||
+          roster.length === 0 ||
+          data.meta?.empty === true;
+
+        if (useDemo) {
+          const demo = getConnectionNightDemoResponse(viewerId);
+          if (demo && demo.connectionRoster.length) {
+            setState({ loading: false, ...mapPayload(viewerId, demo, true) });
+            return;
+          }
+        }
 
         setState({
           loading: false,
-          error: null,
-          people,
-          song,
+          ...mapPayload(viewerId, data, false),
         });
       } catch (err) {
         if (cancelled) return;
+
+        const demo = getConnectionNightDemoResponse(viewerId);
+        if (demo && demo.connectionRoster.length) {
+          setState({ loading: false, ...mapPayload(viewerId, demo, true) });
+          return;
+        }
+
         const message = err instanceof Error ? err.message : "Failed to load Connection Night";
         setState({
           loading: false,
           error: message,
           people: [],
           song: null,
+          isDemo: false,
         });
       }
     }

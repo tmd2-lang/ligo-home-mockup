@@ -14,6 +14,7 @@ import { HomeScreen } from "@/components/HomeScreen";
 import { EventsScreen } from "@/components/EventsScreen";
 import { ProfileV2Provider, ProfileV2Shell } from "@/components/profile/ProfileScreen";
 import { ProfileGateProvider } from "@/lib/profileGate";
+import { CONNECTION_NIGHT_PREVIEW_KEY } from "@/lib/revealConstants";
 
 type HomeState = "normal" | "connection" | "wrapped" | "games" | "reveal";
 
@@ -26,23 +27,46 @@ const NIGHT_LABELS = [
 
 const NIGHT_INTENSITY = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
 
+type NightPreviewSelection = number | "cn" | null;
+
+function readNightPreview(): NightPreviewSelection {
+  const ov = localStorage.getItem("ligo:demo:night");
+  if (ov === CONNECTION_NIGHT_PREVIEW_KEY) return "cn";
+  if (ov !== null) {
+    const n = parseInt(ov, 10);
+    if (!Number.isNaN(n)) return Math.max(0, Math.min(9, n));
+  }
+  return null;
+}
+
 function NightPicker() {
-  const [activeNight, setActiveNight] = useState<number | null>(null);
+  const [selection, setSelection] = useState<NightPreviewSelection>(null);
 
   useEffect(() => {
-    const ov = localStorage.getItem("ligo:demo:night");
-    setActiveNight(ov !== null ? parseInt(ov, 10) : null);
+    setSelection(readNightPreview());
   }, []);
 
-  const pick = useCallback((n: number | null) => {
-    if (n === null) {
+  const applySelection = useCallback((next: NightPreviewSelection) => {
+    if (next === null) {
       localStorage.removeItem("ligo:demo:night");
+    } else if (next === "cn") {
+      localStorage.setItem("ligo:demo:night", CONNECTION_NIGHT_PREVIEW_KEY);
     } else {
-      localStorage.setItem("ligo:demo:night", String(n));
+      localStorage.setItem("ligo:demo:night", String(next));
     }
-    setActiveNight(n);
+    setSelection(next);
     window.location.reload();
   }, []);
+
+  const pickAurora = useCallback(
+    (n: number) => applySelection(selection === n ? null : n),
+    [applySelection, selection],
+  );
+
+  const pickConnection = useCallback(
+    () => applySelection(selection === "cn" ? null : "cn"),
+    [applySelection, selection],
+  );
 
   return (
     <div
@@ -66,15 +90,24 @@ function NightPicker() {
       >
         Night Preview
       </div>
-      <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 5,
+          alignItems: "center",
+          justifyContent: "center",
+          maxWidth: 420,
+        }}
+      >
         {NIGHT_LABELS.map((label, i) => {
-          const active = activeNight === i;
+          const active = selection === i;
           const intensity = NIGHT_INTENSITY[i];
           return (
             <button
               key={i}
               type="button"
-              onClick={() => pick(active ? null : i)}
+              onClick={() => pickAurora(i)}
               title={`Night ${i + 1} — ${Math.round(intensity * 100)}% aurora intensity`}
               style={{
                 width: 34,
@@ -112,10 +145,65 @@ function NightPicker() {
             </button>
           );
         })}
-        {activeNight !== null && (
+
+        <span
+          aria-hidden
+          style={{
+            width: 1,
+            height: 22,
+            margin: "0 2px",
+            background: "rgba(255,255,255,0.12)",
+            flexShrink: 0,
+          }}
+        />
+
+        <button
+          type="button"
+          onClick={pickConnection}
+          title="Connection Night — matches inside the reveal (coming soon)"
+          style={{
+            width: 38,
+            height: 34,
+            borderRadius: 8,
+            border: "none",
+            cursor: "pointer",
+            background:
+              selection === "cn"
+                ? "rgba(234,140,225,0.42)"
+                : "rgba(234,140,225,0.1)",
+            color: selection === "cn" ? "#fff" : "rgba(234,140,225,0.85)",
+            fontFamily: FF,
+            fontSize: 10,
+            fontWeight: selection === "cn" ? 800 : 700,
+            letterSpacing: "0.06em",
+            boxShadow:
+              selection === "cn"
+                ? "0 0 0 1.5px rgba(234,140,225,0.65), 0 4px 14px rgba(234,140,225,0.35)"
+                : "0 0 0 1px rgba(234,140,225,0.28)",
+            transition: "all 0.15s ease",
+            position: "relative",
+            flexShrink: 0,
+          }}
+        >
+          CN
+          <div
+            style={{
+              position: "absolute",
+              bottom: 3,
+              left: 4,
+              right: 4,
+              height: 2,
+              borderRadius: 99,
+              background: "linear-gradient(90deg, #EA8CE1, #F97316)",
+              opacity: selection === "cn" ? 1 : 0.55,
+            }}
+          />
+        </button>
+
+        {selection !== null && (
           <button
             type="button"
-            onClick={() => pick(null)}
+            onClick={() => applySelection(null)}
             title="Reset to live night"
             style={{
               width: 34,
@@ -144,9 +232,11 @@ function NightPicker() {
           letterSpacing: "0.06em",
         }}
       >
-        {activeNight !== null
-          ? `Previewing Night ${activeNight + 1} — click again to deselect · LIVE resets`
-          : "Click a night to preview the aurora progression"}
+        {selection === "cn"
+          ? "Previewing Connection Night — matches inside the reveal · LIVE resets"
+          : selection !== null
+          ? `Previewing Night ${selection + 1} — click again to deselect · LIVE resets`
+          : "N1–N10 = aurora nights · CN = Connection Night slot (TBD)"}
       </div>
     </div>
   );
@@ -290,7 +380,8 @@ export default function Home() {
             <b style={{ color: "rgba(255,255,255,0.6)" }}>Marcus</b>, lock in,
             wait for the reveal — then replay from home. Use{" "}
             <b style={{ color: "rgba(255,255,255,0.6)" }}>Night Preview</b>{" "}
-            above to demo N1–N10 aurora nights.
+            above for N1–N10 aurora nights or <b style={{ color: "rgba(255,255,255,0.6)" }}>CN</b>{" "}
+            (Connection Night — slot reserved).
           </>
         )}
       </div>

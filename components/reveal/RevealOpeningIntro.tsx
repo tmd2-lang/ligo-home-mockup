@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { LigoMark } from '@/components/Primitives';
 
 const FF = "'Bricolage Grotesque', sans-serif";
@@ -23,21 +23,31 @@ type Props = {
  */
 export function RevealOpeningIntro({ onComplete }: Props) {
   const [phase, setPhase] = useState(0);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     const timers = [
       window.setTimeout(() => setPhase(1), 350),
       window.setTimeout(() => setPhase(2), 1050),
       window.setTimeout(() => setPhase(3), 1850),
-      window.setTimeout(() => onComplete(), 2650),
+      window.setTimeout(() => onCompleteRef.current(), 2650),
     ];
     return () => timers.forEach(clearTimeout);
-  }, [onComplete]);
+  }, []);
+
+  const finish = () => onCompleteRef.current();
 
   const exiting = phase >= 3;
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      onClick={finish}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') finish();
+      }}
       style={{
         position: 'absolute',
         inset: 0,
@@ -47,6 +57,7 @@ export function RevealOpeningIntro({ onComplete }: Props) {
         opacity: exiting ? 0 : 1,
         transition: exiting ? `opacity 850ms ${EASE}` : 'none',
         pointerEvents: exiting ? 'none' : 'auto',
+        cursor: exiting ? 'default' : 'pointer',
       }}
     >
       {/* Stars */}

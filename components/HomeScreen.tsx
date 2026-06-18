@@ -361,9 +361,8 @@ function WeekTeasers({ onOpen }) {
   );
 }
 
-function RevealTeaser({ onOpen, activeUserId, answered, revealUnlocked }) {
-  if (activeUserId !== REVEAL_DEMO_PROFILE_ID) return null;
-  if (!answered || !revealUnlocked) return null;
+function RevealTeaser({ onOpen, hasLockedAnswer, revealUnlocked }) {
+  if (!hasLockedAnswer || !revealUnlocked) return null;
 
   return (
     <div style={{ padding: '20px 22px 0' }}>
@@ -566,12 +565,12 @@ function Timeline({ answered, revealWaiting, revealUnlocked }) {
 }
 
 function DailyPick({
+  activeUserId,
   revealCountdown,
   revealUnlocked,
   onRevealAnswerLocked,
-  onRevealAnswerEdited,
+  onRevealAnswerCleared,
 }) {
-  const [activeUserId] = usePersistentState('ligo:active_user', REVEAL_DEMO_PROFILE_ID);
   // persisted per profile — lock-in survives refreshes & revisits
   const [answered, setAnswered] = usePersistentState(`ligo:daily:${activeUserId}:answered`, false);
   const [answer, setAnswer] = usePersistentState(`ligo:daily:${activeUserId}:answer`, '');
@@ -579,23 +578,29 @@ function DailyPick({
   const [focused, setFocused] = useStateN(false);
   const reveal = useReveal();
   const { loading, error, currentQuestion } = useDailyReveal(activeUserId);
-  const isRevealDemoProfile = activeUserId === REVEAL_DEMO_PROFILE_ID;
+  const hasLockedAnswer = answered && answer.trim().length > 0;
+
+  useEffect(() => {
+    if (answered && !answer.trim()) setAnswered(false);
+  }, [answered, answer, setAnswered]);
+
   const revealWaiting =
-    isRevealDemoProfile && answered && !revealUnlocked && revealCountdown !== null && revealCountdown > 0;
+    hasLockedAnswer && !revealUnlocked && revealCountdown !== null && revealCountdown > 0;
 
   function lockIn() {
     if (!draft.trim()) return;
     setAnswer(draft.trim());
     setAnswered(true);
     setFocused(false);
-    if (isRevealDemoProfile) onRevealAnswerLocked();
+    onRevealAnswerLocked();
   }
 
-  function changeAnswer() {
-    setDraft(answer || '');
+  function clearAnswer() {
+    onRevealAnswerCleared();
     setAnswered(false);
-    setFocused(true);
-    if (isRevealDemoProfile) onRevealAnswerEdited();
+    setAnswer('');
+    setDraft('');
+    setFocused(false);
   }
 
   function pickSynced(row) {
@@ -625,7 +630,7 @@ function DailyPick({
   return (
     <div>
       {/* ever-present, pulsing reveal countdown — changes when you answer */}
-      <CountdownBar answered={answered} time={reveal} />
+      <CountdownBar answered={hasLockedAnswer} time={reveal} />
 
       {/* question card */}
       <div style={{ margin: '14px 22px 0' }}>
@@ -736,13 +741,13 @@ function DailyPick({
         </div>
       </div>
 
-      {/* answered → reveal flow */}
-      {answered && (
+      {/* locked answer → reveal flow */}
+      {hasLockedAnswer && (
         <div className="phase-fade">
           <Timeline
-            answered={answered}
+            answered={hasLockedAnswer}
             revealWaiting={revealWaiting}
-            revealUnlocked={isRevealDemoProfile && revealUnlocked}
+            revealUnlocked={revealUnlocked}
           />
 
           {/* locked answer */}
@@ -757,12 +762,13 @@ function DailyPick({
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(20,17,13,0.4)' }}>Your answer is locked in</div>
-                <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 17, letterSpacing: '-0.015em', color: '#14110D', marginTop: 3, textWrap: 'balance' }}>"{answer}"</div>
+                <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 17, letterSpacing: '-0.015em', color: '#14110D', marginTop: 3, textWrap: 'balance' }}>&ldquo;{answer}&rdquo;</div>
               </div>
-              <button type="button" onClick={changeAnswer} style={{
+              <button type="button" onClick={clearAnswer} style={{
                 border: 0, background: 'transparent', cursor: 'pointer', flexShrink: 0,
-                fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 12.5, color: '#F97316',
-              }}>Edit</button>
+                fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11,
+                letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(200,50,50,0.85)',
+              }}>Clear</button>
             </div>
           </div>
 
@@ -863,24 +869,24 @@ function HomeNormal({
   onOpenGames,
   home,
   activeUserId,
-  answered,
+  hasLockedAnswer,
   revealCountdown,
   revealUnlocked,
   onRevealAnswerLocked,
-  onRevealAnswerEdited,
+  onRevealAnswerCleared,
 }) {
   return (
     <div style={{ paddingBottom: 124 }}>
       <DailyPick
+        activeUserId={activeUserId}
         revealCountdown={revealCountdown}
         revealUnlocked={revealUnlocked}
         onRevealAnswerLocked={onRevealAnswerLocked}
-        onRevealAnswerEdited={onRevealAnswerEdited}
+        onRevealAnswerCleared={onRevealAnswerCleared}
       />
       <RevealTeaser
         onOpen={onOpenReveal}
-        activeUserId={activeUserId}
-        answered={answered}
+        hasLockedAnswer={hasLockedAnswer}
         revealUnlocked={revealUnlocked}
       />
       <GamesHubBanner onOpen={onOpenGames} activeUserId={activeUserId} />
@@ -1850,14 +1856,15 @@ function TopBar({ activeUser, activeUserId, setActiveUserId }) {
 // ── Orchestrator — the home interface ───────────────────────
 // `state`/`setState` (normal|connection|wrapped) are lifted to the page so
 // it can darken the device status bar. `onNav` routes the bottom bar.
-export function HomeScreen({ state, setState, onNav }) {
-  const [activeUserId, setActiveUserId] = usePersistentState('ligo:active_user', REVEAL_DEMO_PROFILE_ID);
+function HomeProfileSession({ activeUserId, setActiveUserId, state, setState, onNav }) {
   const [answered] = usePersistentState(`ligo:daily:${activeUserId}:answered`, false);
+  const [answer] = usePersistentState(`ligo:daily:${activeUserId}:answer`, '');
+  const hasLockedAnswer = answered && answer.trim().length > 0;
   const [revealUnlocked, setRevealUnlocked] = usePersistentState(
-    `ligo:reveal:${REVEAL_DEMO_PROFILE_ID}:unlocked`,
+    `ligo:reveal:${activeUserId}:unlocked`,
     false,
   );
-  const [revealCountdown, setRevealCountdown] = useState(null);
+  const [revealCountdown, setRevealCountdown] = useState<number | null>(null);
   const [revealPlayIntro, setRevealPlayIntro] = useState(false);
   const activeUser = USERS[activeUserId] || USERS['jordan'];
   const home = useHomeContent(activeUserId);
@@ -1869,6 +1876,10 @@ export function HomeScreen({ state, setState, onNav }) {
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [state]);
 
   useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, [activeUserId]);
+
+  useEffect(() => {
     if (revealCountdown === null || revealCountdown <= 0) return;
     const id = setTimeout(() => {
       setRevealCountdown((current) => (current !== null && current > 0 ? current - 1 : current));
@@ -1877,32 +1888,48 @@ export function HomeScreen({ state, setState, onNav }) {
   }, [revealCountdown]);
 
   useEffect(() => {
-    if (activeUserId !== REVEAL_DEMO_PROFILE_ID) {
+    if (!hasLockedAnswer) {
       setRevealCountdown(null);
+      setRevealUnlocked(false);
+      setRevealPlayIntro(false);
+      if (state === 'reveal') setState('normal');
       return;
     }
-    if (!answered || revealUnlocked || revealCountdown !== null) return;
+    if (revealUnlocked || revealCountdown !== null) return;
     setRevealCountdown(REVEAL_COUNTDOWN_SECONDS);
-  }, [activeUserId, answered, revealUnlocked, revealCountdown]);
+  }, [activeUserId, hasLockedAnswer, revealUnlocked, revealCountdown, state, setRevealUnlocked, setState]);
 
   useEffect(() => {
-    if (activeUserId !== REVEAL_DEMO_PROFILE_ID) return;
-    if (revealCountdown !== 0 || revealUnlocked) return;
+    if (!hasLockedAnswer || revealCountdown !== 0 || revealUnlocked) return;
     setRevealPlayIntro(true);
     setRevealUnlocked(true);
     setRevealCountdown(null);
     setState('reveal');
-  }, [activeUserId, revealCountdown, revealUnlocked, setRevealUnlocked, setState]);
+  }, [hasLockedAnswer, revealCountdown, revealUnlocked, setRevealUnlocked, setState]);
 
   function handleRevealAnswerLocked() {
-    if (activeUserId !== REVEAL_DEMO_PROFILE_ID) return;
-    if (revealUnlocked) return;
+    if (!hasLockedAnswer || revealUnlocked) return;
     setRevealCountdown(REVEAL_COUNTDOWN_SECONDS);
   }
 
-  function handleRevealAnswerEdited() {
+  function handleRevealAnswerCleared() {
     setRevealCountdown(null);
     setRevealUnlocked(false);
+    setRevealPlayIntro(false);
+    setState('normal');
+    try {
+      const answeredKey = `ligo:daily:${activeUserId}:answered`;
+      const answerKey = `ligo:daily:${activeUserId}:answer`;
+      const unlockKey = `ligo:reveal:${activeUserId}:unlocked`;
+      window.localStorage.setItem(answeredKey, 'false');
+      window.localStorage.setItem(answerKey, '""');
+      window.localStorage.setItem(unlockKey, 'false');
+      window.dispatchEvent(new CustomEvent('ligo:storage', { detail: { key: answeredKey, newValue: false } }));
+      window.dispatchEvent(new CustomEvent('ligo:storage', { detail: { key: answerKey, newValue: '' } }));
+      window.dispatchEvent(new CustomEvent('ligo:storage', { detail: { key: unlockKey, newValue: false } }));
+    } catch {
+      /* ignore */
+    }
   }
 
   function sendInvite() {
@@ -1919,13 +1946,13 @@ export function HomeScreen({ state, setState, onNav }) {
         <HomeWrapped key="wrap" onNav={onNav} home={home} />
       ) : state === 'games' ? (
         <>
-          <GamesHub activeUserId={activeUserId} onBack={() => setState('normal')} />
+          <GamesHub key={activeUserId} activeUserId={activeUserId} onBack={() => setState('normal')} />
           <BottomNav active="home" onChange={onNav} />
         </>
       ) : state === 'reveal' ? (
         <>
           <RevealScreen
-            key={`reveal-${revealPlayIntro ? 'intro' : 'replay'}`}
+            key={`reveal-${activeUserId}-${revealPlayIntro ? 'intro' : 'replay'}`}
             activeUserId={activeUserId}
             playIntro={revealPlayIntro}
             onBack={() => {
@@ -1939,20 +1966,22 @@ export function HomeScreen({ state, setState, onNav }) {
         <>
           <div ref={scrollRef} className="no-scrollbar" style={{ position: 'absolute', inset: 0, overflowY: 'auto', overflowX: 'hidden' }}>
             <TopBar activeUser={activeUser} activeUserId={activeUserId} setActiveUserId={setActiveUserId} />
-            <div key={state} className="phase-fade">
+            <div key={`${state}-${activeUserId}`} className="phase-fade">
               <HomeNormal
+                key={activeUserId}
                 onOpenReveal={() => {
+                  if (!hasLockedAnswer) return;
                   setRevealPlayIntro(false);
                   setState('reveal');
                 }}
                 onOpenGames={() => setState('games')}
                 home={home}
                 activeUserId={activeUserId}
-                answered={answered}
+                hasLockedAnswer={hasLockedAnswer}
                 revealCountdown={revealCountdown}
                 revealUnlocked={revealUnlocked}
                 onRevealAnswerLocked={handleRevealAnswerLocked}
-                onRevealAnswerEdited={handleRevealAnswerEdited}
+                onRevealAnswerCleared={handleRevealAnswerCleared}
               />
             </div>
           </div>
@@ -1968,5 +1997,24 @@ export function HomeScreen({ state, setState, onNav }) {
 
       {sheet && <MeetupSheet match={sheet.match} mode={sheet.mode} onClose={() => setSheet(null)} onSend={sendInvite} />}
     </>
+  );
+}
+
+export function HomeScreen({ state, setState, onNav }) {
+  const [activeUserId, setActiveUserId] = usePersistentState('ligo:active_user', REVEAL_DEMO_PROFILE_ID);
+
+  useEffect(() => {
+    setState('normal');
+  }, [activeUserId, setState]);
+
+  return (
+    <HomeProfileSession
+      key={activeUserId}
+      activeUserId={activeUserId}
+      setActiveUserId={setActiveUserId}
+      state={state}
+      setState={setState}
+      onNav={onNav}
+    />
   );
 }

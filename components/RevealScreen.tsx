@@ -1,15 +1,22 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { getDayIndex } from '@/lib/gameQuestions';
 import { getRevealNight } from '@/lib/revealData';
 import { usePersistentState } from '@/lib/usePersistentState';
-import { RevealShell, REVEAL_COLORS, type ShellController } from '@/components/RevealShell';
+import { RevealShell, REVEAL_COLORS, CONNECTION_COLORS, roman, type ShellController } from '@/components/RevealShell';
 import { RevealOpeningIntro } from '@/components/reveal/RevealOpeningIntro';
+import {
+  ActConnectionIntro,
+  ActConnectionSealed,
+  ActConnectionPerson,
+  ActConnectionDone,
+} from '@/components/reveal/ConnectionNightActs';
+import { useConnectionNight } from '@/hooks/useConnectionNight';
+import { isConnectionNightPreview } from '@/lib/revealConstants';
 
 const FF = "'Bricolage Grotesque', sans-serif";
 const EASE = 'cubic-bezier(.2,.7,.2,1)';
-const ROMAN = ['I','II','III','IV','V'];
 
 // ── Shared night label ────────────────────────────────────────────────
 function NightLabel({ text, color, dotBg, dotGlow }: { text: string; color: string; dotBg: string; dotGlow: string }) {
@@ -368,19 +375,90 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false }: Props)
   const dayIndex = getDayIndex();
   const night    = getRevealNight(dayIndex);
   const [answer] = usePersistentState(`ligo:daily:${activeUserId}:answer`, '');
+  const cnPreview = isConnectionNightPreview();
+  const { people, song, loading: cnLoading } = useConnectionNight(activeUserId);
+  const shouldPlayIntro = playIntro && !cnPreview;
+  const [cnActions, setCnActions] = usePersistentState<Record<number, string>>(
+    `ligo:cn:actions:${activeUserId}`,
+    {},
+  );
 
-  const [introDone, setIntroDone] = useState(!playIntro);
+  const [introDone, setIntroDone] = useState(!shouldPlayIntro);
+  const handleIntroComplete = useCallback(() => setIntroDone(true), []);
   const [shareOpen, setShareOpen] = useState(false);
   const [shareAct, setShareAct] = useState(0);
   const shell = useRef<ShellController | null>(null);
 
-  const steps = [
-    ({ anim }: { anim: string }) => <ActLookUp    night={night} dayIndex={dayIndex} anim={anim} />,
+  const songData = song ?? { name: 'Self Control', artist: 'Frank Ocean', art: '/artists/frank-blond.png' };
+
+  function cnAct(idx: number, kind: 'vibe' | 'spark' | 'pass') {
+    setCnActions((a) => ({ ...a, [idx]: kind }));
+    window.setTimeout(() => shell.current?.go(1), 420);
+  }
+
+  const cnSteps =
+    cnPreview && people.length
+      ? [
+          ({ anim }: { anim: string }) => (
+            <ActConnectionIntro matchCount={people.length} userAnswer={answer} anim={anim} />
+          ),
+          ({ anim }: { anim: string }) => (
+            <ActConnectionSealed people={people} song={songData} anim={anim} />
+          ),
+          ...people.map((p, i) => {
+            const PersonAct = ({ anim }: { anim: string }) => (
+              <ActConnectionPerson
+                p={p}
+                idx={i}
+                total={people.length}
+                song={songData}
+                action={cnActions[i]}
+                onAct={(kind) => cnAct(i, kind)}
+                anim={anim}
+              />
+            );
+            PersonAct.displayName = `ActConnectionPerson${p.id}`;
+            return PersonAct;
+          }),
+          ({ anim }: { anim: string }) => (
+            <ActConnectionDone people={people} actions={cnActions} anim={anim} />
+          ),
+        ]
+      : [];
+
+  const auroraSteps = [
+    ({ anim }: { anim: string }) => <ActLookUp night={night} dayIndex={dayIndex} anim={anim} />,
     ({ anim }: { anim: string }) => <ActTheAnswer night={night} anim={anim} />,
     ({ anim }: { anim: string }) => <ActYourLight night={night} userAnswer={answer} anim={anim} />,
-    ({ anim }: { anim: string }) => <ActSkies     night={night} anim={anim} />,
-    ({ anim }: { anim: string }) => <ActTomorrow  night={night} anim={anim} />,
+    ({ anim }: { anim: string }) => <ActSkies night={night} anim={anim} />,
+    ({ anim }: { anim: string }) => <ActTomorrow night={night} anim={anim} />,
   ];
+
+  const steps = cnPreview && cnSteps.length ? cnSteps : auroraSteps;
+
+  const totalActs = steps.length;
+  const shellColors = cnPreview && cnSteps.length ? CONNECTION_COLORS : REVEAL_COLORS;
+
+  if (cnPreview && cnLoading) {
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#0A0907',
+          color: 'rgba(255,255,255,0.5)',
+          fontFamily: FF,
+          fontWeight: 600,
+          fontSize: 14,
+        }}
+      >
+        Loading Connection Night…
+      </div>
+    );
+  }
 
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
@@ -396,11 +474,11 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false }: Props)
       >
         <RevealShell
           steps={steps}
-          colors={REVEAL_COLORS}
+          colors={shellColors}
           controllerRef={shell}
-          title="The Reveal"
-          subtitle="Georgetown · under the lights"
-          stepLabel={(cur) => `Act ${ROMAN[cur] ?? cur + 1} of V`}
+          title={cnPreview && cnSteps.length ? 'Connection Night' : 'The Reveal'}
+          subtitle={cnPreview && cnSteps.length ? 'Georgetown · three matches tonight' : 'Georgetown · under the lights'}
+          stepLabel={(cur) => (cnPreview && cnSteps.length ? `Part ${roman(cur + 1)} of ${roman(totalActs)}` : `Act ${roman(cur + 1)} of ${roman(totalActs)}`)}
           onBack={onBack}
           tapDisabled={shareOpen || !introDone}
           bottom={() => (
@@ -422,14 +500,14 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false }: Props)
                 <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
                 <path d="M9 11l6-4M9 13l6 4" />
               </svg>
-              Share tonight&apos;s sky
+              {cnPreview && cnSteps.length ? "Share tonight's matches" : "Share tonight's sky"}
             </button>
           )}
         />
       </div>
 
-      {playIntro && !introDone && (
-        <RevealOpeningIntro onComplete={() => setIntroDone(true)} />
+      {shouldPlayIntro && !introDone && (
+        <RevealOpeningIntro onComplete={handleIntroComplete} />
       )}
 
       {shareOpen && (

@@ -30,7 +30,10 @@ const EPOCH = new Date('2025-01-01T00:00:00Z').getTime();
 export function getDayIndex(): number {
   if (typeof window !== 'undefined') {
     const ov = localStorage.getItem('ligo:demo:night');
-    if (ov !== null) return Math.max(0, Math.min(9, parseInt(ov, 10)));
+    if (ov !== null && ov !== 'cn') {
+      const n = parseInt(ov, 10);
+      if (!Number.isNaN(n)) return Math.max(0, Math.min(9, n));
+    }
   }
   return (((Math.floor((Date.now() - EPOCH) / 86_400_000)) % 10) + 10) % 10;
 }
