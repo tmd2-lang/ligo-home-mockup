@@ -26,8 +26,6 @@ import { searchMaddieCatalog } from "@/lib/maddie-catalog";
 import { searchAlessiaCatalog } from "@/lib/alessia-catalog";
 import { searchSofiaCatalog } from "@/lib/sofia-catalog";
 import { searchMarcusCatalog } from "@/lib/marcus-catalog";
-import { DailyPick } from './DailyPick';
-import { HomeConnection } from './HomeConnection';
 import { HomeOrbit } from './HomeOrbit';
 import { USERS } from "@/lib/users";
 import { useConnectionNight } from "@/hooks/useConnectionNight";

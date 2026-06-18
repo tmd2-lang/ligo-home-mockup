@@ -1,0 +1,1837 @@
+
+> ligo-home-mockup@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (120kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (120kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (120kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (120kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+Failed to compile.
+
+./components/HomeScreen.tsx
+Error: 
+  [31mx[0m the name `DailyPick` is defined multiple times
+     ,-[[36;1;4m/Users/tjdozier7/Downloads/ligo-home-mockup-main/components/HomeScreen.tsx[0m:26:1]
+ [2m 26[0m | import { searchAlessiaCatalog } from "@/lib/alessia-catalog";
+ [2m 27[0m | import { searchSofiaCatalog } from "@/lib/sofia-catalog";
+ [2m 28[0m | import { searchMarcusCatalog } from "@/lib/marcus-catalog";
+ [2m 29[0m | import { DailyPick } from './DailyPick';
+     : [31;1m         ^^^^|^^^^[0m
+     :              [31;1m`-- [31;1mprevious definition of `DailyPick` here[0m[0m
+ [2m 30[0m | import { HomeConnection } from './HomeConnection';
+ [2m 31[0m | import { HomeOrbit } from './HomeOrbit';
+ [2m 32[0m | import { USERS } from "@/lib/users";
+ [2m 33[0m | import { useConnectionNight } from "@/hooks/useConnectionNight";
+ [2m 34[0m | import { useDailyReveal } from "@/hooks/useDailyReveal";
+ [2m 35[0m | import { useHomeContent } from "@/hooks/useHomeContent";
+ [2m 36[0m | import { isWrappedCarouselReady, normalizeWrappedContent } from "@/lib/wrappedUtils";
+ [2m 37[0m | import { RevealScreen } from "@/components/RevealScreen";
+ [2m 38[0m | import { GamesHub } from "@/components/GamesHub";
+ [2m 39[0m | import { loadDailyResults } from "@/lib/gameState";
+ [2m 40[0m | import {
+ [2m 41[0m |   DEMO_QUESTION,
+ [2m 42[0m |   REVEAL_COUNTDOWN_SECONDS,
+ [2m 43[0m |   REVEAL_DEMO_PROFILE_ID,
+ [2m 44[0m | } from "@/lib/revealConstants";
+ [2m 45[0m | 
+ [2m 46[0m | // useState/useEffect aliases the bundle used per-file
+ [2m 47[0m | const useStateS = useState, useStateN = useState, useStateC = useState, useStateW = useState, useStateM = useState;
+ [2m 48[0m | const useEffectS = useEffect, useEffectN = useEffect;
+ [2m 49[0m | 
+ [2m 50[0m | // extend the icon registry locally (shared adds Eye/EyeOff/Spark/Vibe)
+ [2m 51[0m | const Icon: any = { ...BaseIcon };
+ [2m 52[0m | 
+ [2m 53[0m | // home-shared.jsx — pieces reused across the three home states
+ [2m 54[0m | // Games icon (extends the registry), NewsStrip, AnsweredPrompt, Toast, ART map
+ [2m 55[0m | 
+ [2m 56[0m | // album art lives in ./art — single source of truth.
+ [2m 57[0m | // In the standalone bundle these resolve to window.__resources blob URLs;
+ [2m 58[0m | // in the live multi-file version they fall back to the on-disk path.
+ [2m 59[0m | const ART = {
+ [2m 60[0m |   taylor: '/artists/taylor.png',
+ [2m 61[0m |   sabrina: '/artists/sabrina.png',
+ [2m 62[0m |   sza: '/artists/sza-saturn.png',
+ [2m 63[0m |   frank: '/artists/frank-blond.png',
+ [2m 64[0m |   kendrick: '/artists/kendrick.png',
+ [2m 65[0m |   chappell: '/artists/chappell.png',
+ [2m 66[0m |   billie: '/artists/billie.png',
+ [2m 67[0m | };
+ [2m 68[0m | 
+ [2m 69[0m | // Extra glyphs (2px round-stroke house style) used by the restyled home
+ [2m 70[0m | Icon.EyeOff = (p) => (
+ [2m 71[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m 72[0m |     <path d="M2 12s3.5-7 10-7c1.6 0 3 .3 4.2.9M22 12s-3.5 7-10 7c-1.6 0-3-.3-4.2-.9" />
+ [2m 73[0m |     <path d="M9.5 9.6A3 3 0 0014.4 14.5M3 3l18 18" />
+ [2m 74[0m |   </svg>
+ [2m 75[0m | );
+ [2m 76[0m | // Spark — romantic connection (4-point sparkle)
+ [2m 77[0m | Icon.Spark = (p) => (
+ [2m 78[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m 79[0m |     <path d="M12 3c.5 4 1.5 5 5.5 5.5C13.5 9 12.5 10 12 14c-.5-4-1.5-5-5.5-5.5C10.5 8 11.5 7 12 3z" />
+ [2m 80[0m |     <path d="M18.5 14.5c.3 2 .8 2.5 2.5 2.8-1.7.3-2.2.8-2.5 2.7-.3-1.9-.8-2.4-2.5-2.7 1.7-.3 2.2-.8 2.5-2.8z" />
+ [2m 81[0m |   </svg>
+ [2m 82[0m | );
+ [2m 83[0m | // Vibe — friendly connection (soundwave)
+ [2m 84[0m | Icon.Vibe = (p) => (
+ [2m 85[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m 86[0m |     <path d="M4 11v2M8 8v8M12 5v14M16 8v8M20 11v2" />
+ [2m 87[0m |   </svg>
+ [2m 88[0m | );
+ [2m 89[0m | // Eye — reveal
+ [2m 90[0m | Icon.Eye = (p) => (
+ [2m 91[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m 92[0m |     <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" />
+ [2m 93[0m |   </svg>
+ [2m 94[0m | );
+ [2m 95[0m | 
+ [2m 96[0m | // ── "Your artists this week" — horizontal music-news strip ──
+ [2m 97[0m | function NewsStrip({ home }) {
+ [2m 98[0m |   const { loading, error, news } = home;
+ [2m 99[0m |   return (
+ [2m100[0m |     <div>
+ [2m101[0m |       <div style={{ padding: '24px 22px 12px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+ [2m102[0m |         <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 18, letterSpacing: '-0.015em', color: '#14110D', margin: 0 }}>Your artists this week</h2>
+ [2m103[0m |         <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 12, fontWeight: 600, color: '#F97316' }}>See all</span>
+ [2m104[0m |       </div>
+ [2m105[0m |       <div style={{
+ [2m106[0m |         display: 'flex', gap: 12, overflowX: 'auto', padding: '0 22px 4px',
+ [2m107[0m |         scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch',
+ [2m108[0m |       }}>
+ [2m109[0m |         {loading ? (
+ [2m110[0m |           <p style={{
+ [2m111[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m112[0m |             color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+ [2m113[0m |           }}>Loading your artists…</p>
+ [2m114[0m |         ) : error ? (
+ [2m115[0m |           <p style={{
+ [2m116[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m117[0m |             color: 'rgba(200,50,50,0.85)', margin: '8px 0 12px',
+ [2m118[0m |           }}>{error}</p>
+ [2m119[0m |         ) : !news.length ? (
+ [2m120[0m |           <p style={{
+ [2m121[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m122[0m |             color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+ [2m123[0m |           }}>Nothing here yet</p>
+ [2m124[0m |         ) : news.map((n, i) => (
+ [2m125[0m |           <div key={n.id || i} style={{
+ [2m126[0m |             flex: '0 0 auto', width: 208, background: '#fff', borderRadius: 18,
+ [2m127[0m |             border: '1px solid rgba(20,17,13,0.05)',
+ [2m128[0m |             boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
+ [2m129[0m |             overflow: 'hidden',
+ [2m130[0m |           }}>
+ [2m131[0m |             <div style={{
+ [2m132[0m |               height: 116, backgroundImage: `url(${n.art_url})`, backgroundSize: 'cover', backgroundPosition: 'center',
+ [2m133[0m |               position: 'relative',
+ [2m134[0m |             }}>
+ [2m135[0m |               <span style={{
+ [2m136[0m |                 position: 'absolute', top: 10, left: 10,
+ [2m137[0m |                 fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 9, fontWeight: 700,
+ [2m138[0m |                 letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff',
+ [2m139[0m |                 background: 'rgba(10,9,7,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+ [2m140[0m |                 padding: '4px 8px', borderRadius: 99,
+ [2m141[0m |               }}>{n.source_label}</span>
+ [2m142[0m |             </div>
+ [2m143[0m |             <div style={{ padding: '12px 14px 14px' }}>
+ [2m144[0m |               <div style={{
+ [2m145[0m |                 fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14,
+ [2m146[0m |                 lineHeight: 1.25, letterSpacing: '-0.01em', color: '#14110D', textWrap: 'pretty',
+ [2m147[0m |               }}>{n.headline}</div>
+ [2m148[0m |               <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.45)', marginTop: 8 }}>{n.time_label} ago</div>
+ [2m149[0m |             </div>
+ [2m150[0m |           </div>
+ [2m151[0m |         ))}
+ [2m152[0m |       </div>
+ [2m153[0m |     </div>
+ [2m154[0m |   );
+ [2m155[0m | }
+ [2m156[0m | 
+ [2m157[0m | // ── Compact answered-prompt strip (today's locked text answer) ──
+ [2m158[0m | function AnsweredPrompt({ answer = 'Drake — What Did I Miss? (strictly Iceman)' }) {
+ [2m159[0m |   return (
+ [2m160[0m |     <div style={{ margin: '14px 22px 0' }}>
+ [2m161[0m |       <div style={{
+ [2m162[0m |         display: 'flex', alignItems: 'center', gap: 14, padding: 14,
+ [2m163[0m |         borderRadius: 18, background: '#fff', border: '1px solid rgba(20,17,13,0.05)',
+ [2m164[0m |         boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
+ [2m165[0m |       }}>
+ [2m166[0m |         <span style={{ width: 44, height: 44, borderRadius: 99, flexShrink: 0, background: 'rgba(113,192,127,0.16)', color: '#2F7D3F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+ [2m167[0m |           <Icon.Check width="20" height="20" />
+ [2m168[0m |         </span>
+ [2m169[0m |         <div style={{ flex: 1, minWidth: 0 }}>
+ [2m170[0m |           <div style={{
+ [2m171[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 10, fontWeight: 700,
+ [2m172[0m |             letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2F7D3F',
+ [2m173[0m |           }}>Today's answer · locked in</div>
+ [2m174[0m |           <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 16, letterSpacing: '-0.015em', color: '#14110D', marginTop: 3, textWrap: 'balance' }}>
+ [2m175[0m |             "{answer}"
+ [2m176[0m |           </div>
+ [2m177[0m |           <div style={{ fontSize: 12, color: 'rgba(20,17,13,0.5)', marginTop: 2 }}>Reveal at 8pm · 1,204 Hoyas in</div>
+ [2m178[0m |         </div>
+ [2m179[0m |       </div>
+ [2m180[0m |     </div>
+ [2m181[0m |   );
+ [2m182[0m | }
+ [2m183[0m | 
+ [2m184[0m | // ── Toast (confirmation after sending a meetup invite) ──
+ [2m185[0m | function Toast({ show, children }) {
+ [2m186[0m |   return (
+ [2m187[0m |     <div style={{
+ [2m188[0m |       position: 'absolute', left: 22, right: 22, bottom: 104, zIndex: 80,
+ [2m189[0m |       transform: show ? 'translateY(0)' : 'translateY(20px)',
+ [2m190[0m |       opacity: show ? 1 : 0, pointerEvents: 'none',
+ [2m191[0m |       transition: 'opacity 220ms cubic-bezier(.2,.7,.2,1), transform 220ms cubic-bezier(.2,.7,.2,1)',
+ [2m192[0m |     }}>
+ [2m193[0m |       <div style={{
+ [2m194[0m |         background: '#14110D', color: '#fff', borderRadius: 16, padding: '14px 16px',
+ [2m195[0m |         display: 'flex', alignItems: 'center', gap: 10,
+ [2m196[0m |         boxShadow: '0 12px 30px -12px rgba(20,17,13,0.5)',
+ [2m197[0m |         fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14,
+ [2m198[0m |       }}>
+ [2m199[0m |         <span style={{ width: 22, height: 22, borderRadius: 99, background: '#71C07F', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+ [2m200[0m |           <Icon.Check width="12" height="12" />
+ [2m201[0m |         </span>
+ [2m202[0m |         {children}
+ [2m203[0m |       </div>
+ [2m204[0m |     </div>
+ [2m205[0m |   );
+ [2m206[0m | }
+ [2m207[0m | 
+ [2m208[0m | 
+ [2m209[0m | 
+ [2m210[0m | // home-normal.jsx — Daily pick: open question + lockable answer + reveal flow
+ [2m211[0m | 
+ [2m212[0m | // ── Real-time countdowns — aligned to the clock in EASTERN TIME ──
+ [2m213[0m | // Everything is scheduled in America/New_York (campus is in DC), so every
+ [2m214[0m | // viewer sees the same countdown regardless of their device timezone.
+ [2m215[0m | // Daily reveal is 8:00 PM ET (the big countdown). The answer cutoff is 3 PM ET
+ [2m216[0m | // (a separate "lock yours before 3pm" note). Connections drop Fri 8 PM ET;
+ [2m217[0m | // wrapped drops Sun 12 PM ET. (Change these to reschedule.) 0 = Sun … 5 = Fri.
+ [2m218[0m | const REVEAL_HOUR = 20, REVEAL_MIN = 0;
+ [2m219[0m | const CONNECTION_DAY = 5, CONNECTION_HOUR = 20;
+ [2m220[0m | const WRAPPED_DAY = 0, WRAPPED_HOUR = 12;
+ [2m221[0m | 
+ [2m222[0m | const ET = "America/New_York";
+ [2m223[0m | const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+ [2m224[0m | 
+ [2m225[0m | // the current wall-clock in Eastern + ET's UTC offset right now (handles EST/EDT)
+ [2m226[0m | function easternParts(now) {
+ [2m227[0m |   const m = {};
+ [2m228[0m |   for (const p of new Intl.DateTimeFormat("en-US", {
+ [2m229[0m |     timeZone: ET, hour12: false, weekday: "short",
+ [2m230[0m |     year: "numeric", month: "2-digit", day: "2-digit",
+ [2m231[0m |     hour: "2-digit", minute: "2-digit", second: "2-digit",
+ [2m232[0m |   }).formatToParts(now)) {
+ [2m233[0m |     if (p.type === "weekday") m.weekday = p.value;
+ [2m234[0m |     else if (p.type !== "literal") m[p.type] = parseInt(p.value, 10);
+ [2m235[0m |   }
+ [2m236[0m |   // ms ET is ahead of UTC (negative for the US): treat ET wall numbers as if
+ [2m237[0m |   // UTC, the gap from the real instant is the offset.
+ [2m238[0m |   m.offset = Date.UTC(m.year, m.month - 1, m.day, m.hour, m.minute, m.second) - now.getTime();
+ [2m239[0m |   return m;
+ [2m240[0m | }
+ [2m241[0m | // UTC timestamp for "ET date + addDays, at hour:minute"
+ [2m242[0m | function easternTarget(m, addDays, hour, minute) {
+ [2m243[0m |   return Date.UTC(m.year, m.month - 1, m.day + addDays, hour, minute, 0) - m.offset;
+ [2m244[0m | }
+ [2m245[0m | // next ET daily time (today, or tomorrow if already passed)
+ [2m246[0m | function nextDaily(hour, minute) {
+ [2m247[0m |   const now = new Date(), m = easternParts(now);
+ [2m248[0m |   let t = easternTarget(m, 0, hour, minute);
+ [2m249[0m |   if (t <= now.getTime()) t = easternTarget(m, 1, hour, minute);
+ [2m250[0m |   return t;
+ [2m251[0m | }
+ [2m252[0m | // next ET weekly day + time
+ [2m253[0m | function nextWeekly(weekday, hour, minute) {
+ [2m254[0m |   const now = new Date(), m = easternParts(now);
+ [2m255[0m |   let add = (weekday - WD[m.weekday] + 7) % 7;
+ [2m256[0m |   let t = easternTarget(m, add, hour, minute);
+ [2m257[0m |   if (t <= now.getTime()) t = easternTarget(m, add + 7, hour, minute);
+ [2m258[0m |   return t;
+ [2m259[0m | }
+ [2m260[0m | // live ms remaining to a target — resolved on the client only (no hydration
+ [2m261[0m | // mismatch) and recomputed every second so it tracks the real clock.
+ [2m262[0m | function useCountdown(makeTarget) {
+ [2m263[0m |   const [now, setNow] = useStateN(null);
+ [2m264[0m |   const target = React.useRef(0);
+ [2m265[0m |   useEffectN(() => {
+ [2m266[0m |     target.current = makeTarget();
+ [2m267[0m |     setNow(Date.now());
+ [2m268[0m |     const id = setInterval(() => setNow(Date.now()), 1000);
+ [2m269[0m |     return () => clearInterval(id);
+ [2m270[0m |   }, []);
+ [2m271[0m |   return now == null ? null : Math.max(0, target.current - now);
+ [2m272[0m | }
+ [2m273[0m | function fmtHMS(ms) {
+ [2m274[0m |   if (ms == null) return '··';
+ [2m275[0m |   const s = Math.floor(ms / 1000);
+ [2m276[0m |   const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+ [2m277[0m |   return `${h}h ${String(m).padStart(2, '0')}m ${String(sec).padStart(2, '0')}s`;
+ [2m278[0m | }
+ [2m279[0m | function fmtDHM(ms) {
+ [2m280[0m |   if (ms == null) return '··';
+ [2m281[0m |   const s = Math.floor(ms / 1000);
+ [2m282[0m |   const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+ [2m283[0m |   return d > 0 ? `${d}d ${h}h ${String(m).padStart(2, '0')}m` : `${h}h ${String(m).padStart(2, '0')}m`;
+ [2m284[0m | }
+ [2m285[0m | // reveal countdown → the big number in the daily-pick card (h m s, live)
+ [2m286[0m | function useReveal() {
+ [2m287[0m |   return fmtHMS(useCountdown(() => nextDaily(REVEAL_HOUR, REVEAL_MIN)));
+ [2m288[0m | }
+ [2m289[0m | 
+ [2m290[0m | const SUGGESTIONS = [
+ [2m291[0m |   'Mr. Brightside — non-negotiable',
+ [2m292[0m |   'Outkast raised me',
+ [2m293[0m |   'Stevie Wonder, every Sunday',
+ [2m294[0m |   'Linkin Park, no notes',
+ [2m295[0m | ];
+ [2m296[0m | 
+ [2m297[0m | // the user's synced library is now powered by JORDAN_CATALOG
+ [2m298[0m | 
+ [2m299[0m | // ever-present, pulsing reveal countdown — recolors when you answer
+ [2m300[0m | function CountdownBar({ answered, time }) {
+ [2m301[0m |   const t = answered
+ [2m302[0m |     ? { card: 'cd-breathe-g', dot: 'cd-dot-g', dotBg: '#71C07F', bg: 'linear-gradient(160deg, rgba(113,192,127,0.18), rgba(245,215,131,0.10))', border: 'rgba(113,192,127,0.30)', accent: '#2F7D3F', big: '#1E6B33', eyebrow: "You're in · everyone reveals in", sub: '41 friends already locked in' }
+ [2m303[0m |     : { card: 'cd-breathe-o', dot: 'cd-dot-o', dotBg: '#F97316', bg: 'linear-gradient(160deg, rgba(249,115,22,0.16), rgba(245,215,131,0.12))', border: 'rgba(249,115,22,0.28)', accent: '#C2410C', big: '#9A3412', eyebrow: 'Everyone reveals in', sub: '847 answered · lock yours before 3pm' };
+ [2m304[0m |   return (
+ [2m305[0m |     <div style={{ margin: '14px 22px 0' }}>
+ [2m306[0m |       <div className={t.card} style={{ borderRadius: 22, padding: '18px 20px', background: t.bg, border: `1px solid ${t.border}` }}>
+ [2m307[0m |         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+ [2m308[0m |           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: t.accent }}>
+ [2m309[0m |             <span className={t.dot} style={{ width: 8, height: 8, borderRadius: 99, background: t.dotBg }} />
+ [2m310[0m |             {t.eyebrow}
+ [2m311[0m |           </span>
+ [2m312[0m |           {answered && (
+ [2m313[0m |             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#2F7D3F' }}>
+ [2m314[0m |               <Icon.Check width="13" height="13" /> Locked
+ [2m315[0m |             </span>
+ [2m316[0m |           )}
+ [2m317[0m |         </div>
+ [2m318[0m |         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 42, letterSpacing: '-0.03em', color: t.big, lineHeight: 1, margin: '10px 0 12px', fontVariantNumeric: 'tabular-nums' }}>{time}</div>
+ [2m319[0m |         <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
+ [2m320[0m |           <AvatarStack />
+ [2m321[0m |           <span style={{ fontSize: 12.5, color: t.accent, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600 }}>{t.sub}</span>
+ [2m322[0m |         </div>
+ [2m323[0m |       </div>
+ [2m324[0m |     </div>
+ [2m325[0m |   );
+ [2m326[0m | }
+ [2m327[0m | 
+ [2m328[0m | // Legacy v0 entry points — parked; Connection Night + Wrapped code kept, not rendered on home.
+ [2m329[0m | function WeekTeasers({ onOpen }) {
+ [2m330[0m |   const conn = fmtDHM(useCountdown(() => nextWeekly(CONNECTION_DAY, CONNECTION_HOUR, 0)));
+ [2m331[0m |   const wrap = fmtDHM(useCountdown(() => nextWeekly(WRAPPED_DAY, WRAPPED_HOUR, 0)));
+ [2m332[0m |   const cards = [
+ [2m333[0m |     { key: 'connection', icon: Icon.Users, eyebrow: 'Connections', cta: "View this week's connections", drop: `Next drops in ${conn}`, accent: '#A13D99', dotBg: '#EA8CE1', bg: 'linear-gradient(160deg, rgba(234,140,225,0.16), rgba(234,140,225,0.05))', border: 'rgba(234,140,225,0.3)' },
+ [2m334[0m |     { key: 'wrapped', icon: Icon.Spark, eyebrow: 'Wrapped', cta: 'View last week’s wrapped', drop: `Next drops in ${wrap}`, accent: '#A07C00', dotBg: '#E9BF52', bg: 'linear-gradient(160deg, rgba(245,215,131,0.22), rgba(245,215,131,0.06))', border: 'rgba(245,215,131,0.45)' },
+ [2m335[0m |   ];
+ [2m336[0m |   return (
+ [2m337[0m |     <div>
+ [2m338[0m |       <div style={{ padding: '26px 22px 12px' }}>
+ [2m339[0m |         <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 18, letterSpacing: '-0.015em', color: '#14110D', margin: 0 }}>This week on Ligo</h2>
+ [2m340[0m |       </div>
+ [2m341[0m |       <div style={{ padding: '0 22px', display: 'flex', gap: 12 }}>
+ [2m342[0m |         {cards.map(c => {
+ [2m343[0m |           const I = c.icon;
+ [2m344[0m |           return (
+ [2m345[0m |             <button key={c.key} onClick={() => onOpen(c.key)} style={{
+ [2m346[0m |               flex: 1, textAlign: 'left', cursor: 'pointer', border: `1px solid ${c.border}`, borderRadius: 20,
+ [2m347[0m |               padding: 16, background: c.bg, display: 'flex', flexDirection: 'column', transition: 'transform 0.12s ease',
+ [2m348[0m |             }} onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'} onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+ [2m349[0m |               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: c.accent }}>
+ [2m350[0m |                 <I width="14" height="14" /> {c.eyebrow}
+ [2m351[0m |               </span>
+ [2m352[0m |               <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 16, letterSpacing: '-0.015em', color: '#14110D', lineHeight: 1.2, margin: '12px 0 14px', textWrap: 'balance', flex: 1 }}>
+ [2m353[0m |                 {c.cta}
+ [2m354[0m |               </div>
+ [2m355[0m |               <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
+ [2m356[0m |                 <span className="cd-tick" style={{ width: 7, height: 7, borderRadius: 99, background: c.dotBg, animation: 'ligo-pulse 1.8s ease-in-out infinite', flexShrink: 0 }} />
+ [2m357[0m |                 <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 12, color: c.accent, fontVariantNumeric: 'tabular-nums' }}>{c.drop}</span>
+ [2m358[0m |               </div>
+ [2m359[0m |             </button>
+ [2m360[0m |           );
+ [2m361[0m |         })}
+ [2m362[0m |       </div>
+ [2m363[0m |     </div>
+ [2m364[0m |   );
+ [2m365[0m | }
+ [2m366[0m | 
+ [2m367[0m | function RevealTeaser({ onOpen, hasLockedAnswer, revealUnlocked }) {
+ [2m368[0m |   if (!hasLockedAnswer || !revealUnlocked) return null;
+ [2m369[0m | 
+ [2m370[0m |   return (
+ [2m371[0m |     <div style={{ padding: '20px 22px 0' }}>
+ [2m372[0m |       <button
+ [2m373[0m |         type="button"
+ [2m374[0m |         onClick={() => onOpen()}
+ [2m375[0m |         style={{
+ [2m376[0m |           width: '100%',
+ [2m377[0m |           textAlign: 'left',
+ [2m378[0m |           cursor: 'pointer',
+ [2m379[0m |           border: '1px solid rgba(113,192,127,0.28)',
+ [2m380[0m |           borderRadius: 20,
+ [2m381[0m |           padding: 18,
+ [2m382[0m |           background: 'linear-gradient(160deg, rgba(7,9,12,0.96), rgba(22,19,15,0.92))',
+ [2m383[0m |           boxShadow: '0 12px 32px -14px rgba(113,192,127,0.35)',
+ [2m384[0m |           display: 'flex',
+ [2m385[0m |           flexDirection: 'column',
+ [2m386[0m |           gap: 12,
+ [2m387[0m |           color: '#fff',
+ [2m388[0m |         }}
+ [2m389[0m |       >
+ [2m390[0m |         <span style={{
+ [2m391[0m |           display: 'inline-flex', alignItems: 'center', gap: 7, alignSelf: 'flex-start',
+ [2m392[0m |           fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 10,
+ [2m393[0m |           letterSpacing: '0.14em', textTransform: 'uppercase', color: '#71C07F',
+ [2m394[0m |         }}>
+ [2m395[0m |           <Icon.Eye width="14" height="14" /> Tonight&apos;s reveal
+ [2m396[0m |         </span>
+ [2m397[0m |         <div style={{
+ [2m398[0m |           fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 22,
+ [2m399[0m |           letterSpacing: '-0.025em', lineHeight: 1.15, textWrap: 'balance',
+ [2m400[0m |         }}>
+ [2m401[0m |           Look up, Georgetown.
+ [2m402[0m |         </div>
+ [2m403[0m |         <div style={{
+ [2m404[0m |           display: 'flex', alignItems: 'center', gap: 8, paddingTop: 12,
+ [2m405[0m |           borderTop: '1px solid rgba(255,255,255,0.08)',
+ [2m406[0m |         }}>
+ [2m407[0m |           <span className="cd-tick" style={{
+ [2m408[0m |             width: 7, height: 7, borderRadius: 99, background: '#71C07F',
+ [2m409[0m |             animation: 'ligo-pulse 1.8s ease-in-out infinite', flexShrink: 0,
+ [2m410[0m |           }} />
+ [2m411[0m |           <span style={{
+ [2m412[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 12,
+ [2m413[0m |             color: 'rgba(255,255,255,0.55)',
+ [2m414[0m |           }}>
+ [2m415[0m |             Open tonight&apos;s sky · swipe through five cards
+ [2m416[0m |           </span>
+ [2m417[0m |         </div>
+ [2m418[0m |       </button>
+ [2m419[0m |     </div>
+ [2m420[0m |   );
+ [2m421[0m | }
+ [2m422[0m | 
+ [2m423[0m | function GamesHubBanner({ onOpen, activeUserId }) {
+ [2m424[0m |   const results = React.useMemo(() => {
+ [2m425[0m |     try { return loadDailyResults(activeUserId); } catch { return null; }
+ [2m426[0m |   }, [activeUserId]);
+ [2m427[0m | 
+ [2m428[0m |   const played = results
+ [2m429[0m |     ? ['trivia', 'ranking', 'soundmoji'].filter((f) => results[f] !== null).length
+ [2m430[0m |     : 0;
+ [2m431[0m | 
+ [2m432[0m |   return (
+ [2m433[0m |     <div style={{ margin: '16px 22px 0' }}>
+ [2m434[0m |       <button
+ [2m435[0m |         type="button"
+ [2m436[0m |         onClick={onOpen}
+ [2m437[0m |         style={{
+ [2m438[0m |           width: '100%', textAlign: 'left', cursor: 'pointer',
+ [2m439[0m |           background: 'linear-gradient(135deg, rgba(249,115,22,0.10) 0%, rgba(124,58,237,0.08) 50%, rgba(8,145,178,0.08) 100%)',
+ [2m440[0m |           border: '1px solid rgba(249,115,22,0.22)',
+ [2m441[0m |           borderRadius: 20, padding: '15px 18px',
+ [2m442[0m |           display: 'flex', alignItems: 'center', gap: 14,
+ [2m443[0m |           boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 20px -12px rgba(249,115,22,0.18)',
+ [2m444[0m |           transition: 'transform 0.12s ease',
+ [2m445[0m |         }}
+ [2m446[0m |         onMouseDown={(e) => { e.currentTarget.style.transform = 'scale(0.985)'; }}
+ [2m447[0m |         onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+ [2m448[0m |         onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+ [2m449[0m |       >
+ [2m450[0m |         <div style={{
+ [2m451[0m |           width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+ [2m452[0m |           background: 'rgba(249,115,22,0.12)',
+ [2m453[0m |           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
+ [2m454[0m |         }}>
+ [2m455[0m |           🎮
+ [2m456[0m |         </div>
+ [2m457[0m |         <div style={{ flex: 1, minWidth: 0 }}>
+ [2m458[0m |           <div style={{
+ [2m459[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 15,
+ [2m460[0m |             letterSpacing: '-0.01em', color: '#14110D',
+ [2m461[0m |           }}>
+ [2m462[0m |             Ligo Games Hub
+ [2m463[0m |           </div>
+ [2m464[0m |           <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 12, color: 'rgba(20,17,13,0.5)', marginTop: 1 }}>
+ [2m465[0m |             {played === 3
+ [2m466[0m |               ? '✓ All games done today'
+ [2m467[0m |               : played > 0
+ [2m468[0m |               ? `${played}/3 played · ${3 - played} left today`
+ [2m469[0m |               : 'Music Trivia · Chart Ranker · Soundmoji'}
+ [2m470[0m |           </div>
+ [2m471[0m |         </div>
+ [2m472[0m |         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(249,115,22,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+ [2m473[0m |           <path d="M5 12h14M12 5l7 7-7 7" />
+ [2m474[0m |         </svg>
+ [2m475[0m |       </button>
+ [2m476[0m |     </div>
+ [2m477[0m |   );
+ [2m478[0m | }
+ [2m479[0m | 
+ [2m480[0m | function RevealWait({ secondsLeft }) {
+ [2m481[0m |   const padded = String(secondsLeft).padStart(2, "0");
+ [2m482[0m | 
+ [2m483[0m |   return (
+ [2m484[0m |     <div style={{ margin: "12px 22px 0" }}>
+ [2m485[0m |       <div
+ [2m486[0m |         style={{
+ [2m487[0m |           padding: "22px 20px",
+ [2m488[0m |           borderRadius: 18,
+ [2m489[0m |           border: "1.5px dashed rgba(249,115,22,0.35)",
+ [2m490[0m |           background: "linear-gradient(160deg, rgba(249,115,22,0.06), rgba(245,215,131,0.04))",
+ [2m491[0m |           textAlign: "center",
+ [2m492[0m |         }}
+ [2m493[0m |       >
+ [2m494[0m |         <div
+ [2m495[0m |           style={{
+ [2m496[0m |             fontFamily: "Bricolage Grotesque, sans-serif",
+ [2m497[0m |             fontWeight: 700,
+ [2m498[0m |             fontSize: 11,
+ [2m499[0m |             letterSpacing: "0.14em",
+ [2m500[0m |             textTransform: "uppercase",
+ [2m501[0m |             color: "#C2410C",
+ [2m502[0m |             marginBottom: 10,
+ [2m503[0m |           }}
+ [2m504[0m |         >
+ [2m505[0m |           Tonight&apos;s reveal · opening soon
+ [2m506[0m |         </div>
+ [2m507[0m |         <div
+ [2m508[0m |           style={{
+ [2m509[0m |             fontFamily: "Bricolage Grotesque, sans-serif",
+ [2m510[0m |             fontWeight: 700,
+ [2m511[0m |             fontSize: 42,
+ [2m512[0m |             letterSpacing: "-0.03em",
+ [2m513[0m |             color: "#9A3412",
+ [2m514[0m |             fontVariantNumeric: "tabular-nums",
+ [2m515[0m |             lineHeight: 1,
+ [2m516[0m |           }}
+ [2m517[0m |         >
+ [2m518[0m |           0:{padded}
+ [2m519[0m |         </div>
+ [2m520[0m |         <p
+ [2m521[0m |           style={{
+ [2m522[0m |             margin: "14px 0 0",
+ [2m523[0m |             fontFamily: "Bricolage Grotesque, sans-serif",
+ [2m524[0m |             fontWeight: 600,
+ [2m525[0m |             fontSize: 14,
+ [2m526[0m |             lineHeight: 1.45,
+ [2m527[0m |             color: "rgba(20,17,13,0.55)",
+ [2m528[0m |             textWrap: "balance",
+ [2m529[0m |           }}
+ [2m530[0m |         >
+ [2m531[0m |           Your answer&apos;s in. Campus is still answering — the reveal opens when the countdown ends.
+ [2m532[0m |         </p>
+ [2m533[0m |       </div>
+ [2m534[0m |     </div>
+ [2m535[0m |   );
+ [2m536[0m | }
+ [2m537[0m | 
+ [2m538[0m | // progress timeline: Opens · Answered · Reveal
+ [2m539[0m | function Timeline({ answered, revealWaiting, revealUnlocked }) {
+ [2m540[0m |   const node = (label, time, state) => (
+ [2m541[0m |     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, flexShrink: 0, width: 64 }}>
+ [2m542[0m |       <span style={{
+ [2m543[0m |         width: 16, height: 16, borderRadius: 99,
+ [2m544[0m |         background: state === 'done' ? '#F97316' : '#fff',
+ [2m545[0m |         border: state === 'done' ? '0' : '2px solid ' + (state === 'next' ? '#F97316' : 'rgba(20,17,13,0.2)'),
+ [2m546[0m |         boxShadow: state === 'done' ? '0 0 0 4px rgba(249,115,22,0.16)' : 'none',
+ [2m547[0m |       }} />
+ [2m548[0m |       <div style={{ textAlign: 'center' }}>
+ [2m549[0m |         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 12.5, color: '#14110D', letterSpacing: '-0.01em' }}>{time}</div>
+ [2m550[0m |         <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.45)', marginTop: 1 }}>{label}</div>
+ [2m551[0m |       </div>
+ [2m552[0m |     </div>
+ [2m553[0m |   );
+ [2m554[0m |   const seg = (fill) => (
+ [2m555[0m |     <div style={{ flex: 1, height: 3, borderRadius: 99, background: 'rgba(20,17,13,0.1)', margin: '8px -6px 0', overflow: 'hidden' }}>
+ [2m556[0m |       <i style={{ display: 'block', height: '100%', width: fill ? '100%' : '0%', background: '#F97316', borderRadius: 99 }} />
+ [2m557[0m |     </div>
+ [2m558[0m |   );
+ [2m559[0m |   return (
+ [2m560[0m |     <div style={{ display: 'flex', alignItems: 'flex-start', padding: '22px 26px 0' }}>
+ [2m561[0m |       {node('Opens', '8:00a', 'done')}
+ [2m562[0m |       {seg(true)}
+ [2m563[0m |       {node('Answered', 'You', answered ? 'done' : 'next')}
+ [2m564[0m |       {seg(false)}
+ [2m565[0m |       {node('Reveal', '8:00p', revealUnlocked ? 'done' : revealWaiting || answered ? 'next' : 'pending')}
+ [2m566[0m |     </div>
+ [2m567[0m |   );
+ [2m568[0m | }
+ [2m569[0m | 
+ [2m570[0m | function DailyPick({
+     : [33;1m         ^^^^|^^^^[0m
+     :              [33;1m`-- [33;1m`DailyPick` redefined here[0m[0m
+ [2m571[0m |   activeUserId,
+ [2m572[0m |   revealCountdown,
+ [2m573[0m |   revealUnlocked,
+     `----
+
+  [31mx[0m the name `HomeConnection` is defined multiple times
+      ,-[[36;1;4m/Users/tjdozier7/Downloads/ligo-home-mockup-main/components/HomeScreen.tsx[0m:27:1]
+ [2m  27[0m | import { searchSofiaCatalog } from "@/lib/sofia-catalog";
+ [2m  28[0m | import { searchMarcusCatalog } from "@/lib/marcus-catalog";
+ [2m  29[0m | import { DailyPick } from './DailyPick';
+ [2m  30[0m | import { HomeConnection } from './HomeConnection';
+      : [31;1m         ^^^^^^^|^^^^^^[0m
+      :                 [31;1m`-- [31;1mprevious definition of `HomeConnection` here[0m[0m
+ [2m  31[0m | import { HomeOrbit } from './HomeOrbit';
+ [2m  32[0m | import { USERS } from "@/lib/users";
+ [2m  33[0m | import { useConnectionNight } from "@/hooks/useConnectionNight";
+ [2m  34[0m | import { useDailyReveal } from "@/hooks/useDailyReveal";
+ [2m  35[0m | import { useHomeContent } from "@/hooks/useHomeContent";
+ [2m  36[0m | import { isWrappedCarouselReady, normalizeWrappedContent } from "@/lib/wrappedUtils";
+ [2m  37[0m | import { RevealScreen } from "@/components/RevealScreen";
+ [2m  38[0m | import { GamesHub } from "@/components/GamesHub";
+ [2m  39[0m | import { loadDailyResults } from "@/lib/gameState";
+ [2m  40[0m | import {
+ [2m  41[0m |   DEMO_QUESTION,
+ [2m  42[0m |   REVEAL_COUNTDOWN_SECONDS,
+ [2m  43[0m |   REVEAL_DEMO_PROFILE_ID,
+ [2m  44[0m | } from "@/lib/revealConstants";
+ [2m  45[0m | 
+ [2m  46[0m | // useState/useEffect aliases the bundle used per-file
+ [2m  47[0m | const useStateS = useState, useStateN = useState, useStateC = useState, useStateW = useState, useStateM = useState;
+ [2m  48[0m | const useEffectS = useEffect, useEffectN = useEffect;
+ [2m  49[0m | 
+ [2m  50[0m | // extend the icon registry locally (shared adds Eye/EyeOff/Spark/Vibe)
+ [2m  51[0m | const Icon: any = { ...BaseIcon };
+ [2m  52[0m | 
+ [2m  53[0m | // home-shared.jsx — pieces reused across the three home states
+ [2m  54[0m | // Games icon (extends the registry), NewsStrip, AnsweredPrompt, Toast, ART map
+ [2m  55[0m | 
+ [2m  56[0m | // album art lives in ./art — single source of truth.
+ [2m  57[0m | // In the standalone bundle these resolve to window.__resources blob URLs;
+ [2m  58[0m | // in the live multi-file version they fall back to the on-disk path.
+ [2m  59[0m | const ART = {
+ [2m  60[0m |   taylor: '/artists/taylor.png',
+ [2m  61[0m |   sabrina: '/artists/sabrina.png',
+ [2m  62[0m |   sza: '/artists/sza-saturn.png',
+ [2m  63[0m |   frank: '/artists/frank-blond.png',
+ [2m  64[0m |   kendrick: '/artists/kendrick.png',
+ [2m  65[0m |   chappell: '/artists/chappell.png',
+ [2m  66[0m |   billie: '/artists/billie.png',
+ [2m  67[0m | };
+ [2m  68[0m | 
+ [2m  69[0m | // Extra glyphs (2px round-stroke house style) used by the restyled home
+ [2m  70[0m | Icon.EyeOff = (p) => (
+ [2m  71[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m  72[0m |     <path d="M2 12s3.5-7 10-7c1.6 0 3 .3 4.2.9M22 12s-3.5 7-10 7c-1.6 0-3-.3-4.2-.9" />
+ [2m  73[0m |     <path d="M9.5 9.6A3 3 0 0014.4 14.5M3 3l18 18" />
+ [2m  74[0m |   </svg>
+ [2m  75[0m | );
+ [2m  76[0m | // Spark — romantic connection (4-point sparkle)
+ [2m  77[0m | Icon.Spark = (p) => (
+ [2m  78[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m  79[0m |     <path d="M12 3c.5 4 1.5 5 5.5 5.5C13.5 9 12.5 10 12 14c-.5-4-1.5-5-5.5-5.5C10.5 8 11.5 7 12 3z" />
+ [2m  80[0m |     <path d="M18.5 14.5c.3 2 .8 2.5 2.5 2.8-1.7.3-2.2.8-2.5 2.7-.3-1.9-.8-2.4-2.5-2.7 1.7-.3 2.2-.8 2.5-2.8z" />
+ [2m  81[0m |   </svg>
+ [2m  82[0m | );
+ [2m  83[0m | // Vibe — friendly connection (soundwave)
+ [2m  84[0m | Icon.Vibe = (p) => (
+ [2m  85[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m  86[0m |     <path d="M4 11v2M8 8v8M12 5v14M16 8v8M20 11v2" />
+ [2m  87[0m |   </svg>
+ [2m  88[0m | );
+ [2m  89[0m | // Eye — reveal
+ [2m  90[0m | Icon.Eye = (p) => (
+ [2m  91[0m |   <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+ [2m  92[0m |     <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" />
+ [2m  93[0m |   </svg>
+ [2m  94[0m | );
+ [2m  95[0m | 
+ [2m  96[0m | // ── "Your artists this week" — horizontal music-news strip ──
+ [2m  97[0m | function NewsStrip({ home }) {
+ [2m  98[0m |   const { loading, error, news } = home;
+ [2m  99[0m |   return (
+ [2m 100[0m |     <div>
+ [2m 101[0m |       <div style={{ padding: '24px 22px 12px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+ [2m 102[0m |         <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 18, letterSpacing: '-0.015em', color: '#14110D', margin: 0 }}>Your artists this week</h2>
+ [2m 103[0m |         <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 12, fontWeight: 600, color: '#F97316' }}>See all</span>
+ [2m 104[0m |       </div>
+ [2m 105[0m |       <div style={{
+ [2m 106[0m |         display: 'flex', gap: 12, overflowX: 'auto', padding: '0 22px 4px',
+ [2m 107[0m |         scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch',
+ [2m 108[0m |       }}>
+ [2m 109[0m |         {loading ? (
+ [2m 110[0m |           <p style={{
+ [2m 111[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m 112[0m |             color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+ [2m 113[0m |           }}>Loading your artists…</p>
+ [2m 114[0m |         ) : error ? (
+ [2m 115[0m |           <p style={{
+ [2m 116[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m 117[0m |             color: 'rgba(200,50,50,0.85)', margin: '8px 0 12px',
+ [2m 118[0m |           }}>{error}</p>
+ [2m 119[0m |         ) : !news.length ? (
+ [2m 120[0m |           <p style={{
+ [2m 121[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m 122[0m |             color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+ [2m 123[0m |           }}>Nothing here yet</p>
+ [2m 124[0m |         ) : news.map((n, i) => (
+ [2m 125[0m |           <div key={n.id || i} style={{
+ [2m 126[0m |             flex: '0 0 auto', width: 208, background: '#fff', borderRadius: 18,
+ [2m 127[0m |             border: '1px solid rgba(20,17,13,0.05)',
+ [2m 128[0m |             boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
+ [2m 129[0m |             overflow: 'hidden',
+ [2m 130[0m |           }}>
+ [2m 131[0m |             <div style={{
+ [2m 132[0m |               height: 116, backgroundImage: `url(${n.art_url})`, backgroundSize: 'cover', backgroundPosition: 'center',
+ [2m 133[0m |               position: 'relative',
+ [2m 134[0m |             }}>
+ [2m 135[0m |               <span style={{
+ [2m 136[0m |                 position: 'absolute', top: 10, left: 10,
+ [2m 137[0m |                 fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 9, fontWeight: 700,
+ [2m 138[0m |                 letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff',
+ [2m 139[0m |                 background: 'rgba(10,9,7,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+ [2m 140[0m |                 padding: '4px 8px', borderRadius: 99,
+ [2m 141[0m |               }}>{n.source_label}</span>
+ [2m 142[0m |             </div>
+ [2m 143[0m |             <div style={{ padding: '12px 14px 14px' }}>
+ [2m 144[0m |               <div style={{
+ [2m 145[0m |                 fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14,
+ [2m 146[0m |                 lineHeight: 1.25, letterSpacing: '-0.01em', color: '#14110D', textWrap: 'pretty',
+ [2m 147[0m |               }}>{n.headline}</div>
+ [2m 148[0m |               <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.45)', marginTop: 8 }}>{n.time_label} ago</div>
+ [2m 149[0m |             </div>
+ [2m 150[0m |           </div>
+ [2m 151[0m |         ))}
+ [2m 152[0m |       </div>
+ [2m 153[0m |     </div>
+ [2m 154[0m |   );
+ [2m 155[0m | }
+ [2m 156[0m | 
+ [2m 157[0m | // ── Compact answered-prompt strip (today's locked text answer) ──
+ [2m 158[0m | function AnsweredPrompt({ answer = 'Drake — What Did I Miss? (strictly Iceman)' }) {
+ [2m 159[0m |   return (
+ [2m 160[0m |     <div style={{ margin: '14px 22px 0' }}>
+ [2m 161[0m |       <div style={{
+ [2m 162[0m |         display: 'flex', alignItems: 'center', gap: 14, padding: 14,
+ [2m 163[0m |         borderRadius: 18, background: '#fff', border: '1px solid rgba(20,17,13,0.05)',
+ [2m 164[0m |         boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
+ [2m 165[0m |       }}>
+ [2m 166[0m |         <span style={{ width: 44, height: 44, borderRadius: 99, flexShrink: 0, background: 'rgba(113,192,127,0.16)', color: '#2F7D3F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+ [2m 167[0m |           <Icon.Check width="20" height="20" />
+ [2m 168[0m |         </span>
+ [2m 169[0m |         <div style={{ flex: 1, minWidth: 0 }}>
+ [2m 170[0m |           <div style={{
+ [2m 171[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 10, fontWeight: 700,
+ [2m 172[0m |             letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2F7D3F',
+ [2m 173[0m |           }}>Today's answer · locked in</div>
+ [2m 174[0m |           <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 16, letterSpacing: '-0.015em', color: '#14110D', marginTop: 3, textWrap: 'balance' }}>
+ [2m 175[0m |             "{answer}"
+ [2m 176[0m |           </div>
+ [2m 177[0m |           <div style={{ fontSize: 12, color: 'rgba(20,17,13,0.5)', marginTop: 2 }}>Reveal at 8pm · 1,204 Hoyas in</div>
+ [2m 178[0m |         </div>
+ [2m 179[0m |       </div>
+ [2m 180[0m |     </div>
+ [2m 181[0m |   );
+ [2m 182[0m | }
+ [2m 183[0m | 
+ [2m 184[0m | // ── Toast (confirmation after sending a meetup invite) ──
+ [2m 185[0m | function Toast({ show, children }) {
+ [2m 186[0m |   return (
+ [2m 187[0m |     <div style={{
+ [2m 188[0m |       position: 'absolute', left: 22, right: 22, bottom: 104, zIndex: 80,
+ [2m 189[0m |       transform: show ? 'translateY(0)' : 'translateY(20px)',
+ [2m 190[0m |       opacity: show ? 1 : 0, pointerEvents: 'none',
+ [2m 191[0m |       transition: 'opacity 220ms cubic-bezier(.2,.7,.2,1), transform 220ms cubic-bezier(.2,.7,.2,1)',
+ [2m 192[0m |     }}>
+ [2m 193[0m |       <div style={{
+ [2m 194[0m |         background: '#14110D', color: '#fff', borderRadius: 16, padding: '14px 16px',
+ [2m 195[0m |         display: 'flex', alignItems: 'center', gap: 10,
+ [2m 196[0m |         boxShadow: '0 12px 30px -12px rgba(20,17,13,0.5)',
+ [2m 197[0m |         fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14,
+ [2m 198[0m |       }}>
+ [2m 199[0m |         <span style={{ width: 22, height: 22, borderRadius: 99, background: '#71C07F', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+ [2m 200[0m |           <Icon.Check width="12" height="12" />
+ [2m 201[0m |         </span>
+ [2m 202[0m |         {children}
+ [2m 203[0m |       </div>
+ [2m 204[0m |     </div>
+ [2m 205[0m |   );
+ [2m 206[0m | }
+ [2m 207[0m | 
+ [2m 208[0m | 
+ [2m 209[0m | 
+ [2m 210[0m | // home-normal.jsx — Daily pick: open question + lockable answer + reveal flow
+ [2m 211[0m | 
+ [2m 212[0m | // ── Real-time countdowns — aligned to the clock in EASTERN TIME ──
+ [2m 213[0m | // Everything is scheduled in America/New_York (campus is in DC), so every
+ [2m 214[0m | // viewer sees the same countdown regardless of their device timezone.
+ [2m 215[0m | // Daily reveal is 8:00 PM ET (the big countdown). The answer cutoff is 3 PM ET
+ [2m 216[0m | // (a separate "lock yours before 3pm" note). Connections drop Fri 8 PM ET;
+ [2m 217[0m | // wrapped drops Sun 12 PM ET. (Change these to reschedule.) 0 = Sun … 5 = Fri.
+ [2m 218[0m | const REVEAL_HOUR = 20, REVEAL_MIN = 0;
+ [2m 219[0m | const CONNECTION_DAY = 5, CONNECTION_HOUR = 20;
+ [2m 220[0m | const WRAPPED_DAY = 0, WRAPPED_HOUR = 12;
+ [2m 221[0m | 
+ [2m 222[0m | const ET = "America/New_York";
+ [2m 223[0m | const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+ [2m 224[0m | 
+ [2m 225[0m | // the current wall-clock in Eastern + ET's UTC offset right now (handles EST/EDT)
+ [2m 226[0m | function easternParts(now) {
+ [2m 227[0m |   const m = {};
+ [2m 228[0m |   for (const p of new Intl.DateTimeFormat("en-US", {
+ [2m 229[0m |     timeZone: ET, hour12: false, weekday: "short",
+ [2m 230[0m |     year: "numeric", month: "2-digit", day: "2-digit",
+ [2m 231[0m |     hour: "2-digit", minute: "2-digit", second: "2-digit",
+ [2m 232[0m |   }).formatToParts(now)) {
+ [2m 233[0m |     if (p.type === "weekday") m.weekday = p.value;
+ [2m 234[0m |     else if (p.type !== "literal") m[p.type] = parseInt(p.value, 10);
+ [2m 235[0m |   }
+ [2m 236[0m |   // ms ET is ahead of UTC (negative for the US): treat ET wall numbers as if
+ [2m 237[0m |   // UTC, the gap from the real instant is the offset.
+ [2m 238[0m |   m.offset = Date.UTC(m.year, m.month - 1, m.day, m.hour, m.minute, m.second) - now.getTime();
+ [2m 239[0m |   return m;
+ [2m 240[0m | }
+ [2m 241[0m | // UTC timestamp for "ET date + addDays, at hour:minute"
+ [2m 242[0m | function easternTarget(m, addDays, hour, minute) {
+ [2m 243[0m |   return Date.UTC(m.year, m.month - 1, m.day + addDays, hour, minute, 0) - m.offset;
+ [2m 244[0m | }
+ [2m 245[0m | // next ET daily time (today, or tomorrow if already passed)
+ [2m 246[0m | function nextDaily(hour, minute) {
+ [2m 247[0m |   const now = new Date(), m = easternParts(now);
+ [2m 248[0m |   let t = easternTarget(m, 0, hour, minute);
+ [2m 249[0m |   if (t <= now.getTime()) t = easternTarget(m, 1, hour, minute);
+ [2m 250[0m |   return t;
+ [2m 251[0m | }
+ [2m 252[0m | // next ET weekly day + time
+ [2m 253[0m | function nextWeekly(weekday, hour, minute) {
+ [2m 254[0m |   const now = new Date(), m = easternParts(now);
+ [2m 255[0m |   let add = (weekday - WD[m.weekday] + 7) % 7;
+ [2m 256[0m |   let t = easternTarget(m, add, hour, minute);
+ [2m 257[0m |   if (t <= now.getTime()) t = easternTarget(m, add + 7, hour, minute);
+ [2m 258[0m |   return t;
+ [2m 259[0m | }
+ [2m 260[0m | // live ms remaining to a target — resolved on the client only (no hydration
+ [2m 261[0m | // mismatch) and recomputed every second so it tracks the real clock.
+ [2m 262[0m | function useCountdown(makeTarget) {
+ [2m 263[0m |   const [now, setNow] = useStateN(null);
+ [2m 264[0m |   const target = React.useRef(0);
+ [2m 265[0m |   useEffectN(() => {
+ [2m 266[0m |     target.current = makeTarget();
+ [2m 267[0m |     setNow(Date.now());
+ [2m 268[0m |     const id = setInterval(() => setNow(Date.now()), 1000);
+ [2m 269[0m |     return () => clearInterval(id);
+ [2m 270[0m |   }, []);
+ [2m 271[0m |   return now == null ? null : Math.max(0, target.current - now);
+ [2m 272[0m | }
+ [2m 273[0m | function fmtHMS(ms) {
+ [2m 274[0m |   if (ms == null) return '··';
+ [2m 275[0m |   const s = Math.floor(ms / 1000);
+ [2m 276[0m |   const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+ [2m 277[0m |   return `${h}h ${String(m).padStart(2, '0')}m ${String(sec).padStart(2, '0')}s`;
+ [2m 278[0m | }
+ [2m 279[0m | function fmtDHM(ms) {
+ [2m 280[0m |   if (ms == null) return '··';
+ [2m 281[0m |   const s = Math.floor(ms / 1000);
+ [2m 282[0m |   const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+ [2m 283[0m |   return d > 0 ? `${d}d ${h}h ${String(m).padStart(2, '0')}m` : `${h}h ${String(m).padStart(2, '0')}m`;
+ [2m 284[0m | }
+ [2m 285[0m | // reveal countdown → the big number in the daily-pick card (h m s, live)
+ [2m 286[0m | function useReveal() {
+ [2m 287[0m |   return fmtHMS(useCountdown(() => nextDaily(REVEAL_HOUR, REVEAL_MIN)));
+ [2m 288[0m | }
+ [2m 289[0m | 
+ [2m 290[0m | const SUGGESTIONS = [
+ [2m 291[0m |   'Mr. Brightside — non-negotiable',
+ [2m 292[0m |   'Outkast raised me',
+ [2m 293[0m |   'Stevie Wonder, every Sunday',
+ [2m 294[0m |   'Linkin Park, no notes',
+ [2m 295[0m | ];
+ [2m 296[0m | 
+ [2m 297[0m | // the user's synced library is now powered by JORDAN_CATALOG
+ [2m 298[0m | 
+ [2m 299[0m | // ever-present, pulsing reveal countdown — recolors when you answer
+ [2m 300[0m | function CountdownBar({ answered, time }) {
+ [2m 301[0m |   const t = answered
+ [2m 302[0m |     ? { card: 'cd-breathe-g', dot: 'cd-dot-g', dotBg: '#71C07F', bg: 'linear-gradient(160deg, rgba(113,192,127,0.18), rgba(245,215,131,0.10))', border: 'rgba(113,192,127,0.30)', accent: '#2F7D3F', big: '#1E6B33', eyebrow: "You're in · everyone reveals in", sub: '41 friends already locked in' }
+ [2m 303[0m |     : { card: 'cd-breathe-o', dot: 'cd-dot-o', dotBg: '#F97316', bg: 'linear-gradient(160deg, rgba(249,115,22,0.16), rgba(245,215,131,0.12))', border: 'rgba(249,115,22,0.28)', accent: '#C2410C', big: '#9A3412', eyebrow: 'Everyone reveals in', sub: '847 answered · lock yours before 3pm' };
+ [2m 304[0m |   return (
+ [2m 305[0m |     <div style={{ margin: '14px 22px 0' }}>
+ [2m 306[0m |       <div className={t.card} style={{ borderRadius: 22, padding: '18px 20px', background: t.bg, border: `1px solid ${t.border}` }}>
+ [2m 307[0m |         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+ [2m 308[0m |           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: t.accent }}>
+ [2m 309[0m |             <span className={t.dot} style={{ width: 8, height: 8, borderRadius: 99, background: t.dotBg }} />
+ [2m 310[0m |             {t.eyebrow}
+ [2m 311[0m |           </span>
+ [2m 312[0m |           {answered && (
+ [2m 313[0m |             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#2F7D3F' }}>
+ [2m 314[0m |               <Icon.Check width="13" height="13" /> Locked
+ [2m 315[0m |             </span>
+ [2m 316[0m |           )}
+ [2m 317[0m |         </div>
+ [2m 318[0m |         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 42, letterSpacing: '-0.03em', color: t.big, lineHeight: 1, margin: '10px 0 12px', fontVariantNumeric: 'tabular-nums' }}>{time}</div>
+ [2m 319[0m |         <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
+ [2m 320[0m |           <AvatarStack />
+ [2m 321[0m |           <span style={{ fontSize: 12.5, color: t.accent, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600 }}>{t.sub}</span>
+ [2m 322[0m |         </div>
+ [2m 323[0m |       </div>
+ [2m 324[0m |     </div>
+ [2m 325[0m |   );
+ [2m 326[0m | }
+ [2m 327[0m | 
+ [2m 328[0m | // Legacy v0 entry points — parked; Connection Night + Wrapped code kept, not rendered on home.
+ [2m 329[0m | function WeekTeasers({ onOpen }) {
+ [2m 330[0m |   const conn = fmtDHM(useCountdown(() => nextWeekly(CONNECTION_DAY, CONNECTION_HOUR, 0)));
+ [2m 331[0m |   const wrap = fmtDHM(useCountdown(() => nextWeekly(WRAPPED_DAY, WRAPPED_HOUR, 0)));
+ [2m 332[0m |   const cards = [
+ [2m 333[0m |     { key: 'connection', icon: Icon.Users, eyebrow: 'Connections', cta: "View this week's connections", drop: `Next drops in ${conn}`, accent: '#A13D99', dotBg: '#EA8CE1', bg: 'linear-gradient(160deg, rgba(234,140,225,0.16), rgba(234,140,225,0.05))', border: 'rgba(234,140,225,0.3)' },
+ [2m 334[0m |     { key: 'wrapped', icon: Icon.Spark, eyebrow: 'Wrapped', cta: 'View last week’s wrapped', drop: `Next drops in ${wrap}`, accent: '#A07C00', dotBg: '#E9BF52', bg: 'linear-gradient(160deg, rgba(245,215,131,0.22), rgba(245,215,131,0.06))', border: 'rgba(245,215,131,0.45)' },
+ [2m 335[0m |   ];
+ [2m 336[0m |   return (
+ [2m 337[0m |     <div>
+ [2m 338[0m |       <div style={{ padding: '26px 22px 12px' }}>
+ [2m 339[0m |         <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 18, letterSpacing: '-0.015em', color: '#14110D', margin: 0 }}>This week on Ligo</h2>
+ [2m 340[0m |       </div>
+ [2m 341[0m |       <div style={{ padding: '0 22px', display: 'flex', gap: 12 }}>
+ [2m 342[0m |         {cards.map(c => {
+ [2m 343[0m |           const I = c.icon;
+ [2m 344[0m |           return (
+ [2m 345[0m |             <button key={c.key} onClick={() => onOpen(c.key)} style={{
+ [2m 346[0m |               flex: 1, textAlign: 'left', cursor: 'pointer', border: `1px solid ${c.border}`, borderRadius: 20,
+ [2m 347[0m |               padding: 16, background: c.bg, display: 'flex', flexDirection: 'column', transition: 'transform 0.12s ease',
+ [2m 348[0m |             }} onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'} onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+ [2m 349[0m |               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: c.accent }}>
+ [2m 350[0m |                 <I width="14" height="14" /> {c.eyebrow}
+ [2m 351[0m |               </span>
+ [2m 352[0m |               <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 16, letterSpacing: '-0.015em', color: '#14110D', lineHeight: 1.2, margin: '12px 0 14px', textWrap: 'balance', flex: 1 }}>
+ [2m 353[0m |                 {c.cta}
+ [2m 354[0m |               </div>
+ [2m 355[0m |               <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
+ [2m 356[0m |                 <span className="cd-tick" style={{ width: 7, height: 7, borderRadius: 99, background: c.dotBg, animation: 'ligo-pulse 1.8s ease-in-out infinite', flexShrink: 0 }} />
+ [2m 357[0m |                 <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 12, color: c.accent, fontVariantNumeric: 'tabular-nums' }}>{c.drop}</span>
+ [2m 358[0m |               </div>
+ [2m 359[0m |             </button>
+ [2m 360[0m |           );
+ [2m 361[0m |         })}
+ [2m 362[0m |       </div>
+ [2m 363[0m |     </div>
+ [2m 364[0m |   );
+ [2m 365[0m | }
+ [2m 366[0m | 
+ [2m 367[0m | function RevealTeaser({ onOpen, hasLockedAnswer, revealUnlocked }) {
+ [2m 368[0m |   if (!hasLockedAnswer || !revealUnlocked) return null;
+ [2m 369[0m | 
+ [2m 370[0m |   return (
+ [2m 371[0m |     <div style={{ padding: '20px 22px 0' }}>
+ [2m 372[0m |       <button
+ [2m 373[0m |         type="button"
+ [2m 374[0m |         onClick={() => onOpen()}
+ [2m 375[0m |         style={{
+ [2m 376[0m |           width: '100%',
+ [2m 377[0m |           textAlign: 'left',
+ [2m 378[0m |           cursor: 'pointer',
+ [2m 379[0m |           border: '1px solid rgba(113,192,127,0.28)',
+ [2m 380[0m |           borderRadius: 20,
+ [2m 381[0m |           padding: 18,
+ [2m 382[0m |           background: 'linear-gradient(160deg, rgba(7,9,12,0.96), rgba(22,19,15,0.92))',
+ [2m 383[0m |           boxShadow: '0 12px 32px -14px rgba(113,192,127,0.35)',
+ [2m 384[0m |           display: 'flex',
+ [2m 385[0m |           flexDirection: 'column',
+ [2m 386[0m |           gap: 12,
+ [2m 387[0m |           color: '#fff',
+ [2m 388[0m |         }}
+ [2m 389[0m |       >
+ [2m 390[0m |         <span style={{
+ [2m 391[0m |           display: 'inline-flex', alignItems: 'center', gap: 7, alignSelf: 'flex-start',
+ [2m 392[0m |           fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 10,
+ [2m 393[0m |           letterSpacing: '0.14em', textTransform: 'uppercase', color: '#71C07F',
+ [2m 394[0m |         }}>
+ [2m 395[0m |           <Icon.Eye width="14" height="14" /> Tonight&apos;s reveal
+ [2m 396[0m |         </span>
+ [2m 397[0m |         <div style={{
+ [2m 398[0m |           fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 22,
+ [2m 399[0m |           letterSpacing: '-0.025em', lineHeight: 1.15, textWrap: 'balance',
+ [2m 400[0m |         }}>
+ [2m 401[0m |           Look up, Georgetown.
+ [2m 402[0m |         </div>
+ [2m 403[0m |         <div style={{
+ [2m 404[0m |           display: 'flex', alignItems: 'center', gap: 8, paddingTop: 12,
+ [2m 405[0m |           borderTop: '1px solid rgba(255,255,255,0.08)',
+ [2m 406[0m |         }}>
+ [2m 407[0m |           <span className="cd-tick" style={{
+ [2m 408[0m |             width: 7, height: 7, borderRadius: 99, background: '#71C07F',
+ [2m 409[0m |             animation: 'ligo-pulse 1.8s ease-in-out infinite', flexShrink: 0,
+ [2m 410[0m |           }} />
+ [2m 411[0m |           <span style={{
+ [2m 412[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 12,
+ [2m 413[0m |             color: 'rgba(255,255,255,0.55)',
+ [2m 414[0m |           }}>
+ [2m 415[0m |             Open tonight&apos;s sky · swipe through five cards
+ [2m 416[0m |           </span>
+ [2m 417[0m |         </div>
+ [2m 418[0m |       </button>
+ [2m 419[0m |     </div>
+ [2m 420[0m |   );
+ [2m 421[0m | }
+ [2m 422[0m | 
+ [2m 423[0m | function GamesHubBanner({ onOpen, activeUserId }) {
+ [2m 424[0m |   const results = React.useMemo(() => {
+ [2m 425[0m |     try { return loadDailyResults(activeUserId); } catch { return null; }
+ [2m 426[0m |   }, [activeUserId]);
+ [2m 427[0m | 
+ [2m 428[0m |   const played = results
+ [2m 429[0m |     ? ['trivia', 'ranking', 'soundmoji'].filter((f) => results[f] !== null).length
+ [2m 430[0m |     : 0;
+ [2m 431[0m | 
+ [2m 432[0m |   return (
+ [2m 433[0m |     <div style={{ margin: '16px 22px 0' }}>
+ [2m 434[0m |       <button
+ [2m 435[0m |         type="button"
+ [2m 436[0m |         onClick={onOpen}
+ [2m 437[0m |         style={{
+ [2m 438[0m |           width: '100%', textAlign: 'left', cursor: 'pointer',
+ [2m 439[0m |           background: 'linear-gradient(135deg, rgba(249,115,22,0.10) 0%, rgba(124,58,237,0.08) 50%, rgba(8,145,178,0.08) 100%)',
+ [2m 440[0m |           border: '1px solid rgba(249,115,22,0.22)',
+ [2m 441[0m |           borderRadius: 20, padding: '15px 18px',
+ [2m 442[0m |           display: 'flex', alignItems: 'center', gap: 14,
+ [2m 443[0m |           boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 20px -12px rgba(249,115,22,0.18)',
+ [2m 444[0m |           transition: 'transform 0.12s ease',
+ [2m 445[0m |         }}
+ [2m 446[0m |         onMouseDown={(e) => { e.currentTarget.style.transform = 'scale(0.985)'; }}
+ [2m 447[0m |         onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+ [2m 448[0m |         onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+ [2m 449[0m |       >
+ [2m 450[0m |         <div style={{
+ [2m 451[0m |           width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+ [2m 452[0m |           background: 'rgba(249,115,22,0.12)',
+ [2m 453[0m |           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
+ [2m 454[0m |         }}>
+ [2m 455[0m |           🎮
+ [2m 456[0m |         </div>
+ [2m 457[0m |         <div style={{ flex: 1, minWidth: 0 }}>
+ [2m 458[0m |           <div style={{
+ [2m 459[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 15,
+ [2m 460[0m |             letterSpacing: '-0.01em', color: '#14110D',
+ [2m 461[0m |           }}>
+ [2m 462[0m |             Ligo Games Hub
+ [2m 463[0m |           </div>
+ [2m 464[0m |           <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 12, color: 'rgba(20,17,13,0.5)', marginTop: 1 }}>
+ [2m 465[0m |             {played === 3
+ [2m 466[0m |               ? '✓ All games done today'
+ [2m 467[0m |               : played > 0
+ [2m 468[0m |               ? `${played}/3 played · ${3 - played} left today`
+ [2m 469[0m |               : 'Music Trivia · Chart Ranker · Soundmoji'}
+ [2m 470[0m |           </div>
+ [2m 471[0m |         </div>
+ [2m 472[0m |         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(249,115,22,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+ [2m 473[0m |           <path d="M5 12h14M12 5l7 7-7 7" />
+ [2m 474[0m |         </svg>
+ [2m 475[0m |       </button>
+ [2m 476[0m |     </div>
+ [2m 477[0m |   );
+ [2m 478[0m | }
+ [2m 479[0m | 
+ [2m 480[0m | function RevealWait({ secondsLeft }) {
+ [2m 481[0m |   const padded = String(secondsLeft).padStart(2, "0");
+ [2m 482[0m | 
+ [2m 483[0m |   return (
+ [2m 484[0m |     <div style={{ margin: "12px 22px 0" }}>
+ [2m 485[0m |       <div
+ [2m 486[0m |         style={{
+ [2m 487[0m |           padding: "22px 20px",
+ [2m 488[0m |           borderRadius: 18,
+ [2m 489[0m |           border: "1.5px dashed rgba(249,115,22,0.35)",
+ [2m 490[0m |           background: "linear-gradient(160deg, rgba(249,115,22,0.06), rgba(245,215,131,0.04))",
+ [2m 491[0m |           textAlign: "center",
+ [2m 492[0m |         }}
+ [2m 493[0m |       >
+ [2m 494[0m |         <div
+ [2m 495[0m |           style={{
+ [2m 496[0m |             fontFamily: "Bricolage Grotesque, sans-serif",
+ [2m 497[0m |             fontWeight: 700,
+ [2m 498[0m |             fontSize: 11,
+ [2m 499[0m |             letterSpacing: "0.14em",
+ [2m 500[0m |             textTransform: "uppercase",
+ [2m 501[0m |             color: "#C2410C",
+ [2m 502[0m |             marginBottom: 10,
+ [2m 503[0m |           }}
+ [2m 504[0m |         >
+ [2m 505[0m |           Tonight&apos;s reveal · opening soon
+ [2m 506[0m |         </div>
+ [2m 507[0m |         <div
+ [2m 508[0m |           style={{
+ [2m 509[0m |             fontFamily: "Bricolage Grotesque, sans-serif",
+ [2m 510[0m |             fontWeight: 700,
+ [2m 511[0m |             fontSize: 42,
+ [2m 512[0m |             letterSpacing: "-0.03em",
+ [2m 513[0m |             color: "#9A3412",
+ [2m 514[0m |             fontVariantNumeric: "tabular-nums",
+ [2m 515[0m |             lineHeight: 1,
+ [2m 516[0m |           }}
+ [2m 517[0m |         >
+ [2m 518[0m |           0:{padded}
+ [2m 519[0m |         </div>
+ [2m 520[0m |         <p
+ [2m 521[0m |           style={{
+ [2m 522[0m |             margin: "14px 0 0",
+ [2m 523[0m |             fontFamily: "Bricolage Grotesque, sans-serif",
+ [2m 524[0m |             fontWeight: 600,
+ [2m 525[0m |             fontSize: 14,
+ [2m 526[0m |             lineHeight: 1.45,
+ [2m 527[0m |             color: "rgba(20,17,13,0.55)",
+ [2m 528[0m |             textWrap: "balance",
+ [2m 529[0m |           }}
+ [2m 530[0m |         >
+ [2m 531[0m |           Your answer&apos;s in. Campus is still answering — the reveal opens when the countdown ends.
+ [2m 532[0m |         </p>
+ [2m 533[0m |       </div>
+ [2m 534[0m |     </div>
+ [2m 535[0m |   );
+ [2m 536[0m | }
+ [2m 537[0m | 
+ [2m 538[0m | // progress timeline: Opens · Answered · Reveal
+ [2m 539[0m | function Timeline({ answered, revealWaiting, revealUnlocked }) {
+ [2m 540[0m |   const node = (label, time, state) => (
+ [2m 541[0m |     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, flexShrink: 0, width: 64 }}>
+ [2m 542[0m |       <span style={{
+ [2m 543[0m |         width: 16, height: 16, borderRadius: 99,
+ [2m 544[0m |         background: state === 'done' ? '#F97316' : '#fff',
+ [2m 545[0m |         border: state === 'done' ? '0' : '2px solid ' + (state === 'next' ? '#F97316' : 'rgba(20,17,13,0.2)'),
+ [2m 546[0m |         boxShadow: state === 'done' ? '0 0 0 4px rgba(249,115,22,0.16)' : 'none',
+ [2m 547[0m |       }} />
+ [2m 548[0m |       <div style={{ textAlign: 'center' }}>
+ [2m 549[0m |         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 12.5, color: '#14110D', letterSpacing: '-0.01em' }}>{time}</div>
+ [2m 550[0m |         <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.45)', marginTop: 1 }}>{label}</div>
+ [2m 551[0m |       </div>
+ [2m 552[0m |     </div>
+ [2m 553[0m |   );
+ [2m 554[0m |   const seg = (fill) => (
+ [2m 555[0m |     <div style={{ flex: 1, height: 3, borderRadius: 99, background: 'rgba(20,17,13,0.1)', margin: '8px -6px 0', overflow: 'hidden' }}>
+ [2m 556[0m |       <i style={{ display: 'block', height: '100%', width: fill ? '100%' : '0%', background: '#F97316', borderRadius: 99 }} />
+ [2m 557[0m |     </div>
+ [2m 558[0m |   );
+ [2m 559[0m |   return (
+ [2m 560[0m |     <div style={{ display: 'flex', alignItems: 'flex-start', padding: '22px 26px 0' }}>
+ [2m 561[0m |       {node('Opens', '8:00a', 'done')}
+ [2m 562[0m |       {seg(true)}
+ [2m 563[0m |       {node('Answered', 'You', answered ? 'done' : 'next')}
+ [2m 564[0m |       {seg(false)}
+ [2m 565[0m |       {node('Reveal', '8:00p', revealUnlocked ? 'done' : revealWaiting || answered ? 'next' : 'pending')}
+ [2m 566[0m |     </div>
+ [2m 567[0m |   );
+ [2m 568[0m | }
+ [2m 569[0m | 
+ [2m 570[0m | function DailyPick({
+ [2m 571[0m |   activeUserId,
+ [2m 572[0m |   revealCountdown,
+ [2m 573[0m |   revealUnlocked,
+ [2m 574[0m |   onRevealAnswerLocked,
+ [2m 575[0m |   onRevealAnswerCleared,
+ [2m 576[0m | }) {
+ [2m 577[0m |   // persisted per profile — lock-in survives refreshes & revisits
+ [2m 578[0m |   const [answered, setAnswered] = usePersistentState(`ligo:daily:${activeUserId}:answered`, false);
+ [2m 579[0m |   const [answer, setAnswer] = usePersistentState(`ligo:daily:${activeUserId}:answer`, '');
+ [2m 580[0m |   const [draft, setDraft] = useStateN('');
+ [2m 581[0m |   const [focused, setFocused] = useStateN(false);
+ [2m 582[0m |   const reveal = useReveal();
+ [2m 583[0m |   const { loading, error, currentQuestion } = useDailyReveal(activeUserId);
+ [2m 584[0m |   const hasLockedAnswer = answered && answer.trim().length > 0;
+ [2m 585[0m | 
+ [2m 586[0m |   useEffect(() => {
+ [2m 587[0m |     if (answered && !answer.trim()) setAnswered(false);
+ [2m 588[0m |   }, [answered, answer, setAnswered]);
+ [2m 589[0m | 
+ [2m 590[0m |   const revealWaiting =
+ [2m 591[0m |     hasLockedAnswer && !revealUnlocked && revealCountdown !== null && revealCountdown > 0;
+ [2m 592[0m | 
+ [2m 593[0m |   function lockIn() {
+ [2m 594[0m |     if (!draft.trim()) return;
+ [2m 595[0m |     setAnswer(draft.trim());
+ [2m 596[0m |     setAnswered(true);
+ [2m 597[0m |     setFocused(false);
+ [2m 598[0m |     onRevealAnswerLocked();
+ [2m 599[0m |   }
+ [2m 600[0m | 
+ [2m 601[0m |   function clearAnswer() {
+ [2m 602[0m |     onRevealAnswerCleared();
+ [2m 603[0m |     setAnswered(false);
+ [2m 604[0m |     setAnswer('');
+ [2m 605[0m |     setDraft('');
+ [2m 606[0m |     setFocused(false);
+ [2m 607[0m |   }
+ [2m 608[0m | 
+ [2m 609[0m |   function pickSynced(row) {
+ [2m 610[0m |     setDraft(`${row.title} — ${row.artist}`);
+ [2m 611[0m |     setFocused(false);
+ [2m 612[0m |   }
+ [2m 613[0m | 
+ [2m 614[0m |   const synced = activeUserId === 'charlotte' 
+ [2m 615[0m |     ? searchCharlotteCatalog(draft, 8) 
+ [2m 616[0m |     : activeUserId === 'cole'
+ [2m 617[0m |     ? searchColeCatalog(draft, 8)
+ [2m 618[0m |     : activeUserId === 'caroline'
+ [2m 619[0m |     ? searchCarolineCatalog(draft, 8)
+ [2m 620[0m |     : activeUserId === 'bennett'
+ [2m 621[0m |     ? searchBennettCatalog(draft, 8)
+ [2m 622[0m |     : activeUserId === 'alessia'
+ [2m 623[0m |     ? searchAlessiaCatalog(draft, 8)
+ [2m 624[0m |     : activeUserId === 'maddie'
+ [2m 625[0m |     ? searchMaddieCatalog(draft, 8)
+ [2m 626[0m |     : activeUserId === 'marcus'
+ [2m 627[0m |     ? searchMarcusCatalog(draft, 8)
+ [2m 628[0m |     : activeUserId === 'sofia'
+ [2m 629[0m |     ? searchSofiaCatalog(draft, 8)
+ [2m 630[0m |     : searchJordanCatalog(draft, 8);
+ [2m 631[0m |   const showSynced = focused && !answered;
+ [2m 632[0m | 
+ [2m 633[0m |   return (
+ [2m 634[0m |     <div>
+ [2m 635[0m |       {/* ever-present, pulsing reveal countdown — changes when you answer */}
+ [2m 636[0m |       <CountdownBar answered={hasLockedAnswer} time={reveal} />
+ [2m 637[0m | 
+ [2m 638[0m |       {/* question card */}
+ [2m 639[0m |       <div style={{ margin: '14px 22px 0' }}>
+ [2m 640[0m |         <div style={{
+ [2m 641[0m |           background: '#fff', borderRadius: 22, padding: '20px 20px 22px',
+ [2m 642[0m |           border: '1px solid rgba(20,17,13,0.05)',
+ [2m 643[0m |           boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 8px 24px -12px rgba(20,17,13,0.10)',
+ [2m 644[0m |         }}>
+ [2m 645[0m |           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+ [2m 646[0m |             <span style={{
+ [2m 647[0m |               background: '#14110D', color: '#fff', fontFamily: 'Bricolage Grotesque, sans-serif',
+ [2m 648[0m |               fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase',
+ [2m 649[0m |               padding: '5px 10px', borderRadius: 8,
+ [2m 650[0m |             }}>Today</span>
+ [2m 651[0m |             <span style={{
+ [2m 652[0m |               fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11,
+ [2m 653[0m |               letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(20,17,13,0.4)',
+ [2m 654[0m |             }}>Everyone answers</span>
+ [2m 655[0m |           </div>
+ [2m 656[0m |           {loading ? (
+ [2m 657[0m |             <p style={{
+ [2m 658[0m |               fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 17,
+ [2m 659[0m |               lineHeight: 1.4, color: 'rgba(20,17,13,0.45)', margin: 0,
+ [2m 660[0m |             }}>Loading today&apos;s question…</p>
+ [2m 661[0m |           ) : error ? (
+ [2m 662[0m |             <p style={{
+ [2m 663[0m |               fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 17,
+ [2m 664[0m |               lineHeight: 1.4, color: 'rgba(200,50,50,0.85)', margin: 0,
+ [2m 665[0m |             }}>{error}</p>
+ [2m 666[0m |           ) : (
+ [2m 667[0m |             <h2 style={{
+ [2m 668[0m |               fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 29,
+ [2m 669[0m |               lineHeight: 1.12, letterSpacing: '-0.025em', color: '#14110D', textWrap: 'balance',
+ [2m 670[0m |             }}>
+ [2m 671[0m |               {currentQuestion?.question_text ?? DEMO_QUESTION}
+ [2m 672[0m |             </h2>
+ [2m 673[0m |           )}
+ [2m 674[0m | 
+ [2m 675[0m |           {/* answer entry — only before locking */}
+ [2m 676[0m |           {!answered && (
+ [2m 677[0m |             <div style={{ marginTop: 18, position: 'relative', zIndex: 40 }}>
+ [2m 678[0m |               <div className="answer-pill" style={{
+ [2m 679[0m |                 display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 14,
+ [2m 680[0m |                 background: 'rgba(20,17,13,0.04)', border: '1px solid rgba(20,17,13,0.06)',
+ [2m 681[0m |               }}>
+ [2m 682[0m |                 <Icon.Music width="18" height="18" style={{ color: 'rgba(20,17,13,0.35)', flexShrink: 0 }} />
+ [2m 683[0m |                 <input
+ [2m 684[0m |                   value={draft}
+ [2m 685[0m |                   onChange={e => setDraft(e.target.value)}
+ [2m 686[0m |                   onFocus={() => setFocused(true)}
+ [2m 687[0m |                   onBlur={() => setTimeout(() => setFocused(false), 200)}
+ [2m 688[0m |                   onKeyDown={e => e.key === 'Enter' && lockIn()}
+ [2m 689[0m |                   placeholder="Name the artist or song…"
+ [2m 690[0m |                   style={{
+ [2m 691[0m |                     flex: 1, minWidth: 0, border: 0, outline: 0, background: 'transparent',
+ [2m 692[0m |                     fontFamily: '-apple-system, sans-serif', fontSize: 15, color: '#14110D',
+ [2m 693[0m |                   }}
+ [2m 694[0m |                 />
+ [2m 695[0m |                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, padding: '4px 8px', borderRadius: 99, background: 'rgba(113,192,127,0.14)', color: '#2F7D3F', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+ [2m 696[0m |                   <span style={{ width: 5, height: 5, borderRadius: 99, background: '#44A96A' }} /> Synced
+ [2m 697[0m |                 </span>
+ [2m 698[0m |               </div>
+ [2m 699[0m | 
+ [2m 700[0m |               {/* autofill from synced music */}
+ [2m 701[0m |               {showSynced && (
+ [2m 702[0m |                 <div
+ [2m 703[0m |                   role="listbox"
+ [2m 704[0m |                   onMouseDown={(e) => e.preventDefault()}
+ [2m 705[0m |                   style={{
+ [2m 706[0m |                     marginTop: 10, background: '#fff', border: '1px solid rgba(20,17,13,0.07)', borderRadius: 14,
+ [2m 707[0m |                     boxShadow: '0 8px 24px -12px rgba(20,17,13,0.14)', maxHeight: 280, overflowY: 'auto',
+ [2m 708[0m |                     overflowX: 'hidden',
+ [2m 709[0m |                   }}
+ [2m 710[0m |                 >
+ [2m 711[0m |                   <div style={{ padding: '9px 13px 7px', display: 'flex', alignItems: 'center', gap: 7 }}>
+ [2m 712[0m |                     <Icon.Music width="12" height="12" style={{ color: '#C2410C' }} />
+ [2m 713[0m |                     <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9.5, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(20,17,13,0.4)' }}>From your synced music</span>
+ [2m 714[0m |                   </div>
+ [2m 715[0m |                   {synced.length ? synced.map((row) => (
+ [2m 716[0m |                     <button key={`${row.artist}-${row.title}-${row.album}`} type="button" onMouseDown={() => pickSynced(row)} style={{
+ [2m 717[0m |                       width: '100%', display: 'flex', alignItems: 'center', gap: 11, padding: '9px 13px', cursor: 'pointer',
+ [2m 718[0m |                       border: 0, borderTop: '1px solid rgba(20,17,13,0.04)', background: 'transparent', textAlign: 'left',
+ [2m 719[0m |                     }}>
+ [2m 720[0m |                       <div style={{ width: 34, height: 34, borderRadius: 8, flexShrink: 0, backgroundImage: `url(${row.cover})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+ [2m 721[0m |                       <div style={{ flex: 1, minWidth: 0 }}>
+ [2m 722[0m |                         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14, color: '#14110D', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.title}</div>
+ [2m 723[0m |                         <div style={{ fontSize: 12, color: 'rgba(20,17,13,0.5)', marginTop: 1 }}>{row.artist}</div>
+ [2m 724[0m |                       </div>
+ [2m 725[0m |                       <Icon.Plus width="16" height="16" style={{ color: '#F97316', flexShrink: 0 }} />
+ [2m 726[0m |                     </button>
+ [2m 727[0m |                   )) : (
+ [2m 728[0m |                     <div style={{ padding: '4px 13px 12px', fontSize: 12.5, color: 'rgba(20,17,13,0.5)' }}>Not in your library — “{draft}” works too.</div>
+ [2m 729[0m |                   )}
+ [2m 730[0m |                 </div>
+ [2m 731[0m |               )}
+ [2m 732[0m | 
+ [2m 733[0m |               <button onClick={lockIn} disabled={!draft.trim()} style={{
+ [2m 734[0m |                 marginTop: 16, width: '100%', height: 50, border: 0, borderRadius: 14,
+ [2m 735[0m |                 cursor: draft.trim() ? 'pointer' : 'not-allowed',
+ [2m 736[0m |                 background: '#F97316', color: '#fff', opacity: draft.trim() ? 1 : 0.4,
+ [2m 737[0m |                 fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 16, letterSpacing: '-0.005em',
+ [2m 738[0m |                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+ [2m 739[0m |                 boxShadow: draft.trim() ? '0 10px 22px -10px rgba(249,115,22,0.6)' : 'none',
+ [2m 740[0m |                 transition: 'opacity 0.2s ease',
+ [2m 741[0m |               }}>Lock in your answer</button>
+ [2m 742[0m |             </div>
+ [2m 743[0m |           )}
+ [2m 744[0m |         </div>
+ [2m 745[0m |       </div>
+ [2m 746[0m | 
+ [2m 747[0m |       {/* locked answer → reveal flow */}
+ [2m 748[0m |       {hasLockedAnswer && (
+ [2m 749[0m |         <div className="phase-fade">
+ [2m 750[0m |           <Timeline
+ [2m 751[0m |             answered={hasLockedAnswer}
+ [2m 752[0m |             revealWaiting={revealWaiting}
+ [2m 753[0m |             revealUnlocked={revealUnlocked}
+ [2m 754[0m |           />
+ [2m 755[0m | 
+ [2m 756[0m |           {/* locked answer */}
+ [2m 757[0m |           <div style={{ margin: '12px 22px 0' }}>
+ [2m 758[0m |             <div style={{
+ [2m 759[0m |               display: 'flex', alignItems: 'center', gap: 14, padding: 16, borderRadius: 18,
+ [2m 760[0m |               background: '#fff', border: '1px solid rgba(20,17,13,0.05)',
+ [2m 761[0m |               boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
+ [2m 762[0m |             }}>
+ [2m 763[0m |               <span style={{ width: 40, height: 40, borderRadius: 99, flexShrink: 0, background: 'rgba(113,192,127,0.16)', color: '#2F7D3F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+ [2m 764[0m |                 <Icon.Check width="18" height="18" />
+ [2m 765[0m |               </span>
+ [2m 766[0m |               <div style={{ flex: 1, minWidth: 0 }}>
+ [2m 767[0m |                 <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(20,17,13,0.4)' }}>Your answer is locked in</div>
+ [2m 768[0m |                 <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 17, letterSpacing: '-0.015em', color: '#14110D', marginTop: 3, textWrap: 'balance' }}>&ldquo;{answer}&rdquo;</div>
+ [2m 769[0m |               </div>
+ [2m 770[0m |               <button type="button" onClick={clearAnswer} style={{
+ [2m 771[0m |                 border: 0, background: 'transparent', cursor: 'pointer', flexShrink: 0,
+ [2m 772[0m |                 fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11,
+ [2m 773[0m |                 letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(200,50,50,0.85)',
+ [2m 774[0m |               }}>Clear</button>
+ [2m 775[0m |             </div>
+ [2m 776[0m |           </div>
+ [2m 777[0m | 
+ [2m 778[0m |           {revealWaiting ? <RevealWait secondsLeft={revealCountdown} /> : null}
+ [2m 779[0m |         </div>
+ [2m 780[0m |       )}
+ [2m 781[0m |     </div>
+ [2m 782[0m |   );
+ [2m 783[0m | }
+ [2m 784[0m | 
+ [2m 785[0m | // overlapping avatar stack + "+38"
+ [2m 786[0m | function AvatarStack() {
+ [2m 787[0m |   const people = [
+ [2m 788[0m |     { i: 'A', bg: '#E0584B' }, { i: 'J', bg: '#6C5CE0' }, { i: 'S', bg: '#3FA76B' }, { i: 'K', bg: '#E0A53F' },
+ [2m 789[0m |   ];
+ [2m 790[0m |   return (
+ [2m 791[0m |     <div style={{ display: 'flex', alignItems: 'center' }}>
+ [2m 792[0m |       {people.map((p, idx) => (
+ [2m 793[0m |         <span key={idx} style={{
+ [2m 794[0m |           width: 30, height: 30, borderRadius: 99, background: p.bg, color: '#fff',
+ [2m 795[0m |           display: 'flex', alignItems: 'center', justifyContent: 'center',
+ [2m 796[0m |           fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 12,
+ [2m 797[0m |           border: '2px solid #FBEFDC', marginLeft: idx === 0 ? 0 : -10, position: 'relative', zIndex: idx,
+ [2m 798[0m |         }}>{p.i}</span>
+ [2m 799[0m |       ))}
+ [2m 800[0m |       <span style={{
+ [2m 801[0m |         width: 30, height: 30, borderRadius: 99, background: '#14110D', color: '#fff',
+ [2m 802[0m |         display: 'flex', alignItems: 'center', justifyContent: 'center',
+ [2m 803[0m |         fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11,
+ [2m 804[0m |         border: '2px solid #FBEFDC', marginLeft: -10, position: 'relative', zIndex: 5,
+ [2m 805[0m |       }}>+38</span>
+ [2m 806[0m |     </div>
+ [2m 807[0m |   );
+ [2m 808[0m | }
+ [2m 809[0m | 
+ [2m 810[0m | // ── Near you — small local-shows block ──
+ [2m 811[0m | const TAG_STYLE = {
+ [2m 812[0m |   green: { background: 'rgba(113,192,127,0.14)', color: '#2F7D3F' },
+ [2m 813[0m |   orange: { background: 'rgba(249,115,22,0.12)', color: '#C2410C' },
+ [2m 814[0m | };
+ [2m 815[0m | 
+ [2m 816[0m | function NearYou({ home }) {
+ [2m 817[0m |   const { loading, error, shows } = home;
+ [2m 818[0m |   return (
+ [2m 819[0m |     <div>
+ [2m 820[0m |       <div style={{ padding: '24px 22px 12px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+ [2m 821[0m |         <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 18, letterSpacing: '-0.015em', color: '#14110D', margin: 0 }}>Near you</h2>
+ [2m 822[0m |         <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 12, fontWeight: 600, color: '#F97316' }}>All shows</span>
+ [2m 823[0m |       </div>
+ [2m 824[0m |       <div style={{ padding: '0 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+ [2m 825[0m |         {loading ? (
+ [2m 826[0m |           <p style={{
+ [2m 827[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m 828[0m |             color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+ [2m 829[0m |           }}>Loading shows near you…</p>
+ [2m 830[0m |         ) : error ? (
+ [2m 831[0m |           <p style={{
+ [2m 832[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m 833[0m |             color: 'rgba(200,50,50,0.85)', margin: '8px 0 12px',
+ [2m 834[0m |           }}>{error}</p>
+ [2m 835[0m |         ) : !shows.length ? (
+ [2m 836[0m |           <p style={{
+ [2m 837[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 500, fontSize: 14,
+ [2m 838[0m |             color: 'rgba(20,17,13,0.45)', margin: '8px 0 12px',
+ [2m 839[0m |           }}>Nothing here yet</p>
+ [2m 840[0m |         ) : shows.map((s, i) => (
+ [2m 841[0m |           <div key={s.id || i} style={{
+ [2m 842[0m |             display: 'flex', alignItems: 'center', gap: 12, padding: 10, borderRadius: 18,
+ [2m 843[0m |             background: '#fff', border: '1px solid rgba(20,17,13,0.05)',
+ [2m 844[0m |             boxShadow: '0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)',
+ [2m 845[0m |           }}>
+ [2m 846[0m |             <div style={{
+ [2m 847[0m |               width: 48, height: 48, borderRadius: 12, flexShrink: 0,
+ [2m 848[0m |               backgroundImage: `url(${s.art_url})`, backgroundSize: 'cover', backgroundPosition: 'center',
+ [2m 849[0m |             }} />
+ [2m 850[0m |             <div style={{ flex: 1, minWidth: 0 }}>
+ [2m 851[0m |               <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14.5, letterSpacing: '-0.01em', color: '#14110D', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
+ [2m 852[0m |               <div style={{ fontSize: 12, color: 'rgba(20,17,13,0.5)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 5 }}>
+ [2m 853[0m |                 <Icon.Pin width="12" height="12" style={{ opacity: 0.6 }} /> {s.venue}
+ [2m 854[0m |               </div>
+ [2m 855[0m |             </div>
+ [2m 856[0m |             <div style={{ textAlign: 'right', flexShrink: 0 }}>
+ [2m 857[0m |               <span style={{
+ [2m 858[0m |                 ...TAG_STYLE[s.tag_style], fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 10, fontWeight: 700,
+ [2m 859[0m |                 letterSpacing: '0.06em', textTransform: 'uppercase', padding: '4px 8px', borderRadius: 99,
+ [2m 860[0m |               }}>{s.tag}</span>
+ [2m 861[0m |               <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.5)', marginTop: 6, fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600 }}>{s.when_label}</div>
+ [2m 862[0m |             </div>
+ [2m 863[0m |           </div>
+ [2m 864[0m |         ))}
+ [2m 865[0m |       </div>
+ [2m 866[0m |     </div>
+ [2m 867[0m |   );
+ [2m 868[0m | }
+ [2m 869[0m | 
+ [2m 870[0m | function HomeNormal({
+ [2m 871[0m |   onOpenReveal,
+ [2m 872[0m |   onOpenGames,
+ [2m 873[0m |   home,
+ [2m 874[0m |   activeUserId,
+ [2m 875[0m |   hasLockedAnswer,
+ [2m 876[0m |   revealCountdown,
+ [2m 877[0m |   revealUnlocked,
+ [2m 878[0m |   onRevealAnswerLocked,
+ [2m 879[0m |   onRevealAnswerCleared,
+ [2m 880[0m | }) {
+ [2m 881[0m |   return (
+ [2m 882[0m |     <div style={{ paddingBottom: 124 }}>
+ [2m 883[0m |       <DailyPick
+ [2m 884[0m |         activeUserId={activeUserId}
+ [2m 885[0m |         revealCountdown={revealCountdown}
+ [2m 886[0m |         revealUnlocked={revealUnlocked}
+ [2m 887[0m |         onRevealAnswerLocked={onRevealAnswerLocked}
+ [2m 888[0m |         onRevealAnswerCleared={onRevealAnswerCleared}
+ [2m 889[0m |       />
+ [2m 890[0m |       <HomeOrbit activeUserId={activeUserId} />
+ [2m 891[0m |       <RevealTeaser
+ [2m 892[0m |         onOpen={onOpenReveal}
+ [2m 893[0m |         hasLockedAnswer={hasLockedAnswer}
+ [2m 894[0m |         revealUnlocked={revealUnlocked}
+ [2m 895[0m |       />
+ [2m 896[0m |       <GamesHubBanner onOpen={onOpenGames} activeUserId={activeUserId} />
+ [2m 897[0m |       <NewsStrip home={home} />
+ [2m 898[0m |       <NearYou home={home} />
+ [2m 899[0m |     </div>
+ [2m 900[0m |   );
+ [2m 901[0m | }
+ [2m 902[0m | 
+ [2m 903[0m | 
+ [2m 904[0m | 
+ [2m 905[0m | // home-connection.jsx — Connection day IS the reveal: sealed moment → story carousel → summary
+ [2m 906[0m | 
+ [2m 907[0m | function archetypeIconFor(key) {
+ [2m 908[0m |   const map = {
+ [2m 909[0m |     "mood-curator": Icon.Moon,
+ [2m 910[0m |     "deep-cut": Icon.Spark,
+ [2m 911[0m |     "afterglow": Icon.Moon,
+ [2m 912[0m |     "hypnotist": Icon.Music,
+ [2m 913[0m |     "main-character": Icon.Spark,
+ [2m 914[0m |     "pop-oracle": Icon.Spark,
+ [2m 915[0m |     "southern-romantic": Icon.Music,
+ [2m 916[0m |     "social-aux": Icon.Vibe,
+ [2m 917[0m |     "pregame-menace": Icon.Spark,
+ [2m 918[0m |     "algorithm-dodger": Icon.Music,
+ [2m 919[0m |     "culture-keeper": Icon.Music,
+ [2m 920[0m |   };
+ [2m 921[0m |   return map[key] ?? Icon.Music;
+ [2m 922[0m | }
+ [2m 923[0m | 
+ [2m 924[0m | const FALLBACK_SONG = { name: 'Self Control', artist: 'Frank Ocean', art: ART.frank };
+ [2m 925[0m | const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+ [2m 926[0m | 
+ [2m 927[0m | function ConnectionReveal({ onMeetup, onNav }) {
+ [2m 928[0m |   const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
+ [2m 929[0m |   const { loading, error, people, song } = useConnectionNight(activeUserId);
+ [2m 930[0m |   const peopleData = people;
+ [2m 931[0m |   const songData = song ?? FALLBACK_SONG;
+ [2m 932[0m | 
+ [2m 933[0m |   const [phase, setPhase] = useStateC('sealed');
+ [2m 934[0m |   const [cur, setCur] = useStateC(0);
+ [2m 935[0m |   // persisted: your Vibe/Spark/Pass choices are remembered
+ [2m 936[0m |   const [actions, setActions] = usePersistentState('ligo:reveal:actions', {});   // idx -> 'vibe' | 'spark' | 'pass'
+ [2m 937[0m |   const TOTAL = peopleData.length + 1;                // + done slide
+ [2m 938[0m |   const ringPeople = peopleData.slice(0, 3);
+ [2m 939[0m | 
+ [2m 940[0m |   useEffect(() => {
+ [2m 941[0m |     setCur(0);
+ [2m 942[0m |     setPhase('sealed');
+ [2m 943[0m |   }, [activeUserId, peopleData.length]);
+ [2m 944[0m | 
+ [2m 945[0m |   if (loading) {
+ [2m 946[0m |     return (
+ [2m 947[0m |       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0A0907', color: 'rgba(255,255,255,0.5)', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 600, fontSize: 14 }}>
+ [2m 948[0m |         Loading tonight&apos;s reveal…
+ [2m 949[0m |       </div>
+ [2m 950[0m |     );
+ [2m 951[0m |   }
+ [2m 952[0m | 
+ [2m 953[0m |   if (error || !peopleData.length) {
+ [2m 954[0m |     return (
+ [2m 955[0m |       <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, background: '#0A0907', color: '#fff', padding: 24, textAlign: 'center' }}>
+ [2m 956[0m |         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 18 }}>Connection Night unavailable</div>
+ [2m 957[0m |         <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', maxWidth: 280 }}>{error || 'No matches surfaced for this profile yet.'}</div>
+ [2m 958[0m |         <button onClick={() => onNav && onNav('home')} style={{ marginTop: 8, padding: '10px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: '#fff', cursor: 'pointer', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 13 }}>Back to home</button>
+ [2m 959[0m |       </div>
+ [2m 960[0m |     );
+ [2m 961[0m |   }
+ [2m 962[0m | 
+ [2m 963[0m |   function next() { setCur(c => Math.min(c + 1, TOTAL - 1)); }
+ [2m 964[0m |   function prev() { setCur(c => Math.max(c - 1, 0)); }
+ [2m 965[0m |   function act(idx, kind) {
+ [2m 966[0m |     setActions(a => ({ ...a, [idx]: kind }));
+ [2m 967[0m |     setTimeout(next, 420);
+ [2m 968[0m |   }
+ [2m 969[0m |   function replay() { setActions({}); setCur(0); setPhase('sealed'); }
+ [2m 970[0m | 
+ [2m 971[0m |   return (
+ [2m 972[0m |     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#0A0907', color: '#fff' }}>
+ [2m 973[0m | 
+ [2m 974[0m |       {/* top-left home button */}
+ [2m 975[0m |       <button onClick={() => onNav && onNav('home')} aria-label="Home" style={{
+ [2m 976[0m |         position: 'absolute', top: 52, left: 16, zIndex: 60, width: 38, height: 38, borderRadius: 99,
+ [2m 977[0m |         border: '1px solid rgba(255,255,255,0.14)', background: 'rgba(255,255,255,0.08)',
+ [2m 978[0m |         backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+ [2m 979[0m |         display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff',
+ [2m 980[0m |       }}>
+ [2m 981[0m |         <Icon.Home width="18" height="18" />
+ [2m 982[0m |       </button>
+ [2m 983[0m | 
+ [2m 984[0m |       {/* ───── SEALED LAYER ───── */}
+ [2m 985[0m |       <div style={{
+ [2m 986[0m |         position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', zIndex: 10,
+ [2m 987[0m |         background: '#0A0907', overflow: 'hidden',
+ [2m 988[0m |         opacity: phase === 'carousel' ? 0 : 1,
+ [2m 989[0m |         transform: phase === 'carousel' ? 'scale(1.05)' : 'scale(1)',
+ [2m 990[0m |         pointerEvents: phase === 'carousel' ? 'none' : 'auto',
+ [2m 991[0m |         transition: 'opacity 0.5s ease, transform 0.5s ease',
+ [2m 992[0m |       }}>
+ [2m 993[0m |         {/* ambient blooms */}
+ [2m 994[0m |         <div style={{ position: 'absolute', width: 340, height: 340, top: -60, left: -80, background: 'radial-gradient(circle, rgba(249,115,22,0.18), transparent 70%)', animation: 'cn-drift1 7s ease-in-out infinite', pointerEvents: 'none' }} />
+ [2m 995[0m |         <div style={{ position: 'absolute', width: 280, height: 280, bottom: 120, right: -60, background: 'radial-gradient(circle, rgba(234,140,225,0.14), transparent 70%)', animation: 'cn-drift2 9s ease-in-out infinite', pointerEvents: 'none' }} />
+ [2m 996[0m | 
+ [2m 997[0m |         <div style={{ padding: '102px 24px 0', position: 'relative', zIndex: 2 }}>
+ [2m 998[0m |           <span style={{
+ [2m 999[0m |             display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 999,
+ [2m1000[0m |             background: 'rgba(249,115,22,0.12)', border: '1px solid rgba(249,115,22,0.22)', color: '#F97316',
+ [2m1001[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+ [2m1002[0m |           }}>
+ [2m1003[0m |             <span style={{ width: 6, height: 6, borderRadius: 99, background: '#F97316', animation: 'cn-blink 1.4s ease-in-out infinite' }} />
+ [2m1004[0m |             Tonight's reveal · Georgetown
+ [2m1005[0m |           </span>
+ [2m1006[0m |         </div>
+ [2m1007[0m | 
+ [2m1008[0m |         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 28px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
+ [2m1009[0m |           {/* floating rings */}
+ [2m1010[0m |           <div style={{ position: 'relative', width: 180, height: 84, marginBottom: 34 }}>
+ [2m1011[0m |             {[
+ [2m1012[0m |               { p: ringPeople[0], style: { left: 0, top: 10, width: 64, height: 64, animation: 'cn-ringfloat 3.2s ease-in-out infinite' } },
+ [2m1013[0m |               { p: ringPeople[2], style: { right: 0, top: 12, width: 64, height: 64, animation: 'cn-ringfloat 4.1s ease-in-out infinite 0.8s' } },
+ [2m1014[0m |               { p: ringPeople[1], style: { left: '50%', top: 0, width: 72, height: 72, animation: 'cn-ringfloat-c 3.8s ease-in-out infinite 0.4s' } },
+ [2m1015[0m |             ].filter((r) => r.p).map((r, i) => (
+ [2m1016[0m |               <div key={i} style={{
+ [2m1017[0m |                 position: 'absolute', borderRadius: 99, background: r.p.grad, color: '#fff',
+ [2m1018[0m |                 display: 'flex', alignItems: 'center', justifyContent: 'center',
+ [2m1019[0m |                 fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: r.style.width > 64 ? 22 : 20,
+ [2m1020[0m |                 border: '2.5px solid #0A0907', boxShadow: '0 8px 24px rgba(0,0,0,0.5)', ...r.style,
+ [2m1021[0m |               }}>{r.p.initials}</div>
+ [2m1022[0m |             ))}
+ [2m1023[0m |           </div>
+ [2m1024[0m | 
+ [2m1025[0m |           <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 72, letterSpacing: '-0.04em', lineHeight: 1, marginBottom: 6, color: '#fff' }}>{peopleData.length}</div>
+ [2m1026[0m |           <div style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.45)', marginBottom: 12 }}>connections surfaced tonight</div>
+ [2m1027[0m |           <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 26, letterSpacing: '-0.03em', lineHeight: 1.2, marginBottom: 10, textWrap: 'balance' }}>
+ [2m1028[0m |             matched to your taste.
+ [2m1029[0m |           </div>
+ [2m1030[0m |           <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, maxWidth: 250 }}>You'll never know it's coming. That's the point.</div>
+ [2m1031[0m | 
+ [2m1032[0m |           {/* your pick chip */}
+ [2m1033[0m |           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 11, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, padding: '10px 14px', marginTop: 22 }}>
+ [2m1034[0m |             <div style={{ width: 38, height: 38, borderRadius: 9, backgroundImage: `url(${songData.art})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
+ [2m1035[0m |             <div style={{ textAlign: 'left' }}>
+ [2m1036[0m |               <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 13.5, lineHeight: 1.2 }}>{songData.name}</div>
+ [2m1037[0m |               <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{songData.artist}</div>
+ [2m1038[0m |             </div>
+ [2m1039[0m |             <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#F97316', background: 'rgba(249,115,22,0.12)', border: '1px solid rgba(249,115,22,0.2)', borderRadius: 6, padding: '4px 7px' }}>Your pick</span>
+ [2m1040[0m |           </div>
+ [2m1041[0m |         </div>
+ [2m1042[0m | 
+ [2m1043[0m |         <div style={{ padding: '0 20px 36px', position: 'relative', zIndex: 2 }}>
+ [2m1044[0m |           <button onClick={() => setPhase('carousel')} style={{
+ [2m1045[0m |             width: '100%', height: 56, border: 0, borderRadius: 18, cursor: 'pointer', background: '#F97316', color: '#fff',
+ [2m1046[0m |             fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 16, letterSpacing: '-0.005em',
+ [2m1047[0m |             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+ [2m1048[0m |             boxShadow: '0 12px 32px -6px rgba(249,115,22,0.55), inset 0 1px 0 rgba(255,255,255,0.15)',
+ [2m1049[0m |             transition: 'transform 0.15s ease',
+ [2m1050[0m |           }} onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'} onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+ [2m1051[0m |             <Icon.Eye width="18" height="18" /> See who they are
+ [2m1052[0m |           </button>
+ [2m1053[0m |           <div style={{ textAlign: 'center', marginTop: 14, fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.25)' }}>Disappears at midnight</div>
+ [2m1054[0m |         </div>
+ [2m1055[0m |       </div>
+ [2m1056[0m | 
+ [2m1057[0m |       {/* ───── CAROUSEL LAYER ───── */}
+ [2m1058[0m |       <div style={{
+ [2m1059[0m |         position: 'absolute', inset: 0, zIndex: 5,
+ [2m1060[0m |         opacity: phase === 'carousel' ? 1 : 0, pointerEvents: phase === 'carousel' ? 'auto' : 'none',
+ [2m1061[0m |         transform: phase === 'carousel' ? 'scale(1)' : 'scale(0.97)',
+ [2m1062[0m |         transition: 'opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s',
+ [2m1063[0m |       }}>
+ [2m1064[0m |         {/* story bars */}
+ [2m1065[0m |         <div style={{ position: 'absolute', top: 56, left: 64, right: 16, display: 'flex', gap: 4, zIndex: 50 }}>
+ [2m1066[0m |           {Array.from({ length: TOTAL }).map((_, i) => (
+ [2m1067[0m |             <div key={i} style={{ flex: 1, height: 2.5, borderRadius: 2, background: 'rgba(255,255,255,0.2)', overflow: 'hidden' }}>
+ [2m1068[0m |               <i style={{ display: 'block', height: '100%', borderRadius: 2, background: '#fff', width: i <= cur ? '100%' : '0%', transition: 'width 0.3s ease' }} />
+ [2m1069[0m |             </div>
+ [2m1070[0m |           ))}
+ [2m1071[0m |         </div>
+ [2m1072[0m | 
+ [2m1073[0m |         {/* tap zones */}
+ [2m1074[0m |         <div onClick={prev} style={{ position: 'absolute', top: 64, bottom: 232, left: 0, width: '36%', zIndex: 30, cursor: 'pointer' }} />
+ [2m1075[0m |         <div onClick={next} style={{ position: 'absolute', top: 64, bottom: 232, right: 0, width: '36%', zIndex: 30, cursor: 'pointer' }} />
+ [2m1076[0m | 
+ [2m1077[0m |         {/* slides */}
+ [2m1078[0m |         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 74 }}>
+ [2m1079[0m |           {peopleData.map((p, i) => (
+ [2m1080[0m |             <PersonSlide key={p.id} p={p} idx={i} cur={cur} total={peopleData.length} song={songData} action={actions[i]} onAct={act} />
+ [2m1081[0m |           ))}
+ [2m1082[0m |           <DoneSlide idx={peopleData.length} cur={cur} actions={actions} peopleData={peopleData} onReplay={replay} onMeetup={onMeetup} />
+ [2m1083[0m |         </div>
+ [2m1084[0m | 
+ [2m1085[0m |         <BottomNav active="home" dark onChange={onNav || (() => {})} />
+ [2m1086[0m |       </div>
+ [2m1087[0m |     </div>
+ [2m1088[0m |   );
+ [2m1089[0m | }
+ [2m1090[0m | 
+ [2m1091[0m | function slideStyle(i, cur) {
+ [2m1092[0m |   const x = i < cur ? '-100%' : i > cur ? '100%' : '0%';
+ [2m1093[0m |   return {
+ [2m1094[0m |     position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+ [2m1095[0m |     transform: `translateX(${x})`, transition: 'transform 0.4s cubic-bezier(.25,.46,.45,.94)',
+ [2m1096[0m |   };
+ [2m1097[0m | }
+ [2m1098[0m | 
+ [2m1099[0m | function WeekPips({ week }) {
+ [2m1100[0m |   return (
+ [2m1101[0m |     <div style={{ display: 'flex', gap: 5, position: 'relative', zIndex: 2 }}>
+ [2m1102[0m |       {week.map((cell, i) => {
+ [2m1103[0m |         const st = cell.status ?? cell;
+ [2m1104[0m |         const label = cell.label ?? DAYS[i];
+ [2m1105[0m |         const c = st === 'today' ? { bg: 'rgba(249,115,22,0.18)', bd: 'rgba(249,115,22,0.3)', fg: '#F97316' }
+ [2m1106[0m |           : st === 'match' ? { bg: 'rgba(113,192,127,0.13)', bd: 'rgba(113,192,127,0.22)', fg: 'rgba(113,192,127,0.85)' }
+ [2m1107[0m |           : { bg: 'rgba(255,255,255,0.04)', bd: 'rgba(255,255,255,0.07)', fg: 'rgba(255,255,255,0.28)' };
+ [2m1108[0m |         return (
+ [2m1109[0m |           <div key={i} style={{ flex: 1, height: 34, borderRadius: 8, background: c.bg, border: `1px solid ${c.bd}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+ [2m1110[0m |             <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 8, textTransform: 'uppercase', color: c.fg, opacity: 0.7 }}>{label}</span>
+ [2m1111[0m |             <span style={{ fontSize: 11, color: c.fg, fontWeight: 700 }}>{st === 'miss' ? '–' : '✓'}</span>
+ [2m1112[0m |           </div>
+ [2m1113[0m |         );
+ [2m1114[0m |       })}
+ [2m1115[0m |     </div>
+ [2m1116[0m |   );
+ [2m1117[0m | }
+ [2m1118[0m | 
+ [2m1119[0m | function PersonSlide({ p, idx, cur, total, song, action, onAct }) {
+ [2m1120[0m |   const A = archetypeIconFor(p.aIconKey);
+ [2m1121[0m |   return (
+ [2m1122[0m |     <div style={slideStyle(idx, cur)}>
+ [2m1123[0m |       {/* hero */}
+ [2m1124[0m |       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '78px 22px 12px', position: 'relative', overflowY: 'auto', scrollbarWidth: 'none' }}>
+ [2m1125[0m |         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(460px 460px at 82% 10%, rgba(234,140,225,0.16), transparent 65%)', pointerEvents: 'none' }} />
+ [2m1126[0m |         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, position: 'relative', zIndex: 2 }}>
+ [2m1127[0m |           <span style={{ width: 5, height: 5, borderRadius: 99, background: '#F97316' }} /> {idx + 1} of {total} · {p.matchType} · {p.score}
+ [2m1128[0m |         </div>
+ [2m1129[0m | 
+ [2m1130[0m |         {/* header: avatar + name + archetype */}
+ [2m1131[0m |         <div style={{ display: 'flex', alignItems: 'center', gap: 14, position: 'relative', zIndex: 2 }}>
+ [2m1132[0m |           <div style={{ width: 60, height: 60, borderRadius: 99, background: p.grad, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 22, color: '#fff', flexShrink: 0, boxShadow: '0 10px 30px rgba(0,0,0,0.45)' }}>{p.initials}</div>
+ [2m1133[0m |           <div style={{ minWidth: 0 }}>
+ [2m1134[0m |             <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 24, letterSpacing: '-0.03em', lineHeight: 1.05 }}>{p.name}</div>
+ [2m1135[0m |             <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.45)', fontWeight: 600, marginTop: 3 }}>{p.meta}</div>
+ [2m1136[0m |             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 999, padding: '4px 10px', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 7 }}>
+ [2m1137[0m |               <A width="12" height="12" /> {p.archetype}
+ [2m1138[0m |             </div>
+ [2m1139[0m |           </div>
+ [2m1140[0m |         </div>
+ [2m1141[0m | 
+ [2m1142[0m |         {/* connection horoscope — personalized to their taste + week answers */}
+ [2m1143[0m |         <div style={{ position: 'relative', overflow: 'hidden', marginTop: 16, padding: '14px 15px', borderRadius: 16, background: 'linear-gradient(160deg, rgba(234,140,225,0.16), rgba(255,255,255,0.02))', border: '1px solid rgba(234,140,225,0.24)', zIndex: 2 }}>
+ [2m1144[0m |           <span style={{ position: 'absolute', top: 13, right: 16, width: 3, height: 3, borderRadius: 99, background: '#EA8CE1', opacity: 0.8 }} />
+ [2m1145[0m |           <span style={{ position: 'absolute', bottom: 16, right: 34, width: 2, height: 2, borderRadius: 99, background: '#EA8CE1', opacity: 0.7 }} />
+ [2m1146[0m |           <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
+ [2m1147[0m |             <Icon.Spark width="13" height="13" style={{ color: '#EA8CE1' }} />
+ [2m1148[0m |             <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9.5, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#EA8CE1' }}>Your connection reading</span>
+ [2m1149[0m |           </div>
+ [2m1150[0m |           <p style={{ fontSize: 13, lineHeight: 1.55, color: 'rgba(255,255,255,0.8)', textWrap: 'pretty' }}>{p.horoscope}</p>
+ [2m1151[0m |         </div>
+ [2m1152[0m | 
+ [2m1153[0m |         {/* shared song */}
+ [2m1154[0m |         <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginTop: 10, padding: '10px 12px', borderRadius: 14, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', position: 'relative', zIndex: 2 }}>
+ [2m1155[0m |           <div style={{ width: 38, height: 38, borderRadius: 9, backgroundImage: `url(${song.art})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(0,0,0,0.4)' }} />
+ [2m1156[0m |           <div style={{ flex: 1, minWidth: 0 }}>
+ [2m1157[0m |             <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Your pick tonight</div>
+ [2m1158[0m |             <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 14.5, letterSpacing: '-0.01em', marginTop: 2 }}>{song.name} · <span style={{ fontWeight: 600, color: 'rgba(255,255,255,0.6)' }}>{song.artist}</span></div>
+ [2m1159[0m |           </div>
+ [2m1160[0m |         </div>
+ [2m1161[0m | 
+ [2m1162[0m |         {p.sharedPickCard ? (
+ [2m1163[0m |           <div style={{ marginTop: 14, padding: '12px 14px', borderRadius: 14, background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(249,115,22,0.24)', position: 'relative', zIndex: 2 }}>
+ [2m1164[0m |             <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#F97316', marginBottom: 6 }}>Shared pick</div>
+ [2m1165[0m |             <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', color: 'rgba(255,255,255,0.92)' }}>{p.sharedPickCard.label}</div>
+ [2m1166[0m |             {p.sharedPickCard.date && (
+ [2m1167[0m |               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{p.sharedPickCard.date}</div>
+ [2m1168[0m |             )}
+ [2m1169[0m |             {p.sharedPickCard.detail && (
+ [2m1170[0m |               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', marginTop: 6, lineHeight: 1.45 }}>{p.sharedPickCard.detail}</div>
+ [2m1171[0m |             )}
+ [2m1172[0m |           </div>
+ [2m1173[0m |         ) : (
+ [2m1174[0m |           <>
+ [2m1175[0m |             {p.sharedLane && (
+ [2m1176[0m |               <div style={{ marginTop: 14, position: 'relative', zIndex: 2 }}>
+ [2m1177[0m |                 <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 8 }}>Shared lane</div>
+ [2m1178[0m |                 <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.55)', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 999, padding: '6px 10px' }}>{p.sharedLane}</span>
+ [2m1179[0m |               </div>
+ [2m1180[0m |             )}
+ [2m1181[0m |             {p.weekGrid?.length > 0 && (
+ [2m1182[0m |               <div style={{ marginTop: 14, position: 'relative', zIndex: 2 }}>
+ [2m1183[0m |                 <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 8 }}>Your answers this week</div>
+ [2m1184[0m |                 <WeekPips week={p.weekGrid} />
+ [2m1185[0m |               </div>
+ [2m1186[0m |             )}
+ [2m1187[0m |           </>
+ [2m1188[0m |         )}
+ [2m1189[0m |       </div>
+ [2m1190[0m | 
+ [2m1191[0m |       {/* cta sheet */}
+ [2m1192[0m |       <div style={{ flexShrink: 0, padding: '14px 18px 18px', background: 'rgba(10,9,7,0.88)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderTop: '1px solid rgba(255,255,255,0.06)', position: 'relative', zIndex: 40 }}>
+ [2m1193[0m |         <div style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.38)', textAlign: 'center', marginBottom: 11 }}>{p.prompt}</div>
+ [2m1194[0m |         <div style={{ display: 'flex', gap: 9, marginBottom: 8 }}>
+ [2m1195[0m |           <button onClick={() => onAct(idx, 'vibe')} disabled={!!action} style={{
+ [2m1196[0m |             flex: 1, padding: '12px 8px', borderRadius: 14, cursor: action ? 'default' : 'pointer',
+ [2m1197[0m |             border: action === 'vibe' ? '1.5px solid rgba(113,192,127,0.4)' : '1.5px solid rgba(255,255,255,0.1)',
+ [2m1198[0m |             background: action === 'vibe' ? 'rgba(113,192,127,0.18)' : 'rgba(255,255,255,0.07)',
+ [2m1199[0m |             color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+ [2m1200[0m |             opacity: action && action !== 'vibe' ? 0.4 : 1, transition: 'all 0.18s ease',
+ [2m1201[0m |           }}>
+ [2m1202[0m |             {action === 'vibe' ? <Icon.Check width="16" height="16" /> : <Icon.Vibe width="17" height="17" />}
+ [2m1203[0m |             <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+ [2m1204[0m |               <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 14, lineHeight: 1 }}>{action === 'vibe' ? 'Vibed' : 'Vibe'}</span>
+ [2m1205[0m |               {action !== 'vibe' && <span style={{ fontSize: 10, fontWeight: 600, opacity: 0.6, marginTop: 2, lineHeight: 1 }}>Friends energy</span>}
+ [2m1206[0m |             </span>
+ [2m1207[0m |           </button>
+ [2m1208[0m |           <button onClick={() => onAct(idx, 'spark')} disabled={!!action} style={{
+ [2m1209[0m |             flex: 1, padding: '12px 8px', borderRadius: 14, cursor: action ? 'default' : 'pointer', border: 0,
+ [2m1210[0m |             background: action === 'spark' ? 'rgba(234,140,225,0.5)' : '#EA8CE1',
+ [2m1211[0m |             color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+ [2m1212[0m |             opacity: action && action !== 'spark' ? 0.4 : 1,
+ [2m1213[0m |             boxShadow: action ? 'none' : '0 8px 22px -6px rgba(234,140,225,0.5)', transition: 'all 0.18s ease',
+ [2m1214[0m |           }}>
+ [2m1215[0m |             {action === 'spark' ? <Icon.Check width="16" height="16" /> : <Icon.Spark width="17" height="17" />}
+ [2m1216[0m |             <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+ [2m1217[0m |               <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 14, lineHeight: 1 }}>{action === 'spark' ? 'Sparked' : 'Spark'}</span>
+ [2m1218[0m |               {action !== 'spark' && <span style={{ fontSize: 10, fontWeight: 600, opacity: 0.7, marginTop: 2, lineHeight: 1 }}>Something more</span>}
+ [2m1219[0m |             </span>
+ [2m1220[0m |           </button>
+ [2m1221[0m |         </div>
+ [2m1222[0m |         <button onClick={() => onAct(idx, 'pass')} style={{ display: 'block', width: '100%', textAlign: 'center', fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.25)', cursor: 'pointer', padding: 4, background: 'none', border: 0, fontFamily: 'Bricolage Grotesque, sans-serif' }}>Not right now</button>
+ [2m1223[0m |       </div>
+ [2m1224[0m |     </div>
+ [2m1225[0m |   );
+ [2m1226[0m | }
+ [2m1227[0m | 
+ [2m1228[0m | function DoneSlide({ idx, cur, actions, peopleData, onReplay, onMeetup }) {
+ [2m1229[0m |   return (
+ [2m1230[0m |     <div style={slideStyle(idx, cur)}>
+ [2m1231[0m |       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '72px 24px 0', textAlign: 'center', position: 'relative' }}>
+ [2m1232[0m |         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(500px at 50% 22%, rgba(113,192,127,0.1), transparent 65%)', pointerEvents: 'none' }} />
+ [2m1233[0m |         <div style={{ width: 68, height: 68, borderRadius: 99, background: 'rgba(113,192,127,0.13)', border: '1.5px solid rgba(113,192,127,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, color: '#71C07F', position: 'relative', zIndex: 2 }}>
+ [2m1234[0m |           <Icon.Check width="30" height="30" />
+ [2m1235[0m |         </div>
+ [2m1236[0m |         <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 24, letterSpacing: '-0.025em', marginBottom: 8, lineHeight: 1.15, position: 'relative', zIndex: 2 }}>That's tonight's reveal.</div>
+ [2m1237[0m |         <div style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.42)', lineHeight: 1.6, maxWidth: 260, marginBottom: 22, position: 'relative', zIndex: 2 }}>
+ [2m1238[0m |           Sparks stay anonymous until they send one back. Vibes can plan a hang right now.
+ [2m1239[0m |         </div>
+ [2m1240[0m |         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 7, position: 'relative', zIndex: 2 }}>
+ [2m1241[0m |           {peopleData.map((p, i) => {
+ [2m1242[0m |             const a = actions[i];
+ [2m1243[0m |             return (
+ [2m1244[0m |               <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 13, padding: '11px 13px', display: 'flex', alignItems: 'center', gap: 11, textAlign: 'left' }}>
+ [2m1245[0m |                 <div style={{ width: 36, height: 36, borderRadius: 99, background: p.grad, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 12, color: '#fff', flexShrink: 0 }}>{p.initials}</div>
+ [2m1246[0m |                 <div style={{ flex: 1, minWidth: 0 }}>
+ [2m1247[0m |                   <div style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 13 }}>{p.name}</div>
+ [2m1248[0m |                   <div style={{ fontSize: 11, marginTop: 2, color: 'rgba(255,255,255,0.38)' }}>
+ [2m1249[0m |                     {a === 'vibe' && <span style={{ color: '#F97316', fontWeight: 700 }}>Sent a Vibe</span>}
+ [2m1250[0m |                     {a === 'spark' && <span style={{ color: '#EA8CE1', fontWeight: 700 }}>Sparked · anonymous until mutual</span>}
+ [2m1251[0m |                     {(!a || a === 'pass') && <span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 700 }}>Passed</span>}
+ [2m1252[0m |                   </div>
+ [2m1253[0m |                 </div>
+ [2m1254[0m |                 {(a === 'vibe' || a === 'spark') && (
+ [2m1255[0m |                   <button onClick={() => onMeetup(p, a)} style={{
+ [2m1256[0m |                     flexShrink: 0, border: 0, cursor: 'pointer', padding: '8px 12px', borderRadius: 10,
+ [2m1257[0m |                     background: a === 'spark' ? 'rgba(234,140,225,0.16)' : 'rgba(249,115,22,0.14)',
+ [2m1258[0m |                     color: a === 'spark' ? '#EA8CE1' : '#F97316',
+ [2m1259[0m |                     fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 12,
+ [2m1260[0m |                   }}>Plan a hang</button>
+ [2m1261[0m |                 )}
+ [2m1262[0m |               </div>
+ [2m1263[0m |             );
+ [2m1264[0m |           })}
+ [2m1265[0m |         </div>
+ [2m1266[0m |         <button onClick={onReplay} style={{ width: '100%', padding: 13, borderRadius: 13, border: '1.5px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', cursor: 'pointer', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, fontSize: 13.5, color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 12, position: 'relative', zIndex: 2 }}>
+ [2m1267[0m |           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+ [2m1268[0m |           Replay
+ [2m1269[0m |         </button>
+ [2m1270[0m |       </div>
+ [2m1271[0m |     </div>
+ [2m1272[0m |   );
+ [2m1273[0m | }
+ [2m1274[0m | 
+ [2m1275[0m | function HomeConnection({ onMeetup, onNav }) {
+      : [33;1m         ^^^^^^^|^^^^^^[0m
+      :                 [33;1m`-- [33;1m`HomeConnection` redefined here[0m[0m
+ [2m1276[0m |   return <ConnectionReveal onMeetup={onMeetup} onNav={onNav} />;
+ [2m1277[0m | }
+      `----
+
+Import trace for requested module:
+./components/HomeScreen.tsx
+./app/page.tsx
+
+
+> Build failed because of webpack errors
