@@ -218,21 +218,15 @@ export function ActConnectionSealed({
               style={{
                 position: 'absolute',
                 borderRadius: 99,
-                background: r.p!.grad,
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontFamily: FF,
-                fontWeight: 700,
-                fontSize: typeof r.style.width === 'number' && r.style.width > 64 ? 22 : 20,
+                backgroundImage: `url(${r.p!.avatar})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundColor: '#333',
                 border: '2.5px solid #0A0907',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
                 ...r.style,
               }}
-            >
-              {r.p!.initials}
-            </div>
+            />
           ))}
       </div>
 

@@ -1,5 +1,6 @@
-import React from 'react';
+import { useState } from 'react';
 import { Icon } from '@/components/Primitives';
+import { ProfileV2Provider, ProfileV2Shell } from '@/components/profile/ProfileScreen';
 
 const FF = "'Bricolage Grotesque', sans-serif";
 
@@ -56,6 +57,7 @@ export function RevealConnectionPerson({
   anim: string;
 }) {
   const A = archetypeIconFor(p.aIconKey || 'music');
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <div
@@ -97,26 +99,26 @@ export function RevealConnectionPerson({
           {p.matchType} · {p.score}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div 
+          onClick={() => setExpanded(true)}
+          style={{ display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}
+        >
           <div
             style={{
               width: 60,
               height: 60,
               borderRadius: 99,
-              background: p.grad,
+              backgroundImage: `url(${p.avatar})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundColor: '#333',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontFamily: FF,
-              fontWeight: 700,
-              fontSize: 22,
-              color: '#fff',
               flexShrink: 0,
               boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
             }}
-          >
-            {p.initials}
-          </div>
+          />
           <div style={{ minWidth: 0 }}>
             <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 24, letterSpacing: '-0.03em', lineHeight: 1.05 }}>
               {p.name}
@@ -289,6 +291,14 @@ export function RevealConnectionPerson({
           Not right now
         </button>
       </div>
+
+      {expanded && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#FAFAF8', animation: 'slideUp 300ms cubic-bezier(0.2, 0.7, 0.2, 1)' }}>
+          <ProfileV2Provider overrideUserId={p.id} matchReason={p.matchReason} onClose={() => setExpanded(false)}>
+            <ProfileV2Shell />
+          </ProfileV2Provider>
+        </div>
+      )}
     </div>
   );
 }

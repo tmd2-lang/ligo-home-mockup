@@ -37,6 +37,7 @@ export type CNProfile = {
   id: string;
   name: string;
   initials: string;
+  avatar: string;
   grad: string; // Background gradient or color for initial circle
   major: string;
   school: string;
@@ -54,6 +55,7 @@ export const CN_PROFILES: CNProfile[] = [
     id: "cole",
     name: "Cole",
     initials: "C",
+    avatar: "/assets/cole-profile.png",
     grad: "linear-gradient(135deg, #11A3A3, #096D6D)",
     major: "Computer Science",
     school: "Georgetown",
@@ -69,6 +71,7 @@ export const CN_PROFILES: CNProfile[] = [
     id: "maddie",
     name: "Maddie",
     initials: "M",
+    avatar: "/assets/maddie-profile.png",
     grad: "linear-gradient(135deg, #D4122C, #8C0A1C)",
     major: "Economics",
     school: "Georgetown",
@@ -84,6 +87,7 @@ export const CN_PROFILES: CNProfile[] = [
     id: "marcus",
     name: "Marcus",
     initials: "M",
+    avatar: "/assets/Marcus-profile.png",
     grad: "linear-gradient(135deg, #FF6B00, #B34B00)",
     major: "Government",
     school: "Georgetown",

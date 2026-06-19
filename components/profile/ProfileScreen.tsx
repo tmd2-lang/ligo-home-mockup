@@ -52,14 +52,18 @@ const ProfileV2Ctx = createContext<any>(null);
 export function usePV2() { return useContext(ProfileV2Ctx); }
 
 export function useActiveUserProfile() {
+  const ctx = usePV2();
+  const overrideUserId = ctx?.overrideUserId;
   const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
-  const user = USERS[activeUserId] || USERS['jordan'];
+  const user = USERS[overrideUserId || activeUserId] || USERS['jordan'];
   return { ...PROFILE_PRESENTATION_DEFAULTS, ...user.profile };
 }
 
 export function useActiveUser() {
+  const ctx = usePV2();
+  const overrideUserId = ctx?.overrideUserId;
   const [activeUserId] = usePersistentState('ligo:active_user', 'jordan');
-  const user = USERS[activeUserId] || USERS['jordan'];
+  const user = USERS[overrideUserId || activeUserId] || USERS['jordan'];
   return { ...USER_IDENTITY_DEFAULTS, ...user };
 }
 
@@ -77,7 +81,7 @@ const STREAK_TROPHIES = [
   { id: 'h6', label: '180 days', short: '180', days: 180, accent: '#14110D', icon: '♛', title: 'Hall of Fame', blurb: "Half a year of never missing a day. Legends aren't born — they're streaked into existence." },
 ];
 
-export function ProfileV2Provider({ children }) {
+export function ProfileV2Provider({ children, overrideUserId, matchReason, onClose }: { children: ReactNode, overrideUserId?: string, matchReason?: string, onClose?: () => void }) {
   const [screen, setScreen] = useState('profile');
   const [sheet, setSheet] = useState(null);
   const [sheetOrigin, setSheetOrigin] = useState(null);
@@ -150,10 +154,11 @@ export function ProfileV2Provider({ children }) {
 
   return (
     <ProfileV2Ctx.Provider value={{
-      screen, openReceipts, closeReceipts,
-      sheet, openSheet, closeSheet, toast, toastMsg, toastOn,
-      notifUnread, playingIdx, toggleTrack, meterOn, runMeterAnim,
+      screen, setScreen, sheet, openSheet, closeSheet, sheetOrigin,
+      toastMsg, toastOn, toast, notifUnread,
       openArchetypeGallery, closeArchetypeGallery, openArchetypeFromGallery,
+      playingIdx, toggleTrack, meterOn, overrideUserId, matchReason, onClose,
+      openReceipts, closeReceipts, runMeterAnim
     }}>
       {children}
     </ProfileV2Ctx.Provider>
@@ -774,7 +779,7 @@ function ProfileTabV2() {
 
   const gate = useProfileGate();
   const {
-    openReceipts, openSheet, toast, notifUnread, playingIdx, toggleTrack, meterOn, runMeterAnim,
+    openReceipts, openSheet, toast, notifUnread, playingIdx, toggleTrack, meterOn, runMeterAnim, matchReason, onClose
   } = usePV2();
 
   const onScoreInView = useCallback(() => {
@@ -805,30 +810,62 @@ function ProfileTabV2() {
         animation: 'ligo-mesh-breathe 8s ease-in-out infinite alternate',
       }} />
 
-      <div style={{ padding: `76px ${EDGE}px 0`, position: 'relative', zIndex: 1 }}>
+      <div style={{ padding: `${onClose ? 40 : 76}px ${EDGE}px 0`, position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button type="button" aria-label="Settings" onClick={() => openSheet('settings')} style={{
-            width: 40, height: 40, borderRadius: 13, border: '1px solid rgba(20,17,13,0.06)',
-            background: 'rgba(20,17,13,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', transition: 'transform 0.15s ease',
-          }} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-            <Icon.Settings width={20} height={20} />
-          </button>
+          {onClose ? (
+            <button type="button" aria-label="Close" onClick={onClose} style={{
+              width: 40, height: 40, borderRadius: 13, border: '1px solid rgba(20,17,13,0.06)',
+              background: 'rgba(20,17,13,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'transform 0.15s ease',
+            }} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+              <Icon.Close width={20} height={20} />
+            </button>
+          ) : (
+            <button type="button" aria-label="Settings" onClick={() => openSheet('settings')} style={{
+              width: 40, height: 40, borderRadius: 13, border: '1px solid rgba(20,17,13,0.06)',
+              background: 'rgba(20,17,13,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'transform 0.15s ease',
+            }} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+              <Icon.Settings width={20} height={20} />
+            </button>
+          )}
           
           <div style={{ color: '#F97316' }}>
             <Wordmark size={24} />
           </div>
 
-          <button type="button" aria-label="Share" onClick={() => openSheet('share')} style={{
-            padding: '8px 16px', borderRadius: 99, border: 0,
-            background: '#14110D', color: '#fff',
-            display: 'flex', alignItems: 'center', gap: 6,
-            fontFamily: DISPLAY, fontWeight: 600, fontSize: 13,
-            cursor: 'pointer', transition: 'transform 0.15s ease, background 0.15s ease',
-          }} onMouseEnter={(e) => e.currentTarget.style.background = '#2A2520'} onMouseLeave={(e) => { e.currentTarget.style.background = '#14110D'; e.currentTarget.style.transform = 'scale(1)'; }} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-            <Icon.Share width={14} height={14} /> Share
-          </button>
+          {!onClose ? (
+            <button type="button" aria-label="Share" onClick={() => openSheet('share')} style={{
+              padding: '8px 16px', borderRadius: 99, border: 0,
+              background: '#14110D', color: '#fff',
+              display: 'flex', alignItems: 'center', gap: 6,
+              fontFamily: DISPLAY, fontWeight: 600, fontSize: 13,
+              cursor: 'pointer', transition: 'transform 0.15s ease, background 0.15s ease',
+            }} onMouseEnter={(e) => e.currentTarget.style.background = '#2A2520'} onMouseLeave={(e) => { e.currentTarget.style.background = '#14110D'; e.currentTarget.style.transform = 'scale(1)'; }} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+              <Icon.Share width={14} height={14} /> Share
+            </button>
+          ) : <div style={{ width: 40 }} />}
         </div>
+
+        {matchReason && (
+          <div style={{
+            marginTop: 24,
+            padding: '16px 20px',
+            borderRadius: 16,
+            background: 'linear-gradient(160deg, rgba(234,140,225,0.2), rgba(255,255,255,0.4))',
+            border: '1px solid rgba(234,140,225,0.4)',
+            boxShadow: '0 4px 20px rgba(234,140,225,0.1)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+              <span style={{ color: '#D946C2' }}><Icon.Spark width={14} height={14} /></span>
+              <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#D946C2' }}>Why you matched</span>
+            </div>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: 'rgba(20,17,13,0.85)', lineHeight: 1.5, margin: 0, textWrap: 'pretty' }}>
+              {matchReason}
+            </p>
+          </div>
+        )}
+
         <Reveal style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginTop: 24 }}>
           <div style={{ position: 'relative' }}>
             {/* Main Avatar Circle */}
