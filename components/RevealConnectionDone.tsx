@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@/components/Primitives';
-import { ProfileScreen } from '@/components/profile/ProfileScreen';
+import { ProfileV2Provider, ProfileV2Shell } from '@/components/profile/ProfileScreen';
 
 const FF = "'Bricolage Grotesque', sans-serif";
 
@@ -150,10 +150,9 @@ export function ActConnectionDone({
 
       {expandedProfile && createPortal(
         <div style={{ position: 'absolute', inset: 0, zIndex: 9999 }}>
-          <ProfileScreen 
-            userId={expandedProfile.id}
-            onClose={(e) => { e?.stopPropagation(); setExpandedProfile(null); }}
-          />
+          <ProfileV2Provider overrideUserId={expandedProfile.id} matchReason={expandedProfile.matchReason} onClose={() => setExpandedProfile(null)}>
+            <ProfileV2Shell />
+          </ProfileV2Provider>
         </div>,
         document.querySelector('.ios-device') || document.body
       )}
