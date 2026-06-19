@@ -1,0 +1,23 @@
+
+> ligo-home-mockup@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./temp_cn_acts.tsx:5:65
+Type error: Cannot find module '@/lib/connectionNight' or its corresponding type declarations.
+
+[0m [90m 3 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useState } [36mfrom[39m [32m'react'[39m[33m;[39m[0m
+[0m [90m 4 |[39m [36mimport[39m { [33mIcon[39m } [36mfrom[39m [32m'@/components/Primitives'[39m[33m;[39m[0m
+[0m[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m type { [33mConnectionNightPerson[39m[33m,[39m [33mConnectionNightSong[39m } [36mfrom[39m [32m'@/lib/connectionNight'[39m[33m;[39m[0m
+[0m [90m   |[39m                                                                 [31m[1m^[22m[39m[0m
+[0m [90m 6 |[39m [36mimport[39m { [33mMeetupSupportSheet[39m } [36mfrom[39m [32m'./MeetupSupportSheet'[39m[33m;[39m[0m
+[0m [90m 7 |[39m [36mimport[39m { [33mMockBackend[39m } [36mfrom[39m [32m'@/lib/mockBackend'[39m[33m;[39m[0m
+[0m [90m 8 |[39m [36mimport[39m { useConnectionRevision } [36mfrom[39m [32m'@/hooks/useConnectionRevision'[39m[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null

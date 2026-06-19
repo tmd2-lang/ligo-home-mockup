@@ -5,6 +5,7 @@ import { ACTIVE_REVEAL_NIGHT, CN_PROFILES } from '@/lib/revealData';
 import { usePersistentState } from '@/lib/usePersistentState';
 import { RevealShell, REVEAL_COLORS, roman, type ShellController } from '@/components/RevealShell';
 import { RevealOpeningIntro } from '@/components/reveal/RevealOpeningIntro';
+import { ActConnectionIntro, ActConnectionSealed } from './RevealConnectionIntro';
 
 const FF = "'Bricolage Grotesque', sans-serif";
 const EASE = 'cubic-bezier(.2,.7,.2,1)';
@@ -486,30 +487,34 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = f
     setTimeout(() => setVibeToast(null), 2500);
   };
 
-  const baseSteps = [
+  const standardSteps = [
     ({ anim }: { anim: string }) => <ActLookUp night={night} dayIndex={dayIndex} anim={anim} />,
     ({ anim }: { anim: string }) => <ActTheAnswer night={night} anim={anim} />,
-  ];
-
-  const cnSteps = isCN ? CN_PROFILES.map((profile) => {
-    const Step = ({ anim }: { anim: string }) => (
-      <ActCNPerson 
-        profile={profile} 
-        anim={anim} 
-        onTap={() => setExpandedProfile(profile)} 
-      />
-    );
-    Step.displayName = `ActCNPerson_${profile.id}`;
-    return Step;
-  }) : [];
-
-  const closingSteps = [
     ({ anim }: { anim: string }) => <ActYourLight night={night} userAnswer={answer} anim={anim} />,
     ({ anim }: { anim: string }) => <ActSkies night={night} anim={anim} />,
     ({ anim }: { anim: string }) => <ActTomorrow night={night} anim={anim} />,
   ];
 
-  const steps = [...baseSteps, ...cnSteps, ...closingSteps];
+  const cnSequence = [
+    ({ anim }: { anim: string }) => <ActConnectionIntro matchCount={CN_PROFILES.length} userAnswer={answer} anim={anim} />,
+    ({ anim }: { anim: string }) => (
+      <ActConnectionSealed 
+        people={CN_PROFILES} 
+        song={{ name: CN_PROFILES[0]?.answer || "Your Pick", artist: night.topArtist, art: night.topArt }} 
+        anim={anim} 
+      />
+    ),
+    ...CN_PROFILES.map((profile) => {
+      const Step = ({ anim }: { anim: string }) => (
+        <ActCNPerson profile={profile} anim={anim} onTap={() => setExpandedProfile(profile)} />
+      );
+      Step.displayName = `ActCNPerson_${profile.id}`;
+      return Step;
+    }),
+    ({ anim }: { anim: string }) => <ActTomorrow night={night} anim={anim} />,
+  ];
+
+  const steps = isCN ? cnSequence : standardSteps;
 
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
