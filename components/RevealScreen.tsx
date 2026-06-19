@@ -415,8 +415,11 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = f
           song={{ name: profile.answer, artist: night.topArtist, art: night.topArt }}
           anim={anim} 
           onAct={(kind) => {
-            if (kind === 'vibe') handleVibe(profile.name);
-            else handlePass();
+            if (kind === 'vibe' || kind === 'spark') {
+              handleVibe(profile.name);
+            } else {
+              handlePass();
+            }
           }} 
         />
       );
@@ -449,7 +452,7 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = f
           stepLabel={(cur) => `Act ${roman(cur + 1)} of ${roman(steps.length)}`}
           onBack={onBack}
           tapDisabled={shareOpen || !introDone || !!vibeToast}
-          bottom={() => (
+          bottom={() => isCN ? null : (
             <button
               onClick={() => { setShareAct(shell.current?.cur ?? 0); setShareOpen(true); }}
               style={{

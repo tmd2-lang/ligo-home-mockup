@@ -220,51 +220,73 @@ export function RevealConnectionPerson({
 
       <div
         style={{
-          display: 'flex',
-          gap: 6,
-          padding: '0 12px 30px',
-          background: 'linear-gradient(0deg, #0A0907 50%, rgba(10,9,7,0))',
-          position: 'relative',
-          zIndex: 10,
+          flexShrink: 0,
+          padding: '14px 18px 110px',
+          background: 'rgba(10,9,7,0.88)',
+          backdropFilter: 'blur(24px)',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
         }}
+        onClick={(e) => e.stopPropagation()}
       >
+        <div style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.38)', textAlign: 'center', marginBottom: 11 }}>
+          {p.prompt}
+        </div>
+        <div style={{ display: 'flex', gap: 9, marginBottom: 8 }}>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onAct('vibe'); }}
+            style={{
+              flex: 1,
+              padding: '12px 8px',
+              borderRadius: 14,
+              cursor: 'pointer',
+              border: '1.5px solid rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.07)',
+              color: '#fff',
+              fontFamily: FF,
+              fontWeight: 700,
+              fontSize: 14,
+            }}
+          >
+            Vibe
+          </button>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onAct('spark'); }}
+            style={{
+              flex: 1,
+              padding: '12px 8px',
+              borderRadius: 14,
+              cursor: 'pointer',
+              border: 0,
+              background: '#EA8CE1',
+              color: '#fff',
+              fontFamily: FF,
+              fontWeight: 700,
+              fontSize: 14,
+            }}
+          >
+            Spark
+          </button>
+        </div>
         <button
+          type="button"
           onClick={(e) => { e.stopPropagation(); onAct('pass'); }}
           style={{
-            flex: 1,
-            height: 54,
-            borderRadius: 18,
-            border: 0,
-            background: 'rgba(255,255,255,0.08)',
-            color: 'rgba(255,255,255,0.8)',
-            fontFamily: FF,
-            fontWeight: 700,
-            fontSize: 16,
+            display: 'block',
+            width: '100%',
+            textAlign: 'center',
+            fontSize: 12,
+            fontWeight: 600,
+            color: 'rgba(255,255,255,0.25)',
             cursor: 'pointer',
+            padding: 4,
+            background: 'none',
+            border: 0,
+            fontFamily: FF,
           }}
         >
-          Pass
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); onAct('vibe'); }}
-          style={{
-            flex: 2,
-            height: 54,
-            borderRadius: 18,
-            border: 0,
-            background: '#F97316',
-            color: '#fff',
-            fontFamily: FF,
-            fontWeight: 700,
-            fontSize: 17,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-            cursor: 'pointer',
-          }}
-        >
-          <VibeIcon width="16" height="16" /> Vibe
+          Not right now
         </button>
       </div>
     </div>
