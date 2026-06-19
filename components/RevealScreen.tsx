@@ -6,6 +6,7 @@ import { usePersistentState } from '@/lib/usePersistentState';
 import { RevealShell, REVEAL_COLORS, roman, type ShellController } from '@/components/RevealShell';
 import { RevealOpeningIntro } from '@/components/reveal/RevealOpeningIntro';
 import { ActConnectionIntro, ActConnectionSealed } from './RevealConnectionIntro';
+import { RevealConnectionPerson } from './RevealConnectionPerson';
 
 const FF = "'Bricolage Grotesque', sans-serif";
 const EASE = 'cubic-bezier(.2,.7,.2,1)';
@@ -313,109 +314,7 @@ function ActTomorrow({ night, anim }: { night: any; anim: string }) {
   );
 }
 
-// ── Act CN: Person Slide ───────────────────────────────────────────────
-function ActCNPerson({ profile, anim, onTap }: { profile: any; anim: string; onTap: () => void }) {
-  return (
-    <div 
-      onClick={onTap}
-      style={{
-      position: 'absolute', inset: 0, zIndex: 2,
-      display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', textAlign: 'center',
-      padding: '100px 30px 140px', animation: anim, cursor: 'pointer',
-    }}>
-      <div style={{
-        width: 140, height: 140, borderRadius: 999, background: profile.grad,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: FF, fontWeight: 700, fontSize: 56, color: '#FFF',
-        boxShadow: '0 8px 30px rgba(0,0,0,0.4)', marginBottom: 24,
-      }}>
-        {profile.initials}
-      </div>
-      <h2 style={{
-        fontFamily: FF, fontWeight: 600, fontSize: 32, color: '#FFF',
-        margin: '0 0 8px', textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-      }}>
-        {profile.name}
-      </h2>
-      <div style={{
-        fontFamily: FF, fontSize: 14, color: 'rgba(255,255,255,0.6)',
-        marginBottom: 24, textTransform: 'uppercase', letterSpacing: '0.05em'
-      }}>
-        {profile.major} · {profile.school} {profile.year}
-      </div>
-      <div style={{
-        padding: '16px 24px', background: 'rgba(255,255,255,0.06)',
-        borderRadius: 20, border: '1px solid rgba(255,255,255,0.1)',
-        backdropFilter: 'blur(10px)',
-      }}>
-        <div style={{ fontFamily: FF, fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
-          Their Answer
-        </div>
-        <div style={{ fontFamily: FF, fontWeight: 600, fontSize: 18, color: '#FFF' }}>
-          {profile.answer}
-        </div>
-      </div>
-      
-      <div style={{ 
-        marginTop: 40, fontFamily: FF, fontSize: 13, fontWeight: 600, 
-        color: 'rgba(255,255,255,0.4)', letterSpacing: '0.02em', 
-        animation: 'pulse 2s infinite' 
-      }}>
-        Tap to view profile
-      </div>
-    </div>
-  );
-}
 
-// ── Expanded Profile Sheet ────────────────────────────────────────────
-function ExpandedProfileSheet({ profile, onClose, onVibe }: { profile: any; onClose: () => void; onVibe: () => void }) {
-  return (
-    <>
-      <div onClick={onClose} style={{ position: 'absolute', inset: 0, zIndex: 60, background: 'rgba(0,0,0,0.65)', animation: 'fadeIn 220ms ease both' }} />
-      <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 61,
-        background: '#0D0B08', borderRadius: '32px 32px 0 0',
-        padding: '12px 24px 48px',
-        animation: `sheetUp 320ms ${EASE} both`,
-        boxShadow: '0 -20px 60px rgba(0,0,0,0.5)',
-      }}>
-        <div style={{ width: 40, height: 5, borderRadius: 99, background: 'rgba(255,255,255,0.15)', margin: '0 auto 24px' }} />
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>
-          <div style={{ width: 64, height: 64, borderRadius: 999, background: profile.grad, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FF, fontWeight: 700, fontSize: 28, color: '#FFF' }}>
-            {profile.initials}
-          </div>
-          <div>
-            <h3 style={{ margin: 0, fontFamily: FF, fontSize: 24, fontWeight: 600, color: '#FFF' }}>{profile.name}</h3>
-            <div style={{ fontFamily: FF, fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{profile.major} · {profile.school}</div>
-          </div>
-        </div>
-
-        <div style={{ background: 'linear-gradient(180deg, rgba(234,140,225,0.1) 0%, rgba(234,140,225,0.02) 100%)', borderRadius: 20, padding: 24, border: '1px solid rgba(234,140,225,0.15)', marginBottom: 32 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#EA8CE1' }}>
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-            <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#EA8CE1' }}>Why you matched</span>
-          </div>
-          <div style={{ fontFamily: FF, fontSize: 16, lineHeight: 1.4, color: 'rgba(255,255,255,0.9)' }}>
-            {profile.matchReason}
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button onClick={onClose} style={{ flex: 1, height: 56, borderRadius: 16, border: 0, background: 'rgba(255,255,255,0.08)', color: '#FFF', fontFamily: FF, fontSize: 16, fontWeight: 600, cursor: 'pointer' }}>
-            Pass
-          </button>
-          <button onClick={onVibe} style={{ flex: 2, height: 56, borderRadius: 16, border: 0, background: '#EA8CE1', color: '#000', fontFamily: FF, fontSize: 16, fontWeight: 700, cursor: 'pointer' }}>
-            Vibe
-          </button>
-        </div>
-      </div>
-    </>
-  );
-}
 
 // ── Share sheet ───────────────────────────────────────────────────────
 function ShareSheet({ act, night, onClose }: { act: number; night: any; onClose: () => void }) {
@@ -477,14 +376,17 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = f
   const handleIntroComplete = useCallback(() => setIntroDone(true), []);
   const [shareOpen, setShareOpen] = useState(false);
   const [shareAct, setShareAct] = useState(0);
-  const [expandedProfile, setExpandedProfile] = useState<any>(null);
   const [vibeToast, setVibeToast] = useState<string | null>(null);
   const shell = useRef<ShellController | null>(null);
 
-  const handleVibe = () => {
-    setVibeToast(`Vibe sent to ${expandedProfile.name}!`);
-    setExpandedProfile(null);
+  const handleVibe = (name: string) => {
+    setVibeToast(`Vibe sent to ${name}!`);
+    shell.current?.go(1); // advance on vibe
     setTimeout(() => setVibeToast(null), 2500);
+  };
+
+  const handlePass = () => {
+    shell.current?.go(1); // advance on pass
   };
 
   const standardSteps = [
@@ -504,9 +406,19 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = f
         anim={anim} 
       />
     ),
-    ...CN_PROFILES.map((profile) => {
+    ...CN_PROFILES.map((profile, i) => {
       const Step = ({ anim }: { anim: string }) => (
-        <ActCNPerson profile={profile} anim={anim} onTap={() => setExpandedProfile(profile)} />
+        <RevealConnectionPerson 
+          p={{...profile, meta: `${profile.major} · ${profile.school} ${profile.year}`}} 
+          idx={i}
+          total={CN_PROFILES.length}
+          song={{ name: profile.answer, artist: night.topArtist, art: night.topArt }}
+          anim={anim} 
+          onAct={(kind) => {
+            if (kind === 'vibe') handleVibe(profile.name);
+            else handlePass();
+          }} 
+        />
       );
       Step.displayName = `ActCNPerson_${profile.id}`;
       return Step;
@@ -536,7 +448,7 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = f
           subtitle="Georgetown · under the lights"
           stepLabel={(cur) => `Act ${roman(cur + 1)} of ${roman(steps.length)}`}
           onBack={onBack}
-          tapDisabled={shareOpen || !introDone || !!expandedProfile || !!vibeToast}
+          tapDisabled={shareOpen || !introDone || !!vibeToast}
           bottom={() => (
             <button
               onClick={() => { setShareAct(shell.current?.cur ?? 0); setShareOpen(true); }}
@@ -570,13 +482,7 @@ export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = f
         <ShareSheet act={shareAct} night={night} onClose={() => setShareOpen(false)} />
       )}
 
-      {expandedProfile && (
-        <ExpandedProfileSheet 
-          profile={expandedProfile} 
-          onClose={() => setExpandedProfile(null)} 
-          onVibe={handleVibe} 
-        />
-      )}
+
 
       {vibeToast && (
         <div style={{

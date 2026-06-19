@@ -43,6 +43,10 @@ export type CNProfile = {
   year: string;
   answer: string;
   matchReason: string;
+  archetype: string;
+  aIconKey: string;
+  matchType: string;
+  score: string;
 };
 
 export const CN_PROFILES: CNProfile[] = [
@@ -55,7 +59,11 @@ export const CN_PROFILES: CNProfile[] = [
     school: "Georgetown",
     year: "'25",
     answer: "FE!N",
-    matchReason: "Cole finds the hypnotic thread in everything. You matched on pace this week — slow burn, same destination."
+    matchReason: "Cole finds the hypnotic thread in everything. You matched on pace this week — slow burn, same destination.",
+    archetype: "The Hypnotist",
+    aIconKey: "hypnotist",
+    matchType: "Pace Match",
+    score: "94% Sync",
   },
   {
     id: "maddie",
@@ -66,7 +74,11 @@ export const CN_PROFILES: CNProfile[] = [
     school: "Georgetown",
     year: "'26",
     answer: "Good 4 U",
-    matchReason: "Maddie picks like every night could be a video. You matched on energy before you matched on titles — the kind of overlap that shows up at the same pregame."
+    matchReason: "Maddie picks like every night could be a video. You matched on energy before you matched on titles — the kind of overlap that shows up at the same pregame.",
+    archetype: "Pregame Menace",
+    aIconKey: "pregame-menace",
+    matchType: "Energy Match",
+    score: "98% Sync",
   },
   {
     id: "marcus",
@@ -77,6 +89,10 @@ export const CN_PROFILES: CNProfile[] = [
     school: "Georgetown",
     year: "'25",
     answer: "Not Like Us",
-    matchReason: "Marcus commits to a chorus like it's a promise. You matched twice this week without trying — mainstream doesn't mean predictable between you two."
+    matchReason: "Marcus commits to a chorus like it's a promise. You matched twice this week without trying — mainstream doesn't mean predictable between you two.",
+    archetype: "Main Character",
+    aIconKey: "main-character",
+    matchType: "Chorus Match",
+    score: "91% Sync",
   }
 ];
