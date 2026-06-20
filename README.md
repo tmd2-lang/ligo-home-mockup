@@ -10,6 +10,25 @@ An interactive, clickable prototype of **LIGO** — a music-first social app for
 
 ---
 
+## v2 Updates: Streamlined Feed & Gutted Profile
+
+In **v2**, we aggressively simplified the UI to focus on core value propositions, making the app snappier and easier for designers/devs to scale:
+
+- **Gutted Profile Page:** Ripped out the complex "Mainstream Score" and "Answer Trail" sections.
+- **The Receipts on Home Feed:** "The Receipts" (a recap of streaks, taste shifts, and stats) was moved from a hidden button on the Profile page to a dedicated, high-visibility card directly on the Home feed (replacing the old "Near you" section).
+- **Streak Trackers Everywhere:** Added a beautiful `🔥 [Streak]` pill to the TopBar on the Home screen for constant visibility.
+- **Native-feel Notifications:** The Bell icon now triggers a lightweight, absolute-positioned dropdown overlay instead of a full-screen modal. It features a new "Keep your streak alive" call-to-action banner.
+- **Unified Events:** Removed the segmented toggles on the Events page, consolidating all events into a single, clean "What's happening on campus" feed.
+- **Simpler Copy:** Scrubbed all references to "plan a meetup" in favor of simpler, lower-friction "Message them" copy.
+
+### What to click around in v2:
+1. **TopBar (Home):** Click the **Bell icon** to see the new Notifications dropdown with the animated streak banner. Click the **Profile Picture** to switch between the nine demo users.
+2. **Home Feed:** Scroll down and click the **"The Receipts"** card to open the dedicated stats dashboard (now gutted to focus entirely on Streak Trophies).
+3. **Events Tab:** Check out the unified, clean event feed.
+4. **Matches:** Click any match in the "Your matches" carousel to open the streamlined Chat screen.
+
+---
+
 ## What this demo is trying to show
 
 LIGO is not a generic social feed. The loop is:
