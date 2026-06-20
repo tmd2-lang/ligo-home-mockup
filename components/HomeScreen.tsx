@@ -1142,7 +1142,7 @@ function NotificationsDropdown({ activeUserId, onClose, onOpenChat }: { activeUs
                     <span style={{ fontWeight: 700 }}>It's mutual!</span> You and <span style={{ fontWeight: 700 }}>{user.name.split(' ')[0]}</span> both sent a {m.type === 'spark' ? 'Spark' : 'Vibe'}.
                   </div>
                   <div style={{ fontSize: 11, color: 'rgba(20,17,13,0.4)', marginTop: 4, fontWeight: 600 }}>
-                    Tap to plan a meetup · {m.daysLeft}d left
+                    Tap to message them · {m.daysLeft}d left
                   </div>
                 </div>
               </div>

@@ -41,7 +41,7 @@ export function ChatScreen({
         <div style={{ width: 36, height: 36, borderRadius: 99, backgroundImage: `url(${user.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: 8 }} />
         <div style={{ marginLeft: 12, flex: 1 }}>
           <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 16, color: '#fff' }}>{user.name}</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginTop: 2 }}>{match.daysLeft}d 23h left to plan meetup</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginTop: 2 }}>{match.daysLeft}d 23h left to message</div>
         </div>
         <button style={{ background: 'none', border: 'none', color: '#fff', padding: 8, marginRight: -8, cursor: 'pointer' }}>
           <Icon.MoreHorizontal width={24} height={24} />
@@ -57,7 +57,7 @@ export function ChatScreen({
             {match.matchType === 'spark' ? '✨' : '🍊'}
           </div>
           <div style={{ fontSize: 13, lineHeight: 1.4, color: 'rgba(255,255,255,0.9)' }}>
-            You both sent a <span style={{ color: match.matchType === 'spark' ? '#EA8CE1' : '#F97316', fontWeight: 600 }}>{match.matchType === 'spark' ? 'Spark' : 'Vibe'}</span>. You have 7 days to message {user.name.split(' ')[0]} and plan a meetup.
+            You both sent a <span style={{ color: match.matchType === 'spark' ? '#EA8CE1' : '#F97316', fontWeight: 600 }}>{match.matchType === 'spark' ? 'Spark' : 'Vibe'}</span>. You have 7 days to message {user.name.split(' ')[0]}.
           </div>
         </div>
 

@@ -81,7 +81,7 @@ export function ActConnectionDone({
         That's tonight's connections.
       </div>
       <div style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.42)', lineHeight: 1.6, maxWidth: 280, marginBottom: 32 }}>
-        If it's mutual, check your home profile. You'll be able to message them to plan a meetup for 7 days.
+        If it's mutual, check your home profile. You'll be able to message them for 7 days.
       </div>
 
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 7, flexShrink: 0 }}>
@@ -177,7 +177,7 @@ export function ActConnectionDone({
             </div>
             
             <div style={{ fontSize: 15, lineHeight: 1.5, color: 'rgba(255,255,255,0.8)', marginBottom: 32 }}>
-              {expandedAction.action === 'vibe' && "If the feeling is mutual, they'll appear on your home screen tomorrow morning. You'll have 7 days to message them and plan a meetup."}
+              {expandedAction.action === 'vibe' && "If the feeling is mutual, they'll appear on your home screen tomorrow morning. You'll have 7 days to message them."}
               {expandedAction.action === 'spark' && "Sparks are secret! This stays completely anonymous unless they spark you back. If they do, you'll both find out tomorrow morning."}
               {expandedAction.action === 'pass' && "You passed. You won't see their profile again tonight."}
             </div>
