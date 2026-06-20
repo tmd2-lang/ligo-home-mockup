@@ -984,6 +984,13 @@ const MOCK_MATCH_PAIRS = [
   [{ id: 'marcus', type: 'vibe', daysLeft: 4 }, { id: 'sofia', type: 'vibe', daysLeft: 4 }],
   [{ id: 'maddie', type: 'vibe', daysLeft: 3 }, { id: 'jordan', type: 'vibe', daysLeft: 3 }],
 
+  // Same-Gender Vibe Pairs
+  [{ id: 'jordan', type: 'vibe', daysLeft: 5 }, { id: 'cole', type: 'vibe', daysLeft: 5 }],
+  [{ id: 'bennett', type: 'vibe', daysLeft: 3 }, { id: 'marcus', type: 'vibe', daysLeft: 3 }],
+  [{ id: 'charlotte', type: 'vibe', daysLeft: 4 }, { id: 'caroline', type: 'vibe', daysLeft: 4 }],
+  [{ id: 'maddie', type: 'vibe', daysLeft: 2 }, { id: 'alessia', type: 'vibe', daysLeft: 2 }],
+  [{ id: 'sofia', type: 'vibe', daysLeft: 6 }, { id: 'charlotte', type: 'vibe', daysLeft: 6 }],
+
   // Spark Pairs
   [{ id: 'jordan', type: 'spark', daysLeft: 4 }, { id: 'maddie', type: 'spark', daysLeft: 4 }],
   [{ id: 'charlotte', type: 'spark', daysLeft: 2 }, { id: 'bennett', type: 'spark', daysLeft: 2 }],
