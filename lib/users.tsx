@@ -110,7 +110,7 @@ export const PROFILE_PRESENTATION_DEFAULTS: Pick<
   ),
   horoscope: {
     headline: "You're running deep and hypnotic today.",
-    body: 'Your last five check-ins lean late-night house and Afro rhythms, and Keinemusik is your most-played this week. Today reads like a 2am set, eyes closed, no skips.',
+    body: 'Your last five Ligo answers lean late-night house and Afro rhythms, and Keinemusik is your most-played this week. Today reads like a 2am set, eyes closed, no skips.',
     chips: [
       { label: 'Keinemusik energy', tone: 'orange' },
       { label: 'Organic house head', tone: 'yellow' },
@@ -281,7 +281,7 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'Crime Pays', artist: 'Freddie Gibbs, Madlib', dur: '3:02', photo: `/artists/freddiegibbs-profile.jpeg`, coverArt: `/covers/bandana-coverart.jpeg` },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You’re the compatibility wild card today.", body: 'Your last five check-ins jump from MGMT and Tame Impala into MK and Freddie Gibbs, which means your night starts chill, hits the dancefloor, and somehow ends with everyone agreeing on your taste.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You’re the compatibility wild card today.", body: 'Your last five Ligo answers jump from MGMT and Tame Impala into MK and Freddie Gibbs, which means your night starts chill, hits the dancefloor, and somehow ends with everyone agreeing on your answers.' },
         { type: 'honest', date: 'Hot Take', head: '“The best aux is one your dad would respect and your friends would still dance to.”', body: 'Tame Impala, MGMT, Fleetwood Mac, MK — you share a different lane with almost everyone.' },
       ],
       currentStreak: 4,
@@ -326,7 +326,7 @@ export const USERS: Record<string, UserProfile> = {
       ),
       horoscope: {
         headline: "You’re the compatibility wild card today.",
-        body: 'Your last five check-ins jump from MGMT and Tame Impala into MK and Freddie Gibbs, which means your night starts chill, hits the dancefloor, and somehow ends with everyone agreeing on your taste.',
+        body: 'Your last five Ligo answers jump from MGMT and Tame Impala into MK and Freddie Gibbs, which means your night starts chill, hits the dancefloor, and somehow ends with everyone agreeing on your answers.',
         chips: [
           { label: 'Tame Impala energy', tone: 'orange' },
           { label: 'Mixes everything', tone: 'yellow' },
@@ -394,8 +394,8 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'See You Again', artist: 'Tyler, The Creator', dur: '3:00', photo: `/artists/tylerthecreator-profile.jpeg` },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You're in full main-character rotation today.", body: 'Your last five check-ins move from Taylor and Sabrina before class to SZA and Frank after midnight, with Drake and Beyoncé carrying the pregame. Today reads like a perfect outfit, a full group chat breakdown, and one song you swear is not about him.' },
-        { type: 'honest', date: 'Hot Take', head: '“Mainstream music is only basic when you have no emotional range.”', body: 'Taylor Swift, Beyoncé, Drake — your taste crosses campus faster than most at Georgetown.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You're in full main-character rotation today.", body: 'Your last five Ligo answers move from Taylor and Sabrina before class to SZA and Frank after midnight, with Drake and Beyoncé carrying the pregame. Today reads like a perfect outfit, a full group chat breakdown, and one song you swear is not about him.' },
+        { type: 'honest', date: 'Hot Take', head: '“Mainstream music is only basic when you have no emotional range.”', body: 'Taylor Swift, Beyoncé, Drake — your answers cross campus faster than most at Georgetown.' },
       ],
       currentStreak: 6,
       longestStreak: 14,
@@ -439,7 +439,7 @@ export const USERS: Record<string, UserProfile> = {
       ),
       horoscope: {
         headline: "You're in full main-character rotation today.",
-        body: 'Your last five check-ins move from Taylor and Sabrina before class to SZA and Frank after midnight, with Drake and Beyoncé carrying the pregame. Today reads like a perfect outfit, a full group chat breakdown, and one song you swear is not about him.',
+        body: 'Your last five Ligo answers move from Taylor and Sabrina before class to SZA and Frank after midnight, with Drake and Beyoncé carrying the pregame. Today reads like a perfect outfit, a full group chat breakdown, and one song you swear is not about him.',
         chips: [
           { label: 'Taylor energy', tone: 'orange' },
           { label: 'SZA after midnight', tone: 'yellow' },
@@ -503,8 +503,8 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'Slow Burn', artist: 'Kacey Musgraves', dur: '4:06', photo: `/covers/kaceygoldenhour-coverart.jpeg` },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You’re in your soft-country era today.", body: 'Your last five check-ins move from Megan Moroney and Zach Bryan into Taylor and Noah Kahan, which means the night starts cute, gets loud, and somehow ends with everyone pretending they’re not emotional.' },
-        { type: 'honest', date: 'Hot Take', head: '“Country music is only corny if you’ve never screamed it with your friends at midnight.”', body: 'Zach Bryan, Megan Moroney, Morgan Wallen — your taste hits the tailgate faster than most at Georgetown.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You’re in your soft-country era today.", body: 'Your last five Ligo answers move from Megan Moroney and Zach Bryan into Taylor and Noah Kahan, which means the night starts cute, gets loud, and somehow ends with everyone pretending they’re not emotional.' },
+        { type: 'honest', date: 'Hot Take', head: '“Country music is only corny if you’ve never screamed it with your friends at midnight.”', body: 'Zach Bryan, Megan Moroney, Morgan Wallen — your answers hit the tailgate faster than most at Georgetown.' },
       ],
       currentStreak: 5,
       longestStreak: 12,
@@ -543,12 +543,12 @@ export const USERS: Record<string, UserProfile> = {
       mainstreamMeterPct: 28,
       mainstreamFootnote: (
         <>
-          <b>Zach Bryan, Megan Moroney, Morgan Wallen</b> — your taste hits the tailgate faster than most.
+          <b>Zach Bryan, Megan Moroney, Morgan Wallen</b> — your answers hit the tailgate faster than most.
         </>
       ),
       horoscope: {
         headline: "You're in your soft-country era today.",
-        body: 'Your last five check-ins move from Megan Moroney and Zach Bryan into Taylor and Noah Kahan, which means the night starts cute, gets loud, and somehow ends with everyone pretending they’re not emotional.',
+        body: 'Your last five Ligo answers move from Megan Moroney and Zach Bryan into Taylor and Noah Kahan, which means the night starts cute, gets loud, and somehow ends with everyone pretending they’re not emotional.',
         chips: [
           { label: 'Country girl energy', tone: 'orange' },
           { label: 'Tailgate tears', tone: 'yellow' },
@@ -612,8 +612,8 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'Last Night', artist: 'Morgan Wallen', dur: '2:43', photo: `/covers/morganwallenonethingatatime-coverart.jpeg` },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You’re playing the room perfectly today.", body: 'Your last five check-ins run Drake into Travis, then Morgan Wallen and SZA when the night gets social. Today reads like a pregame where everyone thinks they should get the aux, but somehow you still have it.' },
-        { type: 'honest', date: 'Hot Take', head: '“The best aux is knowing when to stop proving your taste.”', body: 'Drake, Travis Scott, Morgan Wallen — your taste moves through campus faster than most at Georgetown.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You’re playing the room perfectly today.", body: 'Your last five Ligo answers run Drake into Travis, then Morgan Wallen and SZA when the night gets social. Today reads like a pregame where everyone thinks they should get the aux, but somehow you still have it.' },
+        { type: 'honest', date: 'Hot Take', head: '“The best aux is knowing when to stop proving your answers.”', body: 'Drake, Travis Scott, Morgan Wallen — your answers move through campus faster than most at Georgetown.' },
       ],
       currentStreak: 6,
       longestStreak: 16,
@@ -635,7 +635,7 @@ export const USERS: Record<string, UserProfile> = {
         { text: 'Pregame fluent' },
         { text: 'Knows the room' }
       ],
-      hotTake: 'The best aux is knowing when to stop proving your taste.',
+      hotTake: 'The best aux is knowing when to stop proving your answers.',
       nowListening: { title: 'Passionfruit', artist: 'Drake', photo: `/covers/drakepassionfruitandmorelife-coverart.jpeg` },
       onRepeat: [
         { title: 'Passionfruit', artist: 'Drake', photo: `/covers/drakepassionfruitandmorelife-coverart.jpeg` },
@@ -652,12 +652,12 @@ export const USERS: Record<string, UserProfile> = {
       mainstreamMeterPct: 12,
       mainstreamFootnote: (
         <>
-          <b>Drake, Travis Scott, Morgan Wallen</b> — your taste moves through campus faster than most.
+          <b>Drake, Travis Scott, Morgan Wallen</b> — your answers move through campus faster than most.
         </>
       ),
       horoscope: {
         headline: "You're playing the room perfectly today.",
-        body: 'Your last five check-ins run Drake into Travis, then Morgan Wallen and SZA when the night gets social. Today reads like a pregame where everyone thinks they should get the aux, but somehow you still have it.',
+        body: 'Your last five Ligo answers run Drake into Travis, then Morgan Wallen and SZA when the night gets social. Today reads like a pregame where everyone thinks they should get the aux, but somehow you still have it.',
         chips: [
           { label: 'Drake energy', tone: 'orange' },
           { label: 'Pregame fluent', tone: 'yellow' },
@@ -721,7 +721,7 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'My Love', artist: 'Route 94, Jess Glynne', dur: '4:19', photo: `/artists/route94-profile.jpeg`, coverArt: `/covers/route94mylove-coverart.jpeg` },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You’re bringing reckless aux energy today.", body: 'Your last five check-ins move from Ken and Carti before the night starts to Gunna and Lil Baby in the Uber, then Disclosure once the room gets warmer. Tonight reads like a townhouse pregame that was supposed to be chill and somehow became everybody’s plans.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You’re bringing reckless aux energy today.", body: 'Your last five Ligo answers move from Ken and Carti before the night starts to Gunna and Lil Baby in the Uber, then Disclosure once the room gets warmer. Tonight reads like a townhouse pregame that was supposed to be chill and somehow became everybody’s plans.' },
         { type: 'honest', date: 'Hot Take', head: '“Pregames only die when someone gets scared of playing Carti.”', body: 'Playboi Carti, Ken Carson, Destroy Lonely — followed by fewer than 14 other Georgetown students.' },
       ],
       currentStreak: 5,
@@ -766,7 +766,7 @@ export const USERS: Record<string, UserProfile> = {
       ),
       horoscope: {
         headline: "You’re bringing reckless aux energy today.",
-        body: 'Your last five check-ins move from Ken and Carti before the night starts to Gunna and Lil Baby in the Uber, then Disclosure once the room gets warmer. Tonight reads like a townhouse pregame that was supposed to be chill and somehow became everybody’s plans.',
+        body: 'Your last five Ligo answers move from Ken and Carti before the night starts to Gunna and Lil Baby in the Uber, then Disclosure once the room gets warmer. Tonight reads like a townhouse pregame that was supposed to be chill and somehow became everybody’s plans.',
         chips: [
           { label: 'Carti energy', tone: 'orange' },
           { label: 'Lacrosse house chaos', tone: 'yellow' },
@@ -804,7 +804,7 @@ export const USERS: Record<string, UserProfile> = {
     profile: {
       earnedArchetypeId: 'algorithm-dodger',
       heldWeeks: '1 week',
-      earnedBlurb: "The alt profile that still works socially. You make weird taste feel playable at a rooftop pregame.",
+      earnedBlurb: "The alt profile that still works socially. You make weird answers feel playable at a rooftop pregame.",
       traits: [
         { n: '24%', l: <><b>more niche</b> at Georgetown</> },
         { n: '12', l: <><b>core artists</b> carried your week</> },
@@ -833,7 +833,7 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'XO Tour Llif3', artist: 'Lil Uzi Vert', dur: '3:02', photo: `/covers/luvisrage2-coverart.jpeg` },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You’re making weird taste feel playable today.", body: 'Your last five check-ins jump from Charli and PinkPantheress into The 1975 and The Dare, which means your night starts ironic, gets loud, and somehow becomes everyone else’s new taste next month.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You’re making weird answers feel playable today.", body: 'Your last five Ligo answers jump from Charli and PinkPantheress into The 1975 and The Dare, which means your night starts ironic, gets loud, and somehow becomes everyone else’s new answers next month.' },
         { type: 'honest', date: 'Hot Take', head: '“The best playlists have at least one song that makes no sense until the third drink.”', body: 'Charli XCX, The Dare, The 1975 — the cool alt-social girl rotation.' },
       ],
       currentStreak: 4,
@@ -877,8 +877,8 @@ export const USERS: Record<string, UserProfile> = {
         </>
       ),
       horoscope: {
-        headline: "You’re making weird taste feel playable today.",
-        body: 'Your last five check-ins jump from Charli and PinkPantheress into The 1975 and The Dare, which means your night starts ironic, gets loud, and somehow becomes everyone else’s new taste next month.',
+        headline: "You’re making weird answers feel playable today.",
+        body: 'Your last five Ligo answers jump from Charli and PinkPantheress into The 1975 and The Dare, which means your night starts ironic, gets loud, and somehow becomes everyone else’s new answers next month.',
         chips: [
           { label: 'Charli energy', tone: 'orange' },
           { label: 'Alt social aux', tone: 'pink' },
@@ -945,7 +945,7 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'Call Out My Name', artist: 'The Weeknd', dur: '3:48', photo: '/artists/theweekndprofile.jpeg' },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You peak on the floor and melt on the way home.", body: 'Your last five check-ins start with Adam Port and Disclosure in the club, then immediately drop into Lana and Beach House for the Uber ride home. You need the party to be loud, but the afters to be devastating.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You peak on the floor and melt on the way home.", body: 'Your last five Ligo answers start with Adam Port and Disclosure in the club, then immediately drop into Lana and Beach House for the Uber ride home. You need the party to be loud, but the afters to be devastating.' },
         { type: 'honest', date: 'Hot Take', head: '“The Weeknd is better when he sounds haunted, not famous.”', body: 'Lana Del Rey, The Weeknd, Beach House — you want your pop music to hurt a little.' },
       ],
       currentStreak: 4,
@@ -990,7 +990,7 @@ export const USERS: Record<string, UserProfile> = {
       ),
       horoscope: {
         headline: "You peak on the floor and melt on the way home.",
-        body: 'Your last five check-ins start with Adam Port and Disclosure in the club, then immediately drop into Lana and Beach House for the Uber ride home. You need the party to be loud, but the afters to be devastating.',
+        body: 'Your last five Ligo answers start with Adam Port and Disclosure in the club, then immediately drop into Lana and Beach House for the Uber ride home. You need the party to be loud, but the afters to be devastating.',
         chips: [
           { label: 'House royalty', tone: 'orange' },
           { label: 'Lana energy', tone: 'pink' },
@@ -1057,7 +1057,7 @@ export const USERS: Record<string, UserProfile> = {
         { title: 'Self Control', artist: 'Frank Ocean', dur: '4:09', photo: `/assets/artists/frankocean-profile.jpeg` },
       ],
       pastReads: [
-        { type: 'time-machine', date: 'Your Music Horoscope', head: "You're making a public-transit soundtrack today.", body: 'Your last five check-ins start with Faye Webster and Clairo on the train, then into SZA and Frank Ocean for late night. You match through mood, not volume, turning shared sadness into a real connection.' },
+        { type: 'time-machine', date: 'Your Ligo Horoscope', head: "You're making a public-transit soundtrack today.", body: 'Your last five Ligo answers start with Faye Webster and Clairo on the train, then into SZA and Frank Ocean for late night. You match through mood, not volume, turning shared sadness into a real connection.' },
         { type: 'honest', date: 'Hot Take', head: '“I do not trust people who do not have a playlist for crying on public transit.”', body: 'Faye Webster, Clairo, Phoebe Bridgers — the soft indie/R&B emotional bridge.' },
       ],
       currentStreak: 6,
@@ -1102,7 +1102,7 @@ export const USERS: Record<string, UserProfile> = {
       ),
       horoscope: {
         headline: "You're making a public-transit soundtrack today.",
-        body: 'Your last five check-ins start with Faye Webster and Clairo on the train, then into SZA and Frank Ocean for late night. You match through mood, not volume, turning shared sadness into a real connection.',
+        body: 'Your last five Ligo answers start with Faye Webster and Clairo on the train, then into SZA and Frank Ocean for late night. You match through mood, not volume, turning shared sadness into a real connection.',
         chips: [
           { label: 'Indie tears', tone: 'orange' },
           { label: 'Late night R&B', tone: 'pink' },

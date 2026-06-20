@@ -938,7 +938,7 @@ function ProfileTabV2() {
           background: 'linear-gradient(165deg, rgba(245,215,131,0.16), rgba(249,115,22,0.05))',
           border: '1px solid rgba(245,215,131,0.45)',
         }}>
-          <Eyebrow dotColor="#C2410C">Your music horoscope</Eyebrow>
+          <Eyebrow dotColor="#C2410C">Your Ligo horoscope</Eyebrow>
           <h2 style={{
             fontFamily: DISPLAY, fontWeight: 600, fontSize: 22, marginTop: 12,
             letterSpacing: '-0.02em', lineHeight: 1.12,
