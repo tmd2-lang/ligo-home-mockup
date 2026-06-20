@@ -1012,38 +1012,153 @@ function AllMatchesOverlay({ activeUserId, onClose, onOpenChat }: { activeUserId
           Your Matches
         </div>
       </div>
-      <div style={{ flex: 1, overflowY: 'auto', padding: "16px 22px 24px", display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: "16px 22px 24px", display: 'flex', flexDirection: 'column', gap: 24 }}>
+        
+        {/* Stats Header */}
+        <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ flex: 1, background: '#fff', borderRadius: 16, padding: '12px 16px', border: '1px solid rgba(20,17,13,0.05)', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "Bricolage Grotesque, sans-serif", color: '#F97316' }}>{matches.length}</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(20,17,13,0.5)', marginTop: 2 }}>Active</div>
+          </div>
+          <div style={{ flex: 1, background: '#fff', borderRadius: 16, padding: '12px 16px', border: '1px solid rgba(20,17,13,0.05)', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "Bricolage Grotesque, sans-serif", color: '#14110D' }}>14</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(20,17,13,0.5)', marginTop: 2 }}>All-Time</div>
+          </div>
+        </div>
+
+        {/* Active Matches */}
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "Bricolage Grotesque, sans-serif", color: '#14110D', marginBottom: 12, paddingLeft: 4 }}>
+            Active (7 days left)
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {matches.map((m, i) => {
+              const user = USERS[m.id];
+              if (!user) return null;
+              return (
+                <div 
+                  key={i}
+                  onClick={() => onOpenChat({ ...user, matchType: m.type, daysLeft: m.daysLeft })}
+                  style={{ 
+                    background: "#fff", borderRadius: 20, padding: 16, 
+                    border: "1px solid rgba(20,17,13,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+                    display: "flex", alignItems: "center", gap: 14, cursor: "pointer"
+                  }}
+                >
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <div style={{ width: 56, height: 56, borderRadius: 99, backgroundImage: `url(${user.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                    <div style={{ position: 'absolute', bottom: 0, right: -4, width: 20, height: 20, borderRadius: 99, background: m.type === 'spark' ? '#EA8CE1' : '#F97316', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                       <span style={{ fontSize: 10, lineHeight: 1 }}>{m.type === 'spark' ? '✨' : '🍊'}</span>
+                    </div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 700, fontSize: 16, color: '#14110D' }}>{user.name}</div>
+                    <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', marginTop: 2, fontWeight: 500 }}>
+                      <span style={{ color: m.type === 'spark' ? '#EA8CE1' : '#F97316', fontWeight: 600 }}>Mutual {m.type === 'spark' ? 'Spark' : 'Vibe'}</span> · {m.daysLeft}d left
+                    </div>
+                  </div>
+                  <div style={{ background: m.type === 'spark' ? 'rgba(234, 140, 225, 0.1)' : 'rgba(249, 115, 22, 0.1)', color: m.type === 'spark' ? '#EA8CE1' : '#F97316', padding: '6px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600, fontFamily: "Bricolage Grotesque, sans-serif", flexShrink: 0 }}>
+                    Message
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Expired Matches */}
+        <div style={{ opacity: 0.6 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "Bricolage Grotesque, sans-serif", color: '#14110D', marginBottom: 12, paddingLeft: 4, marginTop: 8 }}>
+            Past Connections
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {/* Mock Expired Card 1 */}
+            <div style={{ background: "#fff", borderRadius: 20, padding: 16, border: "1px solid rgba(20,17,13,0.05)", display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ width: 56, height: 56, borderRadius: 99, background: '#E5E5E5', flexShrink: 0 }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 700, fontSize: 16, color: '#14110D' }}>Sarah</div>
+                <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', marginTop: 2, fontWeight: 500 }}>
+                  Mutual Spark · Expired
+                </div>
+              </div>
+            </div>
+            {/* Mock Expired Card 2 */}
+            <div style={{ background: "#fff", borderRadius: 20, padding: 16, border: "1px solid rgba(20,17,13,0.05)", display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ width: 56, height: 56, borderRadius: 99, background: '#E5E5E5', flexShrink: 0 }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 700, fontSize: 16, color: '#14110D' }}>Emma</div>
+                <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', marginTop: 2, fontWeight: 500 }}>
+                  Mutual Vibe · Expired
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NotificationsOverlay({ activeUserId, onClose, onOpenChat }: { activeUserId: string, onClose: () => void, onOpenChat: (match: any) => void }) {
+  const matches = getMatchesForUser(activeUserId);
+  return (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 5000, background: '#FAFAF8', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '16px 20px', paddingTop: 'max(env(safe-area-inset-top, 20px), 20px)', position: 'relative', borderBottom: '1px solid rgba(20,17,13,0.05)' }}>
+        <div style={{ flex: 1, textAlign: 'center', fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 700, fontSize: 18, color: '#14110D' }}>
+          Notifications
+        </div>
+        <button onClick={onClose} style={{ position: 'absolute', right: 12, background: 'none', border: 'none', color: '#14110D', padding: 8, cursor: 'pointer', fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 600, fontSize: 15 }}>
+          Done
+        </button>
+      </div>
+      <div style={{ flex: 1, overflowY: 'auto', padding: "16px 22px 24px", display: 'flex', flexDirection: 'column', gap: 12 }}>
+        
         {matches.map((m, i) => {
           const user = USERS[m.id];
           if (!user) return null;
           return (
             <div 
               key={i}
-              onClick={() => onOpenChat({ ...user, matchType: m.type, daysLeft: m.daysLeft })}
+              onClick={() => { onClose(); onOpenChat({ ...user, matchType: m.type, daysLeft: m.daysLeft }); }}
               style={{ 
                 background: "#fff", borderRadius: 20, padding: 16, 
                 border: "1px solid rgba(20,17,13,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
-                display: "flex", alignItems: "center", gap: 14, cursor: "pointer"
+                display: "flex", gap: 14, cursor: "pointer"
               }}
             >
               <div style={{ position: 'relative', flexShrink: 0 }}>
-                <div style={{ width: 56, height: 56, borderRadius: 99, backgroundImage: `url(${user.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-                <div style={{ position: 'absolute', bottom: 0, right: -4, width: 20, height: 20, borderRadius: 99, background: m.type === 'spark' ? '#EA8CE1' : '#F97316', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 48, height: 48, borderRadius: 99, backgroundImage: `url(${user.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                <div style={{ position: 'absolute', bottom: -2, right: -2, width: 20, height: 20, borderRadius: 99, background: m.type === 'spark' ? '#EA8CE1' : '#F97316', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                    <span style={{ fontSize: 10, lineHeight: 1 }}>{m.type === 'spark' ? '✨' : '🍊'}</span>
                 </div>
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 700, fontSize: 16, color: '#14110D' }}>{user.name}</div>
-                <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', marginTop: 2, fontWeight: 500 }}>
-                  <span style={{ color: m.type === 'spark' ? '#EA8CE1' : '#F97316', fontWeight: 600 }}>Mutual {m.type === 'spark' ? 'Spark' : 'Vibe'}</span> · {m.daysLeft}d left
+                <div style={{ fontSize: 14, color: '#14110D', lineHeight: 1.4, fontWeight: 500 }}>
+                  <span style={{ fontWeight: 700 }}>It's mutual!</span> You and <span style={{ fontWeight: 700 }}>{user.name.split(' ')[0]}</span> both sent a {m.type === 'spark' ? 'Spark' : 'Vibe'}.
                 </div>
-              </div>
-              <div style={{ background: m.type === 'spark' ? 'rgba(234, 140, 225, 0.1)' : 'rgba(249, 115, 22, 0.1)', color: m.type === 'spark' ? '#EA8CE1' : '#F97316', padding: '6px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600, fontFamily: "Bricolage Grotesque, sans-serif", flexShrink: 0 }}>
-                Message
+                <div style={{ fontSize: 12, color: 'rgba(20,17,13,0.4)', marginTop: 4, fontWeight: 600 }}>
+                  Tap to plan a meetup · {m.daysLeft}d left
+                </div>
               </div>
             </div>
           );
         })}
+
+        {/* Mock Generic Notification */}
+        <div style={{ background: "#fff", borderRadius: 20, padding: 16, border: "1px solid rgba(20,17,13,0.05)", display: "flex", gap: 14, opacity: 0.8 }}>
+          <div style={{ width: 48, height: 48, borderRadius: 99, background: 'rgba(249, 115, 22, 0.1)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F97316', fontSize: 24 }}>
+            🍊
+          </div>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ fontSize: 14, color: '#14110D', lineHeight: 1.4, fontWeight: 500 }}>
+              Someone caught your vibe! Join tonight's Connection Night to see who it is.
+            </div>
+            <div style={{ fontSize: 12, color: 'rgba(20,17,13,0.4)', marginTop: 4, fontWeight: 600 }}>
+              2 hours ago
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
@@ -1188,10 +1303,12 @@ function TopBar({
   activeUser,
   activeUserId,
   setActiveUserId,
+  onOpenNotifications,
 }: {
   activeUser: UserProfile;
   activeUserId: string;
   setActiveUserId: (id: string) => void;
+  onOpenNotifications: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
@@ -1205,6 +1322,7 @@ function TopBar({
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <button
           type="button"
+          onClick={onOpenNotifications}
           style={{
             width: 38,
             height: 38,
@@ -1376,6 +1494,7 @@ function HomeProfileSession({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showChat, setShowChat] = useState<any>(null);
   const [showAllMatches, setShowAllMatches] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
@@ -1457,10 +1576,11 @@ function HomeProfileSession({
 
   return (
     <>
+      {showNotifications && <NotificationsOverlay activeUserId={activeUserId} onClose={() => setShowNotifications(false)} onOpenChat={(m) => setShowChat(m)} />}
       {showAllMatches && <AllMatchesOverlay activeUserId={activeUserId} onClose={() => setShowAllMatches(false)} onOpenChat={(m) => setShowChat(m)} />}
       {showChat && <ChatScreen match={showChat} onClose={() => setShowChat(null)} />}
-      <div ref={scrollRef} className="no-scrollbar" style={{ position: "absolute", inset: 0, overflowY: "auto", overflowX: "hidden", pointerEvents: (showChat || showAllMatches) ? 'none' : 'auto', opacity: (showChat || showAllMatches) ? 0 : 1 }}>
-        <TopBar activeUser={activeUser} activeUserId={activeUserId} setActiveUserId={setActiveUserId} />
+      <div ref={scrollRef} className="no-scrollbar" style={{ position: "absolute", inset: 0, overflowY: "auto", overflowX: "hidden", pointerEvents: (showChat || showAllMatches || showNotifications) ? 'none' : 'auto', opacity: (showChat || showAllMatches || showNotifications) ? 0 : 1 }}>
+        <TopBar activeUser={activeUser} activeUserId={activeUserId} setActiveUserId={setActiveUserId} onOpenNotifications={() => setShowNotifications(true)} />
           <div key={`${state}-${activeUserId}`} className="phase-fade">
             <HomeNormal
               key={activeUserId}
