@@ -975,9 +975,35 @@ const TAG_STYLE: Record<"green" | "orange", { background: string; color: string 
   orange: { background: "rgba(249,115,22,0.12)", color: "#C2410C" },
 };
 
-function ActiveMatches({ onOpenChat }: { onOpenChat: () => void }) {
-  const alessia = USERS['alessia'];
-  if (!alessia) return null;
+const MOCK_MATCH_PAIRS = [
+  // Vibe Pairs
+  [{ id: 'jordan', type: 'vibe', daysLeft: 6 }, { id: 'charlotte', type: 'vibe', daysLeft: 6 }],
+  [{ id: 'cole', type: 'vibe', daysLeft: 5 }, { id: 'caroline', type: 'vibe', daysLeft: 5 }],
+  [{ id: 'bennett', type: 'vibe', daysLeft: 1 }, { id: 'alessia', type: 'vibe', daysLeft: 1 }],
+  [{ id: 'marcus', type: 'vibe', daysLeft: 4 }, { id: 'sofia', type: 'vibe', daysLeft: 4 }],
+  [{ id: 'maddie', type: 'vibe', daysLeft: 3 }, { id: 'jordan', type: 'vibe', daysLeft: 3 }],
+
+  // Spark Pairs
+  [{ id: 'jordan', type: 'spark', daysLeft: 4 }, { id: 'maddie', type: 'spark', daysLeft: 4 }],
+  [{ id: 'charlotte', type: 'spark', daysLeft: 2 }, { id: 'bennett', type: 'spark', daysLeft: 2 }],
+  [{ id: 'cole', type: 'spark', daysLeft: 7 }, { id: 'sofia', type: 'spark', daysLeft: 7 }],
+  [{ id: 'caroline', type: 'spark', daysLeft: 3 }, { id: 'marcus', type: 'spark', daysLeft: 3 }],
+  [{ id: 'alessia', type: 'spark', daysLeft: 6 }, { id: 'maddie', type: 'spark', daysLeft: 6 }],
+];
+
+function getMatchesForUser(userId: string) {
+  const result: any[] = [];
+  for (const pair of MOCK_MATCH_PAIRS) {
+    if (pair[0].id === userId) result.push(pair[1]);
+    else if (pair[1].id === userId) result.push(pair[0]);
+  }
+  return result;
+}
+
+function ActiveMatches({ activeUserId, onOpenChat }: { activeUserId: string, onOpenChat: (match: any) => void }) {
+  const matches = getMatchesForUser(activeUserId);
+  
+  if (!matches.length) return null;
   
   return (
     <div style={{ padding: "0 22px 24px" }}>
@@ -986,29 +1012,38 @@ function ActiveMatches({ onOpenChat }: { onOpenChat: () => void }) {
           Your Matches
         </h2>
       </div>
-      <div 
-        onClick={onOpenChat}
-        style={{ 
-          background: "#fff", borderRadius: 20, padding: 16, 
-          border: "1px solid rgba(20,17,13,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
-          display: "flex", alignItems: "center", gap: 14, cursor: "pointer"
-        }}
-      >
-        <div style={{ position: 'relative', flexShrink: 0 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 99, backgroundImage: `url(${alessia.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-          <div style={{ position: 'absolute', bottom: 0, right: -4, width: 20, height: 20, borderRadius: 99, background: '#EA8CE1', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             <span style={{ fontSize: 10, lineHeight: 1 }}>✨</span>
-          </div>
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 700, fontSize: 16, color: '#14110D' }}>{alessia.name}</div>
-          <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', marginTop: 2, fontWeight: 500 }}>
-            <span style={{ color: '#EA8CE1', fontWeight: 600 }}>Mutual Spark</span> · 6d left
-          </div>
-        </div>
-        <div style={{ background: 'rgba(234, 140, 225, 0.1)', color: '#EA8CE1', padding: '6px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600, fontFamily: "Bricolage Grotesque, sans-serif", flexShrink: 0 }}>
-          Message
-        </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {matches.map((m, i) => {
+          const user = USERS[m.id];
+          if (!user) return null;
+          return (
+            <div 
+              key={i}
+              onClick={() => onOpenChat({ ...user, matchType: m.type, daysLeft: m.daysLeft })}
+              style={{ 
+                background: "#fff", borderRadius: 20, padding: 16, 
+                border: "1px solid rgba(20,17,13,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+                display: "flex", alignItems: "center", gap: 14, cursor: "pointer"
+              }}
+            >
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <div style={{ width: 56, height: 56, borderRadius: 99, backgroundImage: `url(${user.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                <div style={{ position: 'absolute', bottom: 0, right: -4, width: 20, height: 20, borderRadius: 99, background: m.type === 'spark' ? '#EA8CE1' : '#F97316', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   <span style={{ fontSize: 10, lineHeight: 1 }}>{m.type === 'spark' ? '✨' : '🍊'}</span>
+                </div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 700, fontSize: 16, color: '#14110D' }}>{user.name}</div>
+                <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', marginTop: 2, fontWeight: 500 }}>
+                  <span style={{ color: m.type === 'spark' ? '#EA8CE1' : '#F97316', fontWeight: 600 }}>Mutual {m.type === 'spark' ? 'Spark' : 'Vibe'}</span> · {m.daysLeft}d left
+                </div>
+              </div>
+              <div style={{ background: m.type === 'spark' ? 'rgba(234, 140, 225, 0.1)' : 'rgba(249, 115, 22, 0.1)', color: m.type === 'spark' ? '#EA8CE1' : '#F97316', padding: '6px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600, fontFamily: "Bricolage Grotesque, sans-serif", flexShrink: 0 }}>
+                Message
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1254,7 +1289,7 @@ function HomeNormal({
   revealUnlocked: boolean;
   onRevealAnswerLocked: () => void;
   onRevealAnswerCleared: () => void;
-  onOpenChat: () => void;
+  onOpenChat: (match: any) => void;
 }) {
   return (
     <div style={{ paddingBottom: 124 }}>
@@ -1266,7 +1301,7 @@ function HomeNormal({
         onRevealAnswerCleared={onRevealAnswerCleared}
       />
       <RevealTeaser onOpen={onOpenReveal} hasLockedAnswer={hasLockedAnswer} revealUnlocked={revealUnlocked} />
-      <ActiveMatches onOpenChat={onOpenChat} />
+      <ActiveMatches activeUserId={activeUserId} onOpenChat={onOpenChat} />
       <NewsStrip home={home} />
       <NearYou home={home} />
     </div>
@@ -1297,7 +1332,7 @@ function HomeProfileSession({
   const activeUser = USERS[activeUserId] ?? USERS.jordan;
   const home = useHomeContent(activeUserId);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState<any>(null);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
@@ -1379,7 +1414,7 @@ function HomeProfileSession({
 
   return (
     <>
-      {showChat && <ChatScreen userId="alessia" onClose={() => setShowChat(false)} />}
+      {showChat && <ChatScreen match={showChat} onClose={() => setShowChat(null)} />}
       <div ref={scrollRef} className="no-scrollbar" style={{ position: "absolute", inset: 0, overflowY: "auto", overflowX: "hidden", pointerEvents: showChat ? 'none' : 'auto', opacity: showChat ? 0 : 1 }}>
         <TopBar activeUser={activeUser} activeUserId={activeUserId} setActiveUserId={setActiveUserId} />
           <div key={`${state}-${activeUserId}`} className="phase-fade">
@@ -1397,7 +1432,7 @@ function HomeProfileSession({
               revealUnlocked={revealUnlocked}
               onRevealAnswerLocked={handleRevealAnswerLocked}
               onRevealAnswerCleared={handleRevealAnswerCleared}
-              onOpenChat={() => setShowChat(true)}
+              onOpenChat={(match) => setShowChat(match)}
             />
           </div>
         </div>

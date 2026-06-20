@@ -5,13 +5,13 @@ import { USERS } from '@/lib/users';
 const FF = "'Bricolage Grotesque', sans-serif";
 
 export function ChatScreen({
-  userId,
+  match,
   onClose
 }: {
-  userId: string;
+  match: any;
   onClose: () => void;
 }) {
-  const user = USERS[userId];
+  const user = match;
   const [msg, setMsg] = useState("");
   const [history, setHistory] = useState<{ id: number; text: string; time: string }[]>([]);
 
@@ -41,7 +41,7 @@ export function ChatScreen({
         <div style={{ width: 36, height: 36, borderRadius: 99, backgroundImage: `url(${user.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: 8 }} />
         <div style={{ marginLeft: 12, flex: 1 }}>
           <div style={{ fontFamily: FF, fontWeight: 700, fontSize: 16, color: '#fff' }}>{user.name}</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginTop: 2 }}>6d 23h left to plan meetup</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginTop: 2 }}>{match.daysLeft}d 23h left to plan meetup</div>
         </div>
         <button style={{ background: 'none', border: 'none', color: '#fff', padding: 8, marginRight: -8, cursor: 'pointer' }}>
           <Icon.MoreHorizontal width={24} height={24} />
@@ -52,12 +52,12 @@ export function ChatScreen({
       <div style={{ flex: 1, padding: '24px 20px', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
         
         {/* Match Announcement */}
-        <div style={{ alignSelf: 'center', background: 'rgba(234, 140, 225, 0.1)', border: '1px solid rgba(234, 140, 225, 0.3)', borderRadius: 16, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32, maxWidth: '85%' }}>
-          <div style={{ width: 32, height: 32, borderRadius: 99, background: '#EA8CE1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
-            ✨
+        <div style={{ alignSelf: 'center', background: match.matchType === 'spark' ? 'rgba(234, 140, 225, 0.1)' : 'rgba(249, 115, 22, 0.1)', border: match.matchType === 'spark' ? '1px solid rgba(234, 140, 225, 0.3)' : '1px solid rgba(249, 115, 22, 0.3)', borderRadius: 16, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32, maxWidth: '85%' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 99, background: match.matchType === 'spark' ? '#EA8CE1' : '#F97316', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
+            {match.matchType === 'spark' ? '✨' : '🍊'}
           </div>
           <div style={{ fontSize: 13, lineHeight: 1.4, color: 'rgba(255,255,255,0.9)' }}>
-            You both sent a <span style={{ color: '#EA8CE1', fontWeight: 600 }}>Spark</span>. You have 7 days to message {user.name.split(' ')[0]} and plan a meetup.
+            You both sent a <span style={{ color: match.matchType === 'spark' ? '#EA8CE1' : '#F97316', fontWeight: 600 }}>{match.matchType === 'spark' ? 'Spark' : 'Vibe'}</span>. You have 7 days to message {user.name.split(' ')[0]} and plan a meetup.
           </div>
         </div>
 
