@@ -305,9 +305,7 @@ function EventsMemberView({ isOpen, rsvps, onRsvp, onOpenEvent }: any) {
   const invitedSet = visibleAll.filter(e => e.invited || e.nudgedBy);
   const visible = (scope === 'invited' ? invitedSet : visibleAll)
     .filter(e => filter === 'All' || e.tag === filter)
-    .sort((a, b) => hourOf(a.time) - hourOf(b.time));
 
-  React.useEffect(() => { setFilter('All'); }, [segment]);
 
   const renderCard = (e) => (
     <EventCard key={e.id} e={e} open={isOpen(e)} myRsvp={rsvps[e.id]} onOpen={() => onOpenEvent(e.id)} onRsvp={onRsvp} />
