@@ -1320,6 +1320,7 @@ function HomeNormal({
   onRevealAnswerLocked,
   onRevealAnswerCleared,
   onOpenChat,
+  onSeeAll,
 }: {
   onOpenReveal: () => void;
   home: HomeContentState;
