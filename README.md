@@ -188,11 +188,11 @@ npm run dev
 
 Open http://localhost:3000. Use `npm run dev:clean` if you hit stale `.next` errors after switching branches.
 
-**Marcus reveal demo:** default profile is Marcus. Lock an answer, wait 10s for auto-reveal, or reset in the browser console:
+**Reveal demo:** Switch to any profile. Type and lock in an answer to trigger a 5-second countdown to the full Aurora reveal experience. To reset your answer and see the reveal again, run this in the browser console:
 
 ```js
-localStorage.removeItem('ligo:reveal:marcus:unlocked');
-localStorage.removeItem('ligo:daily:marcus:answered');
+localStorage.clear();
+location.reload();
 ```
 
 **Night Preview:** use the N1–N10 buttons above the phone to preview aurora progression across demo nights.
