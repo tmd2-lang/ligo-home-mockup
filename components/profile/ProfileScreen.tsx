@@ -1292,54 +1292,6 @@ export function TheReceiptsScreen({ onClose }: { onClose: () => void }) {
           <StreakTrophyRail />
         </div>
 
-        <ReceiptsSection title="How your taste has shifted">
-          {profile.tasteEvolution.map((row) => (
-            <div key={row.month} style={{
-              background: '#fff', borderRadius: 16, padding: '14px 16px',
-              border: '1px solid rgba(20,17,13,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            }}>
-              <span style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: 14, color: 'rgba(20,17,13,0.55)' }}>{row.month}</span>
-              <span style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: 14, color: '#14110D' }}>
-                → {row.archetype}{row.note ? ` (${row.note})` : ''}
-              </span>
-            </div>
-          ))}
-        </ReceiptsSection>
-
-        <ReceiptsSection title="Against the grain">
-          {profile.rarestPicks.map((r) => (
-            <ReceiptRow key={r.label} stat={r.stat} label={r.label} />
-          ))}
-        </ReceiptsSection>
-
-        <ReceiptsSection title="Songs that brought you people">
-          {profile.connectedSongs.map((r) => (
-            <ReceiptRow
-              key={r.song}
-              stat={String(r.people)}
-              label={`${r.song} — ${r.artist}`}
-              sub={`connected you with ${r.people} people`}
-            />
-          ))}
-        </ReceiptsSection>
-
-        <ReceiptsSection title="You called it early">
-          {profile.firstToPick.map((r, i) => (
-            <div key={i} style={{
-              background: '#fff', borderRadius: 16, padding: '14px 16px',
-              border: '1px solid rgba(20,17,13,0.06)', boxShadow: CARD,
-              fontSize: 14, lineHeight: 1.45, color: 'rgba(20,17,13,0.65)',
-            }}>
-              <span style={{ fontFamily: DISPLAY, fontWeight: 600, color: '#14110D' }}>{r.text}</span>
-            </div>
-          ))}
-        </ReceiptsSection>
-
-        <p style={{
-          padding: `24px ${EDGE}px 8px`, fontSize: 12, color: 'rgba(20,17,13,0.40)', lineHeight: 1.5, textAlign: 'center',
-        }}>
-          {profile.receiptsFooter}
-        </p>
       </div>
     </div>
   );
