@@ -1497,9 +1497,8 @@ function HomeProfileSession({
       setRevealUnlocked(false);
       setRevealPlayIntro(false);
       if (state === "reveal") setState("normal");
-      return;
     }
-  }, [activeUserId, hasLockedAnswer, revealUnlocked, revealCountdown, state, setRevealUnlocked, setState]);
+  }, [hasLockedAnswer, state, setState, setRevealUnlocked]);
 
   useEffect(() => {
     if (!hasLockedAnswer || revealCountdown !== 0 || revealUnlocked) return;
