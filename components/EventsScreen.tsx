@@ -313,7 +313,7 @@ function EventsMemberView({ isOpen, rsvps, onRsvp, onOpenEvent }: any) {
 
   return (
     <div className="screen-fade">
-      <div className="editorial-header" style={{ paddingTop: 24 }}>
+      <div className="editorial-header" style={{ paddingTop: 'max(env(safe-area-inset-top, 56px), 56px)' }}>
         <div className="eyebrow"><span className="dot" /> Campus · Georgetown</div>
         <h1>
           <React.Fragment>Everything else<br/>on campus.</React.Fragment>
