@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIGO — CTO Feasibility Questions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fff;
+    padding: 60px 72px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  @media print {
+    body { padding: 40px 48px; font-size: 12px; }
+    .no-print { display: none !important; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+    .section { page-break-inside: avoid; }
+  }
+
+  .print-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #111;
+    color: #fff;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .print-bar button {
+    background: #F97316;
+    color: #fff;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .print-bar button:hover { background: #ea6c10; }
+
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #111;
+    margin-top: 60px;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 48px;
+    line-height: 1.6;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 32px;
+  }
+
+  h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #111;
+    margin-top: 48px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    margin-top: 28px;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+  .vision {
+    background: #FAFAF8;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #444;
+  }
+
+  .vision strong { color: #222; }
+
+  .build-note {
+    background: #F0F7FF;
+    border: 1px solid #D6E8FA;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin: 12px 0 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1E40AF;
+  }
+
+  .build-note strong { color: #1E3A5F; }
+
+  ul {
+    margin: 8px 0 16px 20px;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  li strong {
+    color: #111;
+  }
+
+  .callout {
+    background: #FFF7ED;
+    border-left: 4px solid #F97316;
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 10px 10px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #9A3412;
+  }
+
+  .callout.caution {
+    background: #FEF2F2;
+    border-left-color: #EF4444;
+    color: #991B1B;
+  }
+
+  .callout strong { color: inherit; }
+
+  hr {
+    border: none;
+    border-top: 1px solid #e5e5e5;
+    margin: 40px 0;
+  }
+
+  .footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e5e5;
+    font-size: 12px;
+    color: #aaa;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <span>LIGO — CTO Feasibility Questions</span>
+  <button onclick="window.print()">Save as PDF ↓</button>
+</div>
+
+<h1>LIGO</h1>
+<p class="subtitle">This document describes what we want to build, stage by stage. For each stage we lay out the product vision, what we believe it requires, and the open questions we need a technical leader to answer: <strong>Is it feasible? How would you build it?</strong></p>
+
+<!-- ==================== 00 ==================== -->
+<h2><span class="num">00</span> Technical Foundation</h2>
+<p>Before any single feature, we need foundational decisions that shape the entire product.</p>
+
+<h3>The App Itself</h3>
+<ul>
+  <li><strong>We want a mobile app that feels native on iOS and Android.</strong> What's the right way to build it — and what are the tradeoffs of each approach?</li>
+  <li><strong>We need push notifications for daily questions, reveals, and matches.</strong> How would you implement that?</li>
+</ul>
+
+<h3>Data &amp; Infrastructure</h3>
+<ul>
+  <li><strong>This app stores user profiles, music libraries, daily answers, match history, and chat messages.</strong> What database architecture would you use, and why?</li>
+  <li><strong>We have time-critical, high-traffic moments</strong> (everyone opens the app at 8 PM for the reveal, Connection Night drops for the whole campus at once). How would you architect the system so it doesn't fall over at those moments?</li>
+  <li><strong>We need background jobs</strong> — nightly reveal aggregation, music sync refreshes, Connection Night batch generation. How would you run and schedule those?</li>
+  <li><strong>We need to store media</strong> — profile photos, album art, potentially audio snippets. What's your approach to file storage at scale?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 01 ==================== -->
+<h2><span class="num">01</span> Onboarding</h2>
+
+<div class="vision">
+  <strong>What we want.</strong> A student signs up with their college ID and a few basics — age, gender, class year — and goes straight into the app. There is deliberately no music sync at this step; that moves to the profile. The experience should be fast and frictionless.
+</div>
+
+<div class="build-note">
+  <strong>What we believe it requires.</strong> Account creation, session/auth, and storage of a minimal demographic set. A way to verify the person is a current student. A lightweight first-run that drops them into the daily experience quickly.
+</div>
+
+<h3>Open Questions</h3>
+<ul>
+  <li><strong>We only want real, current college students on the app.</strong> How do you verify that — and how do you do it without making signup feel like a government form?</li>
+  <li><strong>We need to prevent duplicate and fake accounts.</strong> What's the best way to handle that at the account creation level?</li>
+  <li><strong>Some freshmen are under 18.</strong> Does that change how we build the system from a compliance standpoint? What do we need to account for?</li>
+  <li><strong>Students graduate.</strong> How should the system handle accounts when someone is no longer a current student? What happens to their data, their matches, their profile?</li>
+  <li><strong>We have a Vibe (platonic) and Spark (romantic) matching system.</strong> That means we need to capture gender identity and orientation preferences at some point. How would you model that in the database, and how does it affect matching logic?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 02 ==================== -->
+<h2><span class="num">02</span> Home · Daily Moment</h2>
+
+<div class="vision">
+  <strong>What we want.</strong> One music question appears the moment the user opens the app each day. They type and lock in an answer before that night's reveal. Every answer sharpens their taste profile over time. When they type, the input autocompletes from their own synced music library.
+</div>
+
+<div class="build-note">
+  <strong>What we believe it requires.</strong> A daily-question content source and per-campus scheduling. Answer capture that is write-once and time-gated (locked before the reveal). A push notification to prompt the daily question. A fast, searchable copy of each user's music library for autocomplete.
+</div>
+
+<h3>Open Questions</h3>
+<ul>
+  <li><strong>We need a new music question every day for every campus.</strong> What's a sustainable way to source, schedule, and deliver those? Is it feasible to automate, or does this need a human content pipeline?</li>
+  <li><strong>Once a user locks in their answer, it cannot be changed — and it must be locked before the reveal.</strong> How do you enforce that server-side, especially across time zones?</li>
+  <li><strong>Each answer should feed into the user's taste profile.</strong> Is it better to update the profile in real time or batch it nightly? What are the tradeoffs?</li>
+  <li><strong>What happens if a user doesn't answer on a given day?</strong> Should they still see the reveal? Can they still participate in Connection Night? We need to understand the technical implications of both paths.</li>
+  <li><strong>We want the answer input to autocomplete from the user's own music library</strong> (their synced Spotify/Apple Music). Is it feasible to cache a user's library in our system and make it searchable in real time?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 03 ==================== -->
+<h2><span class="num">03</span> The Reveal</h2>
+
+<div class="vision">
+  <strong>What we want.</strong> A nightly moment: the campus "sky" lights up with everyone's answers in a short, cinematic 5-act swipe-through sequence. It runs at a set time (e.g. 8:00 PM). Every student on campus sees the same reveal at the same time.
+</div>
+
+<div class="build-note">
+  <strong>What we believe it requires.</strong> A nightly aggregation job per campus that assembles the reveal data. A rich client-side animation for the 5 acts. Push notifications and per-campus scheduling/timezone handling.
+</div>
+
+<h3>Open Questions</h3>
+<ul>
+  <li><strong>Potentially thousands of users will open the app at the exact same second.</strong> How do you architect the reveal so the system doesn't collapse under that simultaneous load?</li>
+  <li><strong>We need to process and aggregate everyone's daily answers into a presentable reveal format.</strong> How would you build that pipeline? How far in advance does it need to run?</li>
+  <li><strong>Should every user see the same reveal, or should it be personalized</strong> (e.g., "3 people who matched your answer")? What's the cost and complexity difference?</li>
+  <li><strong>The reveal has to feel smooth and cinematic on any phone, including older models.</strong> Is a 5-act animated swipe sequence feasible on lower-end devices? What are the performance constraints?</li>
+  <li><strong>What if only a small number of people answer on a given day?</strong> Is the reveal still compelling with a tiny dataset, or do we need a minimum threshold to trigger it?</li>
+  <li><strong>We'd love to play a short audio snippet of the referenced song during the reveal.</strong> Is that possible? How would you source and serve those clips?</li>
+  <li><strong>We'll eventually be on multiple campuses in different time zones.</strong> Does each campus get its own reveal time, or is there a smarter way to handle it?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 04 ==================== -->
+<h2><span class="num">04</span> Connection Night</h2>
+
+<div class="vision">
+  <strong>What we want.</strong> Randomized roughly 1–2× a week, each user gets 3–5 match candidates. They can Vibe (platonic), Spark (romantic), or Pass on each one. Profiles are anonymous until mutual. A match only forms when intent aligns — Spark+Spark or Vibe+Vibe. A Vibe+Spark mismatch produces nothing, and neither person is told who chose them. The chosen person only sees "someone in your batch chose you."
+</div>
+
+<div class="build-note">
+  <strong>What we believe it requires.</strong> A matching/batching engine that selects 3–5 candidates per user. A randomized scheduler with spacing rules (e.g. ≥48–72h between nights), per campus. Intent capture (vibe/spark/pass) and mutual-resolution logic. Anonymity guarantees in both the data layer and notifications.
+</div>
+
+<h3>Open Questions</h3>
+<ul>
+  <li><strong>We need a matching engine that selects 3–5 candidates per user based on music taste, demographics, and activity.</strong> How would you build that? What signals would you prioritize, and how do you score them?</li>
+  <li><strong>Connection Night needs to happen 1–2× a week at random, with safe spacing.</strong> How would you schedule that per campus? What does the scheduler look like?</li>
+  <li><strong>Anonymity is critical — no one should be able to figure out who chose them until it's mutual.</strong> How do you guarantee that technically? What are the leakage risks (notification timing, API responses, etc.)?</li>
+  <li><strong>The Vibe+Spark mismatch silently produces nothing.</strong> How would you implement the mutual-resolution logic so it handles all intent combinations correctly?</li>
+  <li><strong>At launch, the user pool will be small.</strong> If Georgetown has 200 users and you're filtering by gender preference, the eligible pool might be ~100. How do you prevent the same people from showing up over and over? What's the cooldown/recycle logic?</li>
+  <li><strong>We need to track the full history of who was shown to whom, what they chose, and whether it was mutual.</strong> How would you model that data? What's the right structure for connections at scale?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 05 ==================== -->
+<h2><span class="num">05</span> Mutual Match → Messaging</h2>
+
+<div class="vision">
+  <strong>What we want.</strong> When a match is mutual, a private chat opens with a soft ~7-day window. Because Connection Night happens 1–2× a week, match groups can overlap — all active mutuals live in a stories-style tray. On Georgetown's campus, people can nudge each other to events from the chat.
+</div>
+
+<div class="build-note">
+  <strong>What we believe it requires.</strong> A real-time chat system. A message store with expiry/retention logic. The mutuals tray UI and push notifications for new messages.
+</div>
+
+<h3>Open Questions</h3>
+<ul>
+  <li><strong>We need real-time messaging between matched users.</strong> What's the fastest, most reliable way to build that? What approach would you take?</li>
+  <li><strong>Chats have a soft 7-day window, but we need to retain messages for safety/abuse review even after they disappear from the UI.</strong> How would you handle the data lifecycle — what the user sees vs. what we retain, and for how long?</li>
+  <li><strong>If someone reports a message on day 6, the system needs to preserve context for review.</strong> How does the reporting and moderation pipeline work from a technical standpoint?</li>
+  <li><strong>Match groups overlap — a user might have 3 active chats from different Connection Nights at the same time.</strong> Does that create any scaling or data-modeling challenges?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 06 ==================== -->
+<h2><span class="num">06</span> Profile &amp; Music Integration</h2>
+
+<div class="vision">
+  <strong>What we want.</strong> Music sync lives on the profile as a mini-onboarding that earns a badge. Once synced, the app generates a live "Sonic Archetype" and a compatibility score between users. The public profile shows: photo, year, gender, clubs, a music block (On Repeat, Top Artists, a featured Playlist), and a "Why you're connected" panel. On your own profile, you see a private horoscope, your streak, connection count, and event RSVPs.
+</div>
+
+<div class="build-note">
+  <strong>What we believe it requires.</strong> OAuth-based music service integration, data ingestion, and periodic refresh. Computation of the archetype and compatibility scores. A server-side view-resolver that swaps public/private fields depending on who's viewing.
+</div>
+
+<h3>Music Sync</h3>
+<ul>
+  <li><strong>We want users to connect their Spotify or Apple Music and have the app pull their listening data.</strong> Is that feasible with current APIs? What data can we actually get, and what can't we get anymore?</li>
+  <li><strong>We want the synced music to power autocomplete when answering the daily question, plus populate "On Repeat" and "Top Artists" on the profile.</strong> How would you store and index that data so it's fast and stays fresh?</li>
+  <li><strong>We want "On Repeat" to feel live — reflecting what the user is actually listening to right now.</strong> Can that be pulled automatically, or does the user have to curate it manually? What are the tradeoffs?</li>
+  <li><strong>We want users to be able to feature a playlist on their profile.</strong> Is it possible to pull their playlists from Spotify/Apple Music and display the tracks? Can other users play it, or just see it?</li>
+  <li><strong>Not every user will have Spotify or Apple Music.</strong> What's the experience for someone who doesn't connect a music service? Can they still participate fully?</li>
+</ul>
+
+<h3>Sonic Archetypes</h3>
+<ul>
+  <li><strong>We want to generate a "Sonic Archetype" for each user based on their music taste</strong> — something like "The Midnight Curator" or "Festival Circuit." Is there a technical approach (AI, clustering, rules engine) that can generate these reliably? What data would it need as input, and what are the key parameters?</li>
+  <li><strong>We also want a compatibility score between any two users based on music taste.</strong> Now that Spotify has closed some of its advanced endpoints, what's still possible? How would you build a compatibility algorithm with the data that's available today?</li>
+</ul>
+
+<h3>Profile Privacy</h3>
+<ul>
+  <li><strong>The profile has public fields (photo, music, archetype) and private fields (horoscope, streak, connection stats).</strong> When one user views another's profile, private data should never reach their device — not hidden with CSS, actually never sent. How would you enforce that?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 07 ==================== -->
+<h2><span class="num">07</span> Audio Playback</h2>
+<p>Audio touches multiple features — the reveal, profiles, and potentially the daily question. It needs its own answer.</p>
+
+<ul>
+  <li><strong>We want to play short audio snippets (15–30 seconds) of songs throughout the app</strong> — on profiles, during the reveal, maybe during the daily question. Is this possible? Where do the audio clips come from, and are there licensing or API constraints we need to know about?</li>
+  <li><strong>Not every song may have an available preview.</strong> How do we handle that gracefully in the UI?</li>
+  <li><strong>We want audio playback to feel seamless, not clunky.</strong> What's the best approach for playing short clips in a mobile app without requiring the user to have a paid streaming subscription?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 08 ==================== -->
+<h2><span class="num">08</span> "Your Artists This Week" — News &amp; Events Feed</h2>
+<p>The Home screen has a horizontal news strip that shows artist-related content personalized to the user's music taste.</p>
+
+<ul>
+  <li><strong>We want to show each user news and events related to the artists they listen to</strong> — new releases, concert announcements, music news. Is it possible to source this data programmatically? Is there an API for "music news by artist," or does this have to be built from scratch?</li>
+  <li><strong>If we have to build it, how would you map artist-related news to individual users at scale?</strong> What does that pipeline look like, and how complex is it?</li>
+  <li><strong>Is there a simpler V1 approach</strong> that gets us something useful at launch without building a full recommendation engine?</li>
+</ul>
+
+<hr>
+
+<!-- ==================== 09 ==================== -->
+<h2><span class="num">09</span> Trust, Safety &amp; Moderation</h2>
+
+<div class="callout caution">
+  <strong>⚠ Non-negotiable for launch.</strong> Any app where college students match, chat, and share profiles needs a safety and moderation layer built in from day one.
+</div>
+
+<ul>
+  <li><strong>Users will upload profile photos.</strong> How do we screen for inappropriate content before a photo goes live?</li>
+  <li><strong>Users will send messages in private chats.</strong> When someone reports a message, what should the technical pipeline look like — where do flagged messages go, how are they reviewed, and what's the response time?</li>
+  <li><strong>We need block and unmatch functionality.</strong> When a user blocks someone, what should that actually do at the data layer? Does it prevent future matching, hide past conversations, or both?</li>
+  <li><strong>Campus administration may contact us about student safety situations.</strong> What data are we able (and legally required) to share, and how do we build the system to support that?</li>
+  <li><strong>Even after chats expire from the UI, we may need message history for safety investigations.</strong> How do we handle data retention so it serves both user privacy and safety obligations?</li>
+</ul>
+
+<div class="footer">
+  LIGO · CTO Feasibility Questions · Confidential
+</div>
+
+</body>
+</html>

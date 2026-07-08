@@ -1,60 +1,57 @@
-'use client';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Image from 'next/image';
-import { ACTIVE_REVEAL_NIGHT, CN_PROFILES } from '@/lib/revealData';
-import { searchCharlotteCatalog } from "@/lib/charlotte-catalog";
-import { searchColeCatalog } from "@/lib/cole-catalog";
-import { searchCarolineCatalog } from "@/lib/caroline-catalog";
-import { searchBennettCatalog } from "@/lib/bennett-catalog";
-import { searchAlessiaCatalog } from "@/lib/alessia-catalog";
-import { searchMaddieCatalog } from "@/lib/maddie-catalog";
-import { searchMarcusCatalog } from "@/lib/marcus-catalog";
-import { searchSofiaCatalog } from "@/lib/sofia-catalog";
-import { searchJordanCatalog } from "@/lib/jordan-catalog";
+import re
+import os
 
-function searchCatalogLocal(activeUserId: string, draft: string, limit = 8) {
-  switch (activeUserId) {
-    case "charlotte": return searchCharlotteCatalog(draft, limit);
-    case "cole": return searchColeCatalog(draft, limit);
-    case "caroline": return searchCarolineCatalog(draft, limit);
-    case "bennett": return searchBennettCatalog(draft, limit);
-    case "alessia": return searchAlessiaCatalog(draft, limit);
-    case "maddie": return searchMaddieCatalog(draft, limit);
-    case "marcus": return searchMarcusCatalog(draft, limit);
-    case "sofia": return searchSofiaCatalog(draft, limit);
-    default: return searchJordanCatalog(draft, limit);
-  }
+css_path = '/Users/tjdozier7/Downloads/ligo-home-mockup-main/app/globals.css'
+with open(css_path, 'r') as f:
+    css_content = f.read()
+
+# Remove techy animations if they exist
+if '/* ── Techy / Sleek Animations ── */' in css_content:
+    css_content = css_content.split('/* ── Techy / Sleek Animations ── */')[0]
+
+# Append new social animations
+css_content += """/* ── Trendy Social Animations ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
+@keyframes aura-spin {
+  from { transform: rotate(0deg) scale(1.2); }
+  to { transform: rotate(360deg) scale(1.2); }
+}
+@keyframes pop-in {
+  0% { opacity: 0; transform: scale(0.8); }
+  60% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes soft-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+"""
+with open(css_path, 'w') as f:
+    f.write(css_content)
 
-import { usePersistentState } from '@/lib/usePersistentState';
-import { RevealShell, REVEAL_COLORS, roman, type ShellController } from '@/components/RevealShell';
-import { RevealOpeningIntro } from '@/components/reveal/RevealOpeningIntro';
-import { ActConnectionIntro, ActConnectionSealed } from './RevealConnectionIntro';
-import { RevealConnectionPerson } from './RevealConnectionPerson';
-import { ActConnectionDone } from './RevealConnectionDone';
+# Patch RevealScreen.tsx
+tsx_path = '/Users/tjdozier7/Downloads/ligo-home-mockup-main/components/RevealScreen.tsx'
+with open(tsx_path, 'r') as f:
+    content = f.read()
 
-const FF = "'Bricolage Grotesque', sans-serif";
-const EASE = 'cubic-bezier(.2,.7,.2,1)';
+old_acts = re.search(r'// ── Shared night label ────────────────────────────────────────────────(.*?)// ── Main RevealScreen ─────────────────────────────────────────────────', content, re.DOTALL)
 
-// ── Shared night label ────────────────────────────────────────────────
+new_acts = """// ── Shared night label ────────────────────────────────────────────────
 function NightLabel({ text, color, dotBg, dotGlow }: { text: string; color: string; dotBg: string; dotGlow: string }) {
   return (
-    <>
-      <div style={{ position: 'absolute', top: 40, display: 'flex', alignItems: 'center', gap: 6, opacity: 0.8, background: 'rgba(255,255,255,0.1)', padding: '6px 14px', borderRadius: 99, backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.15)' }}>
-        <span style={{ fontFamily: FF, fontWeight: 600, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)' }}>Presented by</span>
-        <img src="/assets/starbucks-logo.svg" alt="Starbucks" style={{ height: 14 }} onError={(e) => (e.currentTarget.style.display = 'none')} />
-      </div>
-      <span style={{
-        fontFamily: FF, fontWeight: 700, fontSize: 13, letterSpacing: '0.08em',
-        textTransform: 'uppercase', color,
-        display: 'inline-flex', alignItems: 'center', gap: 8,
-        background: 'rgba(255,255,255,0.1)', padding: '6px 14px', borderRadius: 999,
-        backdropFilter: 'blur(10px)', marginTop: 20
-      } as React.CSSProperties}>
-        <span style={{ width: 8, height: 8, borderRadius: 99, background: dotBg, boxShadow: dotGlow, display: 'inline-block' }} />
-        {text}
-      </span>
-    </>
+    <span style={{
+      fontFamily: FF, fontWeight: 700, fontSize: 13, letterSpacing: '0.08em',
+      textTransform: 'uppercase', color,
+      display: 'inline-flex', alignItems: 'center', gap: 8,
+      background: 'rgba(255,255,255,0.1)', padding: '6px 14px', borderRadius: 999,
+      backdropFilter: 'blur(10px)'
+    } as React.CSSProperties}>
+      <span style={{ width: 8, height: 8, borderRadius: 99, background: dotBg, boxShadow: dotGlow, display: 'inline-block' }} />
+      {text}
+    </span>
   );
 }
 
@@ -67,7 +64,11 @@ function ActCampusPulse({ night, anim }: { night: any; anim: string }) {
       justifyContent: 'center', textAlign: 'center', gap: 16,
       padding: '40px 24px 100px', animation: anim,
     }}>
-
+      {/* Sponsor Lockup */}
+      <div style={{ position: 'absolute', top: 50, display: 'flex', alignItems: 'center', gap: 6, opacity: 0.9, background: 'rgba(255,255,255,0.15)', padding: '6px 14px', borderRadius: 99, backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+        <span style={{ fontFamily: FF, fontWeight: 600, fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>Presented by</span>
+        <img src="/assets/starbucks-logo.png" alt="Starbucks" style={{ height: 16 }} onError={(e) => (e.currentTarget.style.display = 'none')} />
+      </div>
 
       <NightLabel text="Campus Pulse" color="#F5D783" dotBg="#F5D783" dotGlow="0 0 10px rgba(245,215,131,0.5)" />
 
@@ -313,7 +314,7 @@ function ActSponsorCTA({ anim }: { anim: string }) {
         <div style={{ position: 'absolute', top: 20, width: 120, height: 120, background: '#fff', borderRadius: 99, filter: 'blur(40px)', opacity: 0.2 }} />
         
         <div style={{ width: 80, height: 80, background: '#fff', borderRadius: 99, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, boxShadow: '0 10px 20px rgba(0,0,0,0.3)', zIndex: 1 }}>
-          <img src="/assets/starbucks-logo.svg" alt="Starbucks" style={{ width: 60, height: 60, objectFit: 'contain' }} onError={(e) => (e.currentTarget.style.display = 'none')} />
+          <img src="/assets/starbucks-logo.png" alt="Starbucks" style={{ width: 60, height: 60, objectFit: 'contain' }} onError={(e) => (e.currentTarget.style.display = 'none')} />
         </div>
         
         <h2 style={{ fontFamily: FF, fontWeight: 800, fontSize: 32, lineHeight: 1.05, letterSpacing: '-0.03em', color: '#FFFFFF', marginBottom: 12, zIndex: 1 }}>
@@ -332,72 +333,6 @@ function ActSponsorCTA({ anim }: { anim: string }) {
           Redeem in App
         </button>
       </div>
-    </div>
-  );
-}
-
-// ── Act VIII: Spotify Wrapped Summary ─────────────────────────────────
-function ActSpotifyWrapped({ night, anim, dayIndex }: { night: any; anim: string; dayIndex: number }) {
-  const streakCount = Math.min(dayIndex + 1, 7);
-  return (
-    <div style={{
-      position: 'absolute', inset: 0, zIndex: 2,
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      padding: '100px 24px 100px', animation: anim, overflow: 'hidden',
-      background: 'linear-gradient(135deg, #FF3366, #FF9933, #71C07F)',
-    }}>
-      {/* Dynamic Shapes Background */}
-      <div style={{ position: 'absolute', top: -50, left: -50, width: 200, height: 200, background: '#A271FF', borderRadius: 999, filter: 'blur(40px)', opacity: 0.6, animation: 'float 6s infinite alternate' }} />
-      <div style={{ position: 'absolute', bottom: -100, right: -50, width: 250, height: 250, background: '#EA8CE1', borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%', filter: 'blur(50px)', opacity: 0.7, animation: 'aura-spin 15s linear infinite' }} />
-
-      {/* The Wrapped Card Content */}
-      <div style={{ zIndex: 1, width: '100%', maxWidth: 340, display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <h1 style={{ fontFamily: FF, fontWeight: 800, fontSize: 52, lineHeight: 0.9, letterSpacing: '-0.05em', color: '#FFFFFF', textShadow: '0 10px 30px rgba(0,0,0,0.3)', marginBottom: 12 }}>
-          Your<br/>Ligo<br/>Reveal.
-        </h1>
-
-        <div style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 24, padding: 24, display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
-          {/* Stat 1 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 12 }}>
-            <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 14, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Campus Pick</span>
-            <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 22, color: '#FFFFFF' }}>{night.topArtist}</span>
-          </div>
-          {/* Stat 2 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 12 }}>
-            <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 14, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Vibe</span>
-            <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 22, color: '#D8B4FE' }}>Nostalgic</span>
-          </div>
-          {/* Stat 3 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 12 }}>
-            <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 14, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Identity</span>
-            <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 22, color: '#FDE68A' }}>Top 7% Niche</span>
-          </div>
-          {/* Stat 4 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 12 }}>
-            <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 14, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Network</span>
-            <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 22, color: '#FFFFFF' }}>0 Match</span>
-          </div>
-          {/* Stat 5 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-            <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 14, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Streak</span>
-            <span style={{ fontFamily: FF, fontWeight: 800, fontSize: 22, color: '#FFFFFF' }}>{streakCount} Days</span>
-          </div>
-        </div>
-
-        <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: 'rgba(0,0,0,0.3)', padding: '12px 20px', borderRadius: 99, backdropFilter: 'blur(10px)' }}>
-          <span style={{ fontFamily: FF, fontWeight: 700, fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Presented by</span>
-          <img src="/assets/starbucks-logo.svg" style={{ height: 20 }} onError={(e) => (e.currentTarget.style.display = 'none')} />
-        </div>
-      </div>
-      
-      <button style={{
-        position: 'absolute', bottom: 120, width: 'calc(100% - 48px)', height: 56,
-        background: '#FFFFFF', color: '#000', border: 0, borderRadius: 999,
-        fontFamily: FF, fontWeight: 800, fontSize: 16, cursor: 'pointer',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.3)', zIndex: 1
-      }}>
-        Share to IG Story
-      </button>
     </div>
   );
 }
@@ -454,7 +389,7 @@ function ShareSheet({ act, night, onClose }: { act: number; night: any; onClose:
           <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ fontFamily: FF, fontSize: 10, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em' }}>Presented by</span>
-              <img src="/assets/starbucks-logo.svg" alt="Starbucks" style={{ height: 18, filter: 'grayscale(1) brightness(1.5)' }} onError={(e) => (e.currentTarget.style.display = 'none')} />
+              <img src="/assets/starbucks-logo.png" alt="Starbucks" style={{ height: 18, filter: 'grayscale(1) brightness(1.5)' }} onError={(e) => (e.currentTarget.style.display = 'none')} />
             </div>
             <span style={{ fontFamily: FF, fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>10/24/23</span>
           </div>
@@ -468,175 +403,11 @@ function ShareSheet({ act, night, onClose }: { act: number; night: any; onClose:
   );
 }
 
-// ── Main RevealScreen ─────────────────────────────────────────────────
-type Props = {
-  onBack: () => void;
-  activeUserId: string;
-  /** Marcus auto-open: play cinematic intro before Act I. Replay skips this. */
-  playIntro?: boolean;
-  isCN?: boolean;
-};
+// ── Main RevealScreen ─────────────────────────────────────────────────"""
 
-export function RevealScreen({ onBack, activeUserId, playIntro = false, isCN = false }: Props) {
-  const [answer] = usePersistentState(`ligo:daily:${activeUserId}:answer`, '');
-  
-  let night = { ...ACTIVE_REVEAL_NIGHT };
-  if (answer) {
-    // Exact match from user's actual catalog
-    const matches = searchCatalogLocal(activeUserId, answer, 1);
-    if (matches && matches.length > 0) {
-      night.topSong = matches[0].title;
-      night.topArtist = matches[0].artist;
-      night.topArt = matches[0].art;
-    }
-  }
+content = content.replace(old_acts.group(0), new_acts)
 
-  const dayIndex = 0;
-  const shouldPlayIntro = playIntro;
-  const [introDone, setIntroDone] = useState(!shouldPlayIntro);
-  const handleIntroComplete = useCallback(() => setIntroDone(true), []);
-  const [shareOpen, setShareOpen] = useState(false);
-  const [shareAct, setShareAct] = useState(0);
-  const [vibeToast, setVibeToast] = useState<string | null>(null);
-  const [cnActions, setCnActions] = useState<Record<number, string>>({});
-  const shell = useRef<ShellController | null>(null);
+with open(tsx_path, 'w') as f:
+    f.write(content)
 
-  const handleVibe = (name: string) => {
-    setVibeToast(`Vibe sent to ${name}!`);
-    shell.current?.go(1); // advance on vibe
-    setTimeout(() => setVibeToast(null), 2500);
-  };
-
-  const handlePass = () => {
-    shell.current?.go(1); // advance on pass
-  };
-
-  const standardSteps = [
-    ({ anim }: { anim: string }) => <ActCampusPulse night={night} anim={anim} />,
-    ({ anim }: { anim: string }) => <ActCampusMood night={night} anim={anim} />,
-    ({ anim }: { anim: string }) => <ActRarity anim={anim} />,
-    ({ anim }: { anim: string }) => <ActPercentile anim={anim} />,
-    ({ anim }: { anim: string }) => <ActSocialProof night={night} anim={anim} />,
-    ({ anim }: { anim: string }) => <ActForwardHook night={night} dayIndex={dayIndex} anim={anim} />,
-    ({ anim }: { anim: string }) => <ActSponsorCTA anim={anim} />,
-    ({ anim }: { anim: string }) => <ActSpotifyWrapped night={night} dayIndex={dayIndex} anim={anim} />,
-  ];
-
-  const cnSequence = [
-    ({ anim }: { anim: string }) => <ActConnectionIntro matchCount={CN_PROFILES.length} userAnswer={answer} anim={anim} />,
-    ({ anim }: { anim: string }) => (
-      <ActConnectionSealed 
-        people={CN_PROFILES} 
-        song={{ name: CN_PROFILES[0]?.answer || "Your Pick", artist: night.topArtist, art: night.topArt }} 
-        anim={anim} 
-      />
-    ),
-    ...CN_PROFILES.map((profile, i) => {
-      const Step = ({ anim }: { anim: string }) => (
-        <RevealConnectionPerson 
-          p={{...profile, meta: `${profile.major} · ${profile.school} ${profile.year}`}} 
-          idx={i}
-          total={CN_PROFILES.length}
-          song={{ name: profile.answer, artist: night.topArtist, art: night.topArt }}
-          anim={anim} 
-          onAct={(kind) => {
-            setCnActions(prev => ({ ...prev, [i]: kind }));
-            if (kind === 'vibe' || kind === 'spark') {
-              handleVibe(profile.name);
-            } else {
-              handlePass();
-            }
-          }} 
-        />
-      );
-      Step.displayName = `ActCNPerson_${profile.id}`;
-      return Step;
-    }),
-    ({ anim }: { anim: string }) => (
-      <div onClick={onBack} style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
-        <ActConnectionDone 
-          people={CN_PROFILES} 
-          actions={cnActions} 
-          anim={anim} 
-          night={night} 
-          onRestart={() => {
-            setCnActions({});
-            if (shell.current) shell.current.go(-shell.current.cur);
-          }}
-        />
-      </div>
-    ),
-  ];
-
-  const steps = isCN ? cnSequence : standardSteps;
-
-  return (
-    <div style={{ position: 'absolute', inset: 0 }}>
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          opacity: introDone ? 1 : 0,
-          transform: introDone ? 'scale(1)' : 'scale(1.05)',
-          filter: introDone ? 'blur(0)' : 'blur(8px)',
-          transition: `opacity 900ms ${EASE}, transform 900ms ${EASE}, filter 900ms ${EASE}`,
-        }}
-      >
-        <RevealShell
-          steps={steps}
-          colors={REVEAL_COLORS}
-          controllerRef={shell}
-          title="The Reveal"
-          subtitle="Georgetown · under the lights"
-          stepLabel={(cur) => `Act ${roman(cur + 1)} of ${roman(steps.length)}`}
-          onBack={onBack}
-          tapDisabled={shareOpen || !introDone || !!vibeToast}
-          bottom={() => isCN ? null : (
-            <button
-              onClick={() => { setShareAct(shell.current?.cur ?? 0); setShareOpen(true); }}
-              style={{
-                pointerEvents: 'auto',
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                height: 42, padding: '0 20px', borderRadius: 999,
-                border: '1px solid rgba(255,255,255,0.14)',
-                background: 'rgba(10,9,7,0.45)',
-                backdropFilter: 'blur(20px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                color: '#FFFFFF',
-                fontFamily: FF, fontWeight: 600, fontSize: 13.5, cursor: 'pointer',
-              } as React.CSSProperties}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
-                <path d="M9 11l6-4M9 13l6 4" />
-              </svg>
-              Share tonight&apos;s sky
-            </button>
-          )}
-        />
-      </div>
-
-      {shouldPlayIntro && !introDone && (
-        <RevealOpeningIntro onComplete={handleIntroComplete} />
-      )}
-
-      {shareOpen && (
-        <ShareSheet act={shareAct} night={night} onClose={() => setShareOpen(false)} />
-      )}
-
-
-
-      {vibeToast && (
-        <div style={{
-          position: 'absolute', top: 60, left: 24, right: 24, zIndex: 100,
-          background: '#EA8CE1', borderRadius: 16, padding: '16px 20px',
-          boxShadow: '0 8px 30px rgba(234,140,225,0.4)',
-          fontFamily: FF, fontWeight: 700, fontSize: 15, color: '#000',
-          textAlign: 'center', animation: 'fadeInDown 300ms ease both'
-        }}>
-          {vibeToast}
-        </div>
-      )}
-    </div>
-  );
-}
+print("Patch social complete")

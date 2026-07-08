@@ -674,18 +674,21 @@ function DailyPick({
             >
               Today
             </span>
-            <span
-              style={{
-                fontFamily: "Bricolage Grotesque, sans-serif",
-                fontWeight: 700,
-                fontSize: 11,
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: "rgba(20,17,13,0.4)",
-              }}
-            >
-              Everyone answers
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span
+                style={{
+                  fontFamily: "Bricolage Grotesque, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 10,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "rgba(20,17,13,0.5)",
+                }}
+              >
+                Presented to you by Starbucks™
+              </span>
+              <img src="/assets/starbucks-logo.svg" style={{ height: 14, filter: 'grayscale(1) opacity(0.7)' }} alt="Starbucks" onError={(e) => (e.currentTarget.style.display = 'none')} />
+            </div>
           </div>
           {loading ? (
             <p style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 500, fontSize: 17, lineHeight: 1.4, color: "rgba(20,17,13,0.45)", margin: 0 }}>

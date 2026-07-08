@@ -100,3 +100,11 @@ export const CN_PROFILES: CNProfile[] = [
     score: "91% Sync",
   }
 ];
+
+export const MOCK_CATALOG = [
+  { title: "Espresso", artist: "Sabrina Carpenter", art: "/assets/covers/sabrina.webp" },
+  { title: "Snooze", artist: "SZA", art: "/assets/covers/sos.webp" },
+  { title: "Good 4 U", artist: "Olivia Rodrigo", art: "/assets/covers/sour.webp" },
+  { title: "Starboy", artist: "The Weeknd", art: "/assets/covers/starboy.webp" },
+  { title: "Feather", artist: "Sabrina Carpenter", art: "/assets/covers/sabrina.webp" }
+];
