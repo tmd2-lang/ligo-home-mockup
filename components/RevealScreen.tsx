@@ -232,7 +232,7 @@ function ActSocialProof({ night, anim }: { night: any; anim: string }) {
       </div>
 
       <p style={{ fontFamily: FF, fontSize: 16, color: 'rgba(255,255,255,0.7)', maxWidth: 280 }}>
-        You're completely isolated from your friends tonight. Your taste is yours alone.
+        You&apos;re completely isolated from your friends tonight. Your taste is yours alone.
       </p>
     </div>
   );
