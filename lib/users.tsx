@@ -43,6 +43,7 @@ export type ProfileData = {
   firstToPick: Array<{ text: string }>;
   hotTake?: string;
   nowListening?: { title: string; artist: string; photo?: string; coverArt?: string };
+  prompts?: Array<{ id: string; answer: string }>;
   onRepeat?: OnRepeatItem[];
   archetypeSubline?: React.ReactNode;
   mainstreamScoreAccent?: string;
@@ -54,6 +55,10 @@ export type ProfileData = {
   secretTrack?: { label: string; title: string; artist: string; cover: string; accentColor?: string };
   receiptsFooter?: string;
   notifications?: ProfileNotification[];
+  anthem?: { title: string; artist: string; coverArt: string };
+  favoriteGenres?: string[];
+  musicDealbreaker?: string;
+  liveShowWishlist?: string;
 };
 
 export type UserProfile = {
@@ -87,6 +92,10 @@ export const PROFILE_PRESENTATION_DEFAULTS: Pick<
   | 'secretTrack'
   | 'receiptsFooter'
   | 'notifications'
+  | 'anthem'
+  | 'favoriteGenres'
+  | 'musicDealbreaker'
+  | 'liveShowWishlist'
 > = {
   hotTake: "House music is just jazz for people who can't sleep.",
   nowListening: { title: 'Move L8r', artist: 'Keinemusik', photo: `${ARTIST_IMG}keinemusik.png` },
@@ -132,6 +141,10 @@ export const PROFILE_PRESENTATION_DEFAULTS: Pick<
     { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>5</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 9:02' },
     { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>3 people</b> saved <b>after hours</b> this week.</>, time: 'Yesterday' },
   ],
+  anthem: { title: 'Losing My Edge', artist: 'LCD Soundsystem', coverArt: 'https://i.scdn.co/image/ab67616d0000b2734121faee3df82c506ebdc2c8' },
+  favoriteGenres: ['Organic House', 'Indie Dance', 'Minimal Techno'],
+  musicDealbreaker: "If you don't like dancing, we probably won't get along.",
+  liveShowWishlist: "Fred again.., Jamie xx, Bicep",
 };
 
 export const USER_IDENTITY_DEFAULTS = {
@@ -234,6 +247,11 @@ export const USERS: Record<string, UserProfile> = {
       firstToPick: [
         { text: 'You picked Prospa before 200 other Georgetown students' },
         { text: 'First at Georgetown to pick Anyma this semester' },
+      ],
+      prompts: [
+        { id: 'music-dealbreaker', answer: 'you only listen to the Spotify Top 50 playlist' },
+        { id: 'main-3', answer: 'Taylor Swift. I grew up with every era.' },
+        { id: 'hot-take-4', answer: 'anything by Imagine Dragons. Instant ban.' }
       ],
       ...PROFILE_PRESENTATION_DEFAULTS,
     }
@@ -346,6 +364,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: 'M', bg: 'linear-gradient(145deg,#14B8A6,#A78BFA)', text: <><b>Maddie</b> bumped you — you&apos;re a <b>85% match</b> on Tame Impala and The Strokes.</>, time: '11 min ago', unread: true },
         { ic: 'C', bg: 'linear-gradient(145deg,#3B82F6,#14B8A6)', text: <><b>Cole</b> bumped you — you&apos;re a <b>75% match</b> on MK and Disclosure.</>, time: '15 min ago', unread: true },
         { ic: '◉', bg: '#0A0907', text: <>Your archetype held steady — <b>The Deep Cut Generalist</b> for 2 weeks running.</>, time: '4 hr ago', unread: true },
+      ],
+
+      prompts: [
+        { id: 'compat-3', answer: 'sounds like driving down PCH at midnight' },
+        { id: 'main-4', answer: 'getting whiplash between techno and country' },
+        { id: 'hot-take-1', answer: 'that Nickelback actually slaps and I will not apologize' }
       ],
     }
   },
@@ -461,6 +485,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>6</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 9:02' },
         { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>8 people</b> saved <b>main character behavior</b> this week.</>, time: 'Yesterday' },
       ],
+
+      prompts: [
+        { id: 'main-2', answer: 'Espresso by Sabrina Carpenter. I am fueled by iced lattes.' },
+        { id: 'hot-take-3', answer: 'Don\'t Stop Believin\' — skip immediately.' },
+        { id: 'confess-1', answer: 'Party In The U.S.A. and I know every word.' }
+      ],
     }
   },
   caroline: {
@@ -569,6 +599,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: '◉', bg: '#0A0907', text: <>Your archetype held steady — <b>The Southern Romantic</b> for 2 weeks running.</>, time: '4 hr ago', unread: true },
         { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>5</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 9:02' },
         { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>9 people</b> saved <b>tailgate tears</b> this week.</>, time: 'Yesterday' },
+      ],
+
+      prompts: [
+        { id: 'main-3', answer: 'Zach Bryan. The poetry gets me.' },
+        { id: 'confess-3', answer: 'Stick Season by Noah Kahan. It gets me every time.' },
+        { id: 'compat-2', answer: 'an embarrassing amount of 2010s Kesha' }
       ],
     }
   },
@@ -679,6 +715,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>6</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 10:15' },
         { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>12 people</b> saved <b>pass the aux</b> this week.</>, time: 'Yesterday' },
       ],
+
+      prompts: [
+        { id: 'hot-take-4', answer: 'anything by Imagine Dragons. Instant ban.' },
+        { id: 'main-5', answer: '"Real G\'s move in silence like lasagna"' },
+        { id: 'irl-3', answer: 'Kendrick Lamar on the Big Steppers tour. Life changing.' }
+      ],
     }
   },
   bennett: {
@@ -787,6 +829,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: '◉', bg: '#0A0907', text: <>Your archetype held steady — <b>The Pregame Menace</b> for 2 weeks running.</>, time: '3 hr ago', unread: true },
         { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>5</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 9:02' },
         { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>14 people</b> saved <b>lacrosse house chaos</b> this week.</>, time: 'Yesterday' },
+      ],
+
+      prompts: [
+        { id: 'hot-take-2', answer: 'Drake. The monotone just puts me to sleep.' },
+        { id: 'main-1', answer: 'exclusively 90s hip-hop to make me feel cool' },
+        { id: 'irl-2', answer: 'Mr. Brightside. Yes, I am that guy.' }
       ],
     }
   },
@@ -900,6 +948,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>4</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 8:45' },
         { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>4 people</b> saved <b>alt social chaos</b> this week.</>, time: 'Yesterday' },
       ],
+
+      prompts: [
+        { id: 'confess-4', answer: 'something embarrassing by The 1975.' },
+        { id: 'irl-1', answer: 'Frank Ocean if he ever actually performs again' },
+        { id: 'compat-4', answer: 'Mr. Brightside. I just can\'t do it anymore.' }
+      ],
     }
   },
   alessia: {
@@ -1012,6 +1066,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>4</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 8:45' },
         { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>6 people</b> saved <b>emotional afters</b> this week.</>, time: 'Yesterday' },
       ],
+
+      prompts: [
+        { id: 'irl-5', answer: 'Losing It by Fisher at a massive festival' },
+        { id: 'confess-5', answer: 'Demon Days by Gorillaz. A masterpiece.' },
+        { id: 'music-dealbreaker', answer: 'you only listen to the Spotify Top 50 playlist' }
+      ],
     }
   },
   sofia: {
@@ -1123,6 +1183,12 @@ export const USERS: Record<string, UserProfile> = {
         { ic: '◉', bg: '#0A0907', text: <>Your archetype held steady — <b>The Mood Curator</b> for 3 weeks running.</>, time: '2 hr ago', unread: true },
         { ic: '🔥', bg: 'linear-gradient(145deg,#F97316,#C2410C)', text: <>Day <b>6</b> streak — answer today&apos;s question to keep it alive.</>, time: 'Today, 9:02' },
         { ic: '♬', bg: 'linear-gradient(145deg,#EA8CE1,#A13D99)', text: <><b>8 people</b> saved <b>public transit tears</b> this week.</>, time: 'Yesterday' },
+      ],
+
+      prompts: [
+        { id: 'compat-3', answer: 'is smooth 90s R&B' },
+        { id: 'main-5', answer: '"Boy you got me hooked onto something"' },
+        { id: 'confess-2', answer: 'Baby by Justin Bieber.' }
       ],
     }
   }

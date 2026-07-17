@@ -84,10 +84,8 @@
   --hairline-dark: rgba(255, 255, 255, 0.07);
 
   /* ── Type families ── */
-  --font-display: "Bricolage Grotesque", -apple-system, "SF Pro Display",
-    sans-serif;
-  --font-body: -apple-system, "SF Pro Display", "Helvetica Neue", Arial,
-    sans-serif;
+  --font-display: var(--font-montserrat), "Bricolage Grotesque", -apple-system, "SF Pro Display", sans-serif;
+  --font-body: var(--font-inter), -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
 }
 
 * {
@@ -378,3 +376,14 @@ body {
   0%, 100% { opacity: 0.8; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.02); }
 }
+
+@keyframes fade-in-up-card {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.stagger-fade-in {
+  animation: fade-in-up-card 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+

@@ -1,8 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Montserrat } from 'next/font/google';
 import "./globals.css";
 import "./home.css";
 import "./events.css";
 import "./profile.css";
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const montserrat = Montserrat({ subsets: ['latin'], variable: '--font-montserrat' });
 
 export const metadata: Metadata = {
   title: "LIGO — Home",
@@ -41,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <body>{children}</body>
     </html>
   );

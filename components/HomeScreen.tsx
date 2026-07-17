@@ -152,105 +152,6 @@ function searchCatalog(activeUserId: string, draft: string, limit = 8): CatalogS
   }
 }
 
-function NewsStrip({ home }: { home: HomeContentState }) {
-  const { loading, error, news } = home;
-  return (
-    <div>
-      <div style={{ padding: "24px 22px 12px", display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-        <h2 style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 600, fontSize: 18, letterSpacing: "-0.015em", color: "#14110D", margin: 0 }}>
-          Your artists this week
-        </h2>
-        <span style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontSize: 12, fontWeight: 600, color: "#F97316" }}>See all</span>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          overflowX: "auto",
-          padding: "0 22px 4px",
-          scrollbarWidth: "none",
-          WebkitOverflowScrolling: "touch",
-        }}
-      >
-        {loading ? (
-          <p style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 500, fontSize: 14, color: "rgba(20,17,13,0.45)", margin: "8px 0 12px" }}>
-            Loading your artists…
-          </p>
-        ) : error ? (
-          <p style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 500, fontSize: 14, color: "rgba(200,50,50,0.85)", margin: "8px 0 12px" }}>
-            {error}
-          </p>
-        ) : !news.length ? (
-          <p style={{ fontFamily: "Bricolage Grotesque, sans-serif", fontWeight: 500, fontSize: 14, color: "rgba(20,17,13,0.45)", margin: "8px 0 12px" }}>
-            Nothing here yet
-          </p>
-        ) : (
-          news.map((n, i) => (
-            <div
-              key={n.id || i}
-              style={{
-                flex: "0 0 auto",
-                width: 208,
-                background: "#fff",
-                borderRadius: 18,
-                border: "1px solid rgba(20,17,13,0.05)",
-                boxShadow: "0 1px 0 rgba(20,17,13,0.02), 0 6px 18px -12px rgba(20,17,13,0.08)",
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  height: 116,
-                  backgroundImage: `url(${n.art_url})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  position: "relative",
-                }}
-              >
-                <span
-                  style={{
-                    position: "absolute",
-                    top: 10,
-                    left: 10,
-                    fontFamily: "Bricolage Grotesque, sans-serif",
-                    fontSize: 9,
-                    fontWeight: 700,
-                    letterSpacing: "0.14em",
-                    textTransform: "uppercase",
-                    color: "#fff",
-                    background: "rgba(10,9,7,0.55)",
-                    backdropFilter: "blur(8px)",
-                    WebkitBackdropFilter: "blur(8px)",
-                    padding: "4px 8px",
-                    borderRadius: 99,
-                  }}
-                >
-                  {n.source_label}
-                </span>
-              </div>
-              <div style={{ padding: "12px 14px 14px" }}>
-                <div
-                  style={{
-                    fontFamily: "Bricolage Grotesque, sans-serif",
-                    fontWeight: 600,
-                    fontSize: 14,
-                    lineHeight: 1.25,
-                    letterSpacing: "-0.01em",
-                    color: "#14110D",
-                    textWrap: "pretty",
-                  }}
-                >
-                  {n.headline}
-                </div>
-                <div style={{ fontSize: 11, color: "rgba(20,17,13,0.45)", marginTop: 8 }}>{n.time_label} ago</div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
-}
 
 function AvatarStack() {
   const people = [
@@ -1445,7 +1346,6 @@ function HomeNormal({
       <RevealTeaser onOpen={onOpenReveal} hasLockedAnswer={hasLockedAnswer} revealUnlocked={revealUnlocked} />
       <ActiveMatches activeUserId={activeUserId} onSeeAll={onSeeAll} onOpenChat={onOpenChat} />
       <ReceiptsCard onOpenReceipts={onOpenReceipts} />
-      <NewsStrip home={home} />
     </div>
   );
 }
