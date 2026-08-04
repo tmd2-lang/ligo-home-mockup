@@ -1394,3 +1394,20 @@
 
 /* room for the app bottom nav overlaid on the events screen */
 .ligo-events .scroll { padding-bottom: 92px; }
+
+/* Public Profile View animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeInUpStatic {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+

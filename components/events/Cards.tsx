@@ -2,7 +2,7 @@ import React from 'react';
 import { EVI } from './Icons';
 import { EventItem } from '../../lib/mockEventsData';
 
-export function EventCard({ e, onOpen, onRsvp }: { e: EventItem, onOpen: () => void, onRsvp: (id: string, action: 'going'|'maybe'|'declined'|null) => void }) {
+export function EventCard({ e, onOpen, onRsvp, onOpenProfile }: { e: EventItem, onOpen: () => void, onRsvp: (id: string, action: 'going'|'maybe'|'declined'|null) => void, onOpenProfile?: (orgId: string) => void }) {
   // Top: Access badge logic
   let accessBadge = null;
   if (e.visibility === 'members_only') {
@@ -43,7 +43,18 @@ export function EventCard({ e, onOpen, onRsvp }: { e: EventItem, onOpen: () => v
       
       <div className="body" style={{ padding: 16 }}>
         <div className="name" style={{ fontSize: 18, fontWeight: 500, fontFamily: 'var(--font-display)', color: 'var(--ink)' }}>{e.name}</div>
-        <div className="host" style={{ fontSize: 14, fontWeight: 500, color: 'rgba(20,17,13,0.6)', marginTop: 4 }}>{e.host}</div>
+        <div className="host" style={{ fontSize: 14, fontWeight: 500, color: 'rgba(20,17,13,0.6)', marginTop: 4 }}>
+          {onOpenProfile && e.hostOrganizationId ? (
+            <span 
+              onClick={(ev) => { ev.stopPropagation(); onOpenProfile(e.hostOrganizationId); }}
+              style={{ cursor: 'pointer', borderBottom: '1px solid transparent', transition: 'border-color 0.15s ease' }}
+              onMouseEnter={(ev) => (ev.currentTarget.style.borderBottomColor = 'rgba(20,17,13,0.3)')}
+              onMouseLeave={(ev) => (ev.currentTarget.style.borderBottomColor = 'transparent')}
+            >
+              {e.host}
+            </span>
+          ) : e.host}
+        </div>
         <div className="venue" style={{ fontSize: 14, fontWeight: 500, color: 'rgba(20,17,13,0.6)' }}>{e.venue}</div>
         
         <div className="footer" style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

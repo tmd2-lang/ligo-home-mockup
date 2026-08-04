@@ -8,53 +8,6 @@ const privateEvents = `
   // PRIVATE EVENTS FOR MY EVENTS / INVITES TAB
   // ----------------------------------------------------
   {
-    id: 101,
-    title: "MAYA'S 20TH: AFTER HOURS",
-    subtitle: 'Invited by Maya Thompson',
-    image: '',
-    hostAvatar: 'MT',
-    hostAvatarColor: '#FF0055',
-    hostName: 'Maya Thompson',
-    location: 'Private residence, Burleith',
-    visibility: 'private',
-    currentUserStatus: 'pending',
-    relativeDays: 2,
-    time: '9:30 PM',
-    description: [
-      "Twenty deserves a proper night out — or in this case, a proper night in.",
-      "Come celebrate Maya's birthday with drinks, cake, music, and an apartment full of people she loves. The night starts upstairs with birthday drinks and dessert, then the rest of the house opens up and it gets loud. Dress like the pictures are getting posted.",
-      "This is a private party for friends and invited guests. Please respond so we can plan for numbers — and so the address doesn't have to float around publicly. The exact address and entry details unlock after your RSVP is confirmed."
-    ],
-    details: [
-      { label: "Dress code", value: "going-out attire" },
-      { label: "Bring", value: "nothing required — a bottle or mixer is welcome" },
-      { label: "Transport", value: "Walking or rideshare recommended; street parking in Burleith is a myth" }
-    ],
-    schedule: [
-      { label: "Cake & drinks", value: "9:30 PM" },
-      { label: "Music starts", value: "10:00 PM" },
-      { label: "Last entry", value: "11:30 PM" },
-      { label: "Ends", value: "~1:30 AM" }
-    ],
-    tickets: [
-      { name: 'Admission', price: 'Free', desc: 'Complimentary. No ticket — an accepted invitation is required for entry.' }
-    ],
-    rules: [
-      "Private event. Invitation required.",
-      "Georgetown students and personally invited guests only.",
-      "The street address stays hidden until you respond Going."
-    ],
-    guestPolicy: "Invitations are non-transferable. No open plus-ones — text Maya directly if you want to bring someone. Don't share the address or the invite link.",
-    socialProof: { going: 47, pending: 12, connections: 8 },
-    tags: ['Birthday', 'House Party', 'Private', 'Burleith', 'Nightlife'],
-    organizer: {
-      name: 'Maya Thompson',
-      desc: 'Georgetown sophomore studying Culture and Politics. Hosting dinners, birthdays, and any gathering that gives people a reason to dress up.',
-      upcoming: 3,
-      followers: '286' // Using followers as connections in EventDetailView
-    }
-  },
-  {
     id: 102,
     title: "SAE WINTER FORMAL: MIDNIGHT IN MONACO",
     subtitle: 'Invited by Will Harrington',

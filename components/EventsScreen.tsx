@@ -9,13 +9,15 @@ import { MemberClubHome } from "./events/MemberClubHome";
 import { ManageEventView } from "./events/ManageEventView";
 import { CreateEventSheet } from "./events/CreateEventSheet";
 import { EventDetailView } from "./events/EventDetailView";
+import { CreateProfileFlow } from "./events/CreateProfileFlow";
 import { SwipeableInvites } from "./events/SwipeableInvites";
+import { PublicProfileView } from "./events/PublicProfileView";
 import { ImportContactsFlow } from "./events/ImportContactsFlow";
 import { LiveActivityPill } from "./events/LiveActivityPill";
 import { EVI } from "./events/Icons";
 import { usePersistentState } from "../lib/usePersistentState";
 
-type EventsView = "main" | "organization" | "member-club" | "manage-event" | "event-detail" | "publish-confirmation";
+type EventsView = "main" | "organization" | "member-club" | "manage-event" | "event-detail" | "publish-confirmation" | "public-profile" | "create-profile";
 type MainTab = 'home' | 'invites' | 'clubs';
 
 /** Demo users who belong to each org — used when publishing members-only invites */
@@ -50,7 +52,7 @@ export function EventsScreen({ onTab }: any) {
   // Keep mock data as-is for Charlotte to see the new fixture events
   const dynamicInitialEvents = INITIAL_EVENTS;
 
-  const [events, setEvents] = usePersistentState<EventItem[]>('ligo:all_events_v4', dynamicInitialEvents);
+  const [events, setEvents] = usePersistentState<EventItem[]>('ligo:all_events_v6', dynamicInitialEvents);
   const [rsvpStore, setRsvpStore] = usePersistentState<UserRsvpStore>('ligo:user_rsvps_v1', {});
   const [view, setView] = useState<EventsView>("main");
   const [mainTab, setMainTab] = useState<MainTab>('home');
@@ -61,6 +63,8 @@ export function EventsScreen({ onTab }: any) {
   const [skipClubWelcome, setSkipClubWelcome] = useState(false);
   const [skipOrgWelcome, setSkipOrgWelcome] = useState(false);
   const [liveActivityEventId, setLiveActivityEventId] = useState<string | null>(null);
+  const [activeProfileOrgId, setActiveProfileOrgId] = useState<string | null>(null);
+  const [profileReturnView, setProfileReturnView] = useState<EventsView>('main');
   
   const [showSwipeableInvites, setShowSwipeableInvites] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -277,6 +281,29 @@ export function EventsScreen({ onTab }: any) {
     ? viewEvents.find(e => String(e.id) === liveActivityEventId && (e.currentUserStatus === 'going' || e.currentUserStatus === 'hosting'))
     : null;
 
+  // Profile data for the public profile view
+  const activeProfileEvent = activeProfileOrgId
+    ? viewEvents.find(e => e.hostOrganizationId === activeProfileOrgId || String(e.id) === activeProfileOrgId)
+    : null;
+  const activeProfileOrganizer = activeProfileEvent?.organizer || (activeProfileOrgId ? MOCK_ORGANIZATIONS[activeProfileOrgId] as any : null);
+  const profileEvents = activeProfileOrgId
+    ? viewEvents.filter(e => {
+        const matchesOrg = e.hostOrganizationId === activeProfileOrgId;
+        const matchesHost = e.organizer?.name === activeProfileOrganizer?.name;
+        return matchesOrg || matchesHost;
+      })
+    : [];
+
+  const openProfile = (eventOrOrgId: string, returnView?: EventsView) => {
+    // Find the event to extract organizer data
+    const event = viewEvents.find(e => String(e.id) === eventOrOrgId || e.hostOrganizationId === eventOrOrgId);
+    if (event?.organizer) {
+      setActiveProfileOrgId(event.hostOrganizationId || eventOrOrgId);
+      setProfileReturnView(returnView || view);
+      setView('public-profile');
+    }
+  };
+
   const managedOrgs = activeUser.organizations
     .filter((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))
     .map((o: any) => MOCK_ORGANIZATIONS[o.organizationId])
@@ -391,6 +418,8 @@ export function EventsScreen({ onTab }: any) {
                 orgs={MOCK_ORGANIZATIONS}
                 onOpenEvent={(id) => { setActiveEventId(id); setDetailReturnView('main'); setView('event-detail'); }}
                 onOpenOrgWorkspace={(id) => { setActiveOrgId(id); setSkipOrgWelcome(false); setView('organization'); }}
+                onOpenProfile={(orgId) => openProfile(orgId, 'main')}
+                onCreateProfile={() => setView('create-profile')}
               />
             )}
 
@@ -527,6 +556,62 @@ export function EventsScreen({ onTab }: any) {
           canOpenEventChat={activeUser.organizations.some(
             (o: any) => o.organizationId === activeEvent.hostOrganizationId
           )}
+          onOpenProfile={(orgId) => openProfile(orgId, 'event-detail')}
+        />
+      )}
+
+      {view === 'public-profile' && (
+        activeProfileOrganizer ? (
+          <PublicProfileView
+            organizer={activeProfileOrganizer}
+            hostAvatar={activeProfileEvent?.hostAvatar}
+            hostAvatarColor={activeProfileEvent?.hostAvatarColor || (activeProfileOrganizer as any).avatarColor}
+            events={profileEvents}
+            onBack={() => setView(profileReturnView)}
+            onOpenEvent={(id) => {
+              setActiveEventId(id);
+              setDetailReturnView('public-profile');
+              setView('event-detail');
+            }}
+          />
+        ) : (
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#FAFAF8', padding: 24 }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>👻</div>
+            <h2 style={{ fontSize: 20, fontWeight: 600, color: '#111', marginBottom: 8 }}>Profile Data Lost</h2>
+            <p style={{ color: '#666', textAlign: 'center', marginBottom: 24, fontSize: 15 }}>The mock data was reset by a hot-reload.</p>
+            <button 
+              onClick={() => setView('main')}
+              style={{ padding: '12px 24px', background: 'var(--ink)', color: '#fff', borderRadius: 100, border: 'none', fontWeight: 600, cursor: 'pointer' }}
+            >
+              Back to Home
+            </button>
+          </div>
+        )
+      )}
+
+      {view === 'create-profile' && (
+        <CreateProfileFlow 
+          onCancel={() => setView('main')}
+          onComplete={(profile) => {
+            // Mock injecting the new profile into MOCK_ORGANIZATIONS
+            MOCK_ORGANIZATIONS[profile.id] = {
+              ...profile,
+              groups: [{ id: 'all', name: 'All Members', memberCount: 1 }],
+              workspaceFeatures: ['chat', 'events']
+            };
+            
+            // Add user as admin
+            activeUser.organizations.push({
+              organizationId: profile.id,
+              role: 'admin',
+              groupIds: ['all']
+            });
+
+            // Navigate to public profile
+            setActiveProfileOrgId(profile.id);
+            setProfileReturnView('main');
+            setView('public-profile');
+          }}
         />
       )}
 

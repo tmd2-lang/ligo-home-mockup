@@ -11,12 +11,14 @@ export function EventDetailView({
   onRsvpAction,
   currentUserId,
   canOpenEventChat,
+  onOpenProfile,
 }: {
   e: EventItem;
   onBack: () => void;
   onRsvpAction: (action: 'going' | 'maybe' | 'declined' | null) => void;
   currentUserId?: string;
   canOpenEventChat?: boolean;
+  onOpenProfile?: (orgId: string) => void;
 }) {
   const [showFullAbout, setShowFullAbout] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -33,7 +35,7 @@ export function EventDetailView({
   };
   
   const isPastEvent = e.relativeDays !== undefined && e.relativeDays < 0;
-  const isPersonHost = e.organizer?.name === 'Maya Thompson' || e.organizer?.name === 'Caroline Lee';
+  const isPersonHost = e.organizer?.type === 'person';
   
   return (
     <div className="screen-fade event-detail" style={{ position: 'absolute', inset: 0, zIndex: 10, background: '#fff', overflowY: 'auto' }}>
@@ -244,7 +246,9 @@ export function EventDetailView({
         </div>
 
         {/* Org Card */}
-        <div style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 16, padding: 20, cursor: 'pointer', display: 'flex', alignItems: 'flex-start', gap: 16, boxShadow: '0 8px 32px rgba(0,0,0,0.05)' }}>
+        <div 
+          onClick={() => onOpenProfile?.(e.hostOrganizationId || String(e.id))}
+          style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 16, padding: 20, cursor: 'pointer', display: 'flex', alignItems: 'flex-start', gap: 16, boxShadow: '0 8px 32px rgba(0,0,0,0.05)', transition: 'transform 0.15s ease, box-shadow 0.15s ease' }}>
           <div style={{ width: 48, height: 48, borderRadius: '50%', background: e.hostAvatarColor || '#000', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 500, flexShrink: 0 }}>
             {e.hostAvatar || (e.host || (e as any).hostName || 'L').charAt(0)}
           </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { EventItem } from "../../lib/mockEventsData";
 import { getGoingSocial } from "../../lib/eventSocialProof";
 
-export function PoshEventCard({ event, onClick, layout = "carousel", index = 0 }: { event: EventItem, onClick: () => void, layout?: "carousel" | "grid", index?: number }) {
+export function PoshEventCard({ event, onClick, layout = "carousel", index = 0, onOpenProfile }: { event: EventItem, onClick: () => void, layout?: "carousel" | "grid", index?: number, onOpenProfile?: (orgId: string) => void }) {
   const isGrid = layout === "grid";
   const social = getGoingSocial(event);
   const goingLine = social.going > 0
@@ -54,7 +54,16 @@ export function PoshEventCard({ event, onClick, layout = "carousel", index = 0 }
         {event.name}
       </div>
       <div style={{ fontSize: '13px', color: '#444', margin: '0 0 2px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 500 }}>
-        {event.host}
+        {onOpenProfile && event.hostOrganizationId ? (
+          <span 
+            onClick={(ev) => { ev.stopPropagation(); onOpenProfile(event.hostOrganizationId); }}
+            style={{ cursor: 'pointer', borderBottom: '1px solid transparent', transition: 'border-color 0.15s ease' }}
+            onMouseEnter={(ev) => (ev.currentTarget.style.borderBottomColor = 'rgba(20,17,13,0.2)')}
+            onMouseLeave={(ev) => (ev.currentTarget.style.borderBottomColor = 'transparent')}
+          >
+            {event.host}
+          </span>
+        ) : event.host}
       </div>
       <div style={{ fontSize: '13px', color: '#888', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {event.tickets?.[0]?.price || 'Free'} · {event.venue}

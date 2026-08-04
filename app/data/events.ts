@@ -34,7 +34,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 212, connections: 13 },
     tags: ['A Cappella', 'Benefit', 'Community Service', 'Live Music', 'All Ages', 'Georgetown'],
-    organizer: { name: 'The Georgetown Saxatones', desc: 'Georgetown’s service-based a cappella group, established in 2003.', upcoming: 3, followers: '1,520' }
+    organizer: { name: 'The Georgetown Saxatones', desc: 'Georgetown’s service-based a cappella group, established in 2003.', upcoming: 3, followers: '1,520', type: 'club', category: 'A Cappella' }
   },
 
   // 10: Blue & Gray Tour Guide Society (ID 11)
@@ -69,7 +69,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 96, connections: 11 },
     tags: ['Community', 'Campus Tradition', 'Networking', 'Social', 'Free', 'Georgetown'],
-    organizer: { name: 'Blue & Gray Tour Guide Society', desc: 'Student ambassadors sharing Georgetown’s history, campus, and traditions.', upcoming: 2, followers: '1,040' }
+    organizer: { name: 'Blue & Gray Tour Guide Society', desc: 'Student ambassadors sharing Georgetown’s history, campus, and traditions.', upcoming: 2, followers: '1,040', type: 'club', category: 'Campus Tradition' }
   },
 
   // 6: Frequency (ID 7)
@@ -109,7 +109,11 @@ export const LigoEvents = [
       name: 'WGTB & Prospect Records',
       desc: 'Student-led artist development, radio, and independent music collective.',
       upcoming: 9,
-      followers: '3,750'
+      followers: '3,750',
+      type: 'club', category: 'Music & Media', links: [
+  { label: 'WGTB Radio', url: 'https://wgtb.georgetown.edu', icon: '📻' },
+  { label: 'Instagram', url: 'https://instagram.com', icon: '📸' }
+]
     }
   },
 
@@ -147,7 +151,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 418, connections: 22 },
     tags: ['Sports', 'Boxing', 'Competition', 'Campus', 'Ticketed', 'Georgetown'],
-    organizer: { name: 'Georgetown Club Boxing', desc: 'Competitive club team training and competing year-round.', upcoming: 4, followers: '1,150' }
+    organizer: { name: 'Georgetown Club Boxing', desc: 'Competitive club team training and competing year-round.', upcoming: 4, followers: '1,150', type: 'club', category: 'Athletics' }
   },
 
   // 16: Georgetown University Dance Company (ID 17)
@@ -185,7 +189,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 492, connections: 29 },
     tags: ['Dance', 'Ballet', 'Contemporary', 'Student Choreography', 'Performance', 'Georgetown'],
-    organizer: { name: 'Georgetown University Dance Company', desc: 'Georgetown’s pre-professional concert repertory dance company, established in 1974.', upcoming: 3, followers: '2,940' }
+    organizer: { name: 'Georgetown University Dance Company', desc: 'Georgetown’s pre-professional concert repertory dance company, established in 1974.', upcoming: 3, followers: '2,940', type: 'club', category: 'Performing Arts', memberCount: 36 }
   },
 
   // 12: Georgetown GraceNotes (ID 13)
@@ -222,7 +226,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 184, connections: 16 },
     tags: ['A Cappella', 'Women in Music', 'Live Performance', 'Campus', 'Georgetown', 'All Ages'],
-    organizer: { name: 'Georgetown GraceNotes', desc: 'A cappella for women and gender minorities at Georgetown University, established in 1980.', upcoming: 3, followers: '1,640' }
+    organizer: { name: 'Georgetown GraceNotes', desc: 'A cappella for women and gender minorities at Georgetown University, established in 1980.', upcoming: 3, followers: '1,640', type: 'club', category: 'A Cappella' }
   },
 
   // 21: The Hoya (ID 22)
@@ -258,7 +262,10 @@ export const LigoEvents = [
     ],
     socialProof: { going: 147, connections: 20 },
     tags: ['Journalism', 'Media', 'Open House', 'Recruitment', 'Creative', 'Georgetown'],
-    organizer: { name: 'The Hoya', desc: 'Georgetown University’s student newspaper of record.', upcoming: 5, followers: '12,400' }
+    organizer: { name: 'The Hoya', desc: 'Georgetown University’s student newspaper of record.', upcoming: 5, followers: '12,400', type: 'club', category: 'Student Media', links: [
+  { label: 'Website', url: 'https://thehoya.com', icon: '🌐' },
+  { label: 'Instagram', url: 'https://instagram.com', icon: '📸' }
+] }
   },
 
   // 15: Mask & Bauble Dramatic Society (ID 16)
@@ -296,7 +303,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 198, connections: 17 },
     tags: ['Theater', 'Student Writing', 'Original Work', 'Festival', 'Ticketed', 'Georgetown'],
-    organizer: { name: 'Mask & Bauble Dramatic Society', desc: 'Student-produced theater at Georgetown since 1852.', upcoming: 5, followers: '2,180' }
+    organizer: { name: 'Mask & Bauble Dramatic Society', desc: 'Student-produced theater at Georgetown since 1852.', upcoming: 5, followers: '2,180', type: 'club', category: 'Theatre' }
   },
 
   // 3: After Hours (ID 4)
@@ -343,7 +350,8 @@ export const LigoEvents = [
       name: 'Georgetown Sigma Phi Epsilon',
       desc: 'Social fraternity at Georgetown University.',
       upcoming: 4,
-      followers: '1,200'
+      followers: '1,200',
+      type: 'club', category: 'Greek Life', memberCount: 85
     }
   },
 
@@ -385,7 +393,8 @@ export const LigoEvents = [
       name: 'Georgetown Alpha Kappa Psi',
       desc: 'Professional business fraternity focused on leadership, community, and professional development.',
       upcoming: 5,
-      followers: '1,480'
+      followers: '1,480',
+      type: 'club', category: 'Professional Fraternity'
     }
   },
 
@@ -428,7 +437,8 @@ export const LigoEvents = [
       name: 'Senior Class Committee',
       desc: 'Creating traditions, events, and shared experiences for the Class of 2027.',
       upcoming: 12,
-      followers: '2,900'
+      followers: '2,900',
+      type: 'club', category: 'Student Government'
     }
   },
 
@@ -471,7 +481,8 @@ export const LigoEvents = [
       name: 'Georgetown Black Student Alliance',
       desc: 'Building community and celebrating Black identity, culture, and student life at Georgetown.',
       upcoming: 7,
-      followers: '3,200'
+      followers: '3,200',
+      type: 'club', category: 'Cultural Organization', memberCount: 180
     }
   },
   // 11: Independent Georgetown DJ / Artist (ID 12)
@@ -508,7 +519,11 @@ export const LigoEvents = [
     ],
     socialProof: { going: 221, connections: 19 },
     tags: ['DJ', 'Nightlife', 'House', 'Student Artist', 'Dance', 'Georgetown'],
-    organizer: { name: 'DJ Ren', desc: 'Student DJ playing house, jersey club, edits, and late-night sets.', upcoming: 1, followers: '860' }
+    organizer: { name: 'DJ Ren', desc: 'Student DJ playing house, jersey club, edits, and late-night sets.', upcoming: 1, followers: '860', type: 'artist', category: 'Student DJ', links: [
+  { label: 'SoundCloud', url: 'https://soundcloud.com', icon: '🎵' },
+  { label: 'Instagram', url: 'https://instagram.com', icon: '📸' },
+  { label: 'YouTube', url: 'https://youtube.com', icon: '▶️' }
+] }
   },
 
   // 13: The Georgetown Phantoms (ID 14)
@@ -545,7 +560,11 @@ export const LigoEvents = [
     ],
     socialProof: { going: 436, connections: 27 },
     tags: ['A Cappella', 'Pop', 'R&B', 'Live Music', 'Ticketed', 'Georgetown'],
-    organizer: { name: 'The Georgetown Phantoms', desc: 'Georgetown’s all-gender a cappella group performing pop, rock, and R&B since 1988.', upcoming: 4, followers: '2,760' }
+    organizer: { name: 'The Georgetown Phantoms', desc: 'Georgetown’s all-gender a cappella group performing pop, rock, and R&B since 1988.', upcoming: 4, followers: '2,760', type: 'club', category: 'A Cappella', memberCount: 22, links: [
+  { label: 'YouTube', url: 'https://youtube.com', icon: '▶️' },
+  { label: 'Spotify', url: 'https://open.spotify.com', icon: '🎧' },
+  { label: 'Instagram', url: 'https://instagram.com', icon: '📸' }
+] }
   },
 
   // 13.5: Fall Rush Kickoff (ID 30) - Marcus's org
@@ -576,7 +595,7 @@ export const LigoEvents = [
     goingCount: 63,
     pendingCount: 22,
     tags: ['Greek', 'Rush', 'Members Only'],
-    organizer: { name: 'Sigma Phi Epsilon', desc: 'Georgetown’s Sigma Phi Epsilon fraternity.', upcoming: 2, followers: '2,760' }
+    organizer: { name: 'Sigma Phi Epsilon', desc: 'Georgetown’s Sigma Phi Epsilon fraternity.', upcoming: 2, followers: '2,760', type: 'club', category: 'Greek Life', memberCount: 85 }
   },
 
   // 13.4: Saturday Darty
@@ -608,7 +627,7 @@ export const LigoEvents = [
     goingCount: 84,
     pendingCount: 0,
     tags: ['Greek', 'Social', 'Day Party'],
-    organizer: { name: 'Sigma Phi Epsilon', desc: 'Georgetown’s Sigma Phi Epsilon fraternity.', upcoming: 3, followers: '2,760' }
+    organizer: { name: 'Sigma Phi Epsilon', desc: 'Georgetown’s Sigma Phi Epsilon fraternity.', upcoming: 3, followers: '2,760', type: 'club', category: 'Greek Life', memberCount: 85 }
   },
 
   // 13.6: Brotherhood Retreat (ID 31)
@@ -639,7 +658,7 @@ export const LigoEvents = [
     goingCount: 45,
     pendingCount: 40,
     tags: ['Greek', 'Retreat', 'Members Only'],
-    organizer: { name: 'Sigma Phi Epsilon', desc: 'Georgetown’s Sigma Phi Epsilon fraternity.', upcoming: 2, followers: '2,760' }
+    organizer: { name: 'Sigma Phi Epsilon', desc: 'Georgetown’s Sigma Phi Epsilon fraternity.', upcoming: 2, followers: '2,760', type: 'club', category: 'Greek Life', memberCount: 85 }
   },
 
   // 0: No Wahala (was ID 6)
@@ -682,7 +701,8 @@ export const LigoEvents = [
       name: 'African Society of Georgetown',
       desc: 'Creating community through African culture, conversation, music, and celebration.',
       upcoming: 5,
-      followers: '2,650'
+      followers: '2,650',
+      type: 'club', category: 'Cultural Organization', memberCount: 95
     }
   },
 
@@ -728,7 +748,8 @@ export const LigoEvents = [
       name: 'Georgetown South Asian Society',
       desc: 'Celebrating South Asian culture, identity, community, and creative expression.',
       upcoming: 6,
-      followers: '4,300'
+      followers: '4,300',
+      type: 'club', category: 'Cultural Organization', memberCount: 200
     }
   },
 
@@ -772,7 +793,11 @@ export const LigoEvents = [
       name: 'Georgetown Program Board',
       desc: 'Student-led entertainment and campus programming at Georgetown University.',
       upcoming: 8,
-      followers: '8,900'
+      followers: '8,900',
+      type: 'club', category: 'Campus Programming', memberCount: 45, links: [
+  { label: 'Instagram', url: 'https://instagram.com', icon: '📸' },
+  { label: 'Website', url: 'https://georgetown.edu/gpb', icon: '🌐' }
+]
     }
   },
 
@@ -781,13 +806,15 @@ export const LigoEvents = [
     id: 20,
     title: 'THE VAULT',
     subtitle: 'GUASFCU Holiday Formal',
-    date: 'SAT · 12.05 · 9:00 PM',
     image: '/Posh/GUAFSCU.png',
     hostAvatar: 'GUA',
     hostAvatarColor: '#123712',
     hostName: 'GUASFCU',
     location: 'The Ritz-Carlton Georgetown, Washington, D.C.',
-    timeFull: 'Sat, Dec 5 at 9:00 PM - 12:30 AM (EST)',
+    visibility: 'invite_only',
+    currentUserStatus: 'pending',
+    relativeDays: 3,
+    time: '9:00 PM',
     description: [
       "The books are closed for the night.",
       "GUASFCU invites interns, leadership, alumni, and registered guests to **The Vault**, its end-of-semester holiday formal.",
@@ -811,7 +838,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 284, connections: 23 },
     tags: ['Formal', 'Finance', 'Members Only', 'Alumni', 'Dance', 'Georgetown'],
-    organizer: { name: 'GUASFCU', desc: 'A student-run federal credit union providing financial services and hands-on professional experience at Georgetown.', upcoming: 8, followers: '3,460' }
+    organizer: { name: 'GUASFCU', desc: 'A student-run federal credit union providing financial services and hands-on professional experience at Georgetown.', upcoming: 8, followers: '3,460', type: 'club', category: 'Finance & Professional' }
   },
 
   // 17: Georgetown University Jazz Ensemble (ID 18)
@@ -846,7 +873,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 236, connections: 12 },
     tags: ['Jazz', 'Big Band', 'Live Music', 'D.C. Culture', 'Free', 'Georgetown'],
-    organizer: { name: 'Georgetown University Jazz Ensemble', desc: 'Performing classic and contemporary big-band music at Georgetown and throughout Washington, D.C.', upcoming: 3, followers: '1,310' }
+    organizer: { name: 'Georgetown University Jazz Ensemble', desc: 'Performing classic and contemporary big-band music at Georgetown and throughout Washington, D.C.', upcoming: 3, followers: '1,310', type: 'club', category: 'Music Ensemble', memberCount: 28 }
   },
 
   // 18: Georgetown University Orchestra (ID 19)
@@ -881,7 +908,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 528, connections: 18 },
     tags: ['Orchestra', 'Classical Music', 'Symphonic', 'Gaston Hall', 'Free', 'Georgetown'],
-    organizer: { name: 'Georgetown University Orchestra', desc: 'Georgetown’s student orchestra performing symphonic repertoire in fall and spring concerts.', upcoming: 2, followers: '1,720' }
+    organizer: { name: 'Georgetown University Orchestra', desc: 'Georgetown’s student orchestra performing symphonic repertoire in fall and spring concerts.', upcoming: 2, followers: '1,720', type: 'club', category: 'Music Ensemble' }
   },
 
   // 9: The Capitol G's (ID 10)
@@ -916,7 +943,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 173, connections: 14 },
     tags: ['A Cappella', 'Live Music', 'Performance', 'Campus', 'Free', 'Georgetown'],
-    organizer: { name: 'The Capitol G’s', desc: 'Georgetown’s contemporary a cappella group.', upcoming: 3, followers: '1,980' }
+    organizer: { name: 'The Capitol G’s', desc: 'Georgetown’s contemporary a cappella group.', upcoming: 3, followers: '1,980', type: 'club', category: 'A Cappella' }
   },
 
   // 22: Georgetown University Student Association (ID 23)
@@ -953,7 +980,7 @@ export const LigoEvents = [
     ],
     socialProof: { going: 326, connections: 34 },
     tags: ['Student Government', 'Town Hall', 'Campus Issues', 'Civic Engagement', 'Free', 'Georgetown'],
-    organizer: { name: 'Georgetown University Student Association', desc: 'Representing undergraduate student interests and coordinating advocacy, services, and campus initiatives.', upcoming: 10, followers: '6,820' }
+    organizer: { name: 'Georgetown University Student Association', desc: 'Representing undergraduate student interests and coordinating advocacy, services, and campus initiatives.', upcoming: 10, followers: '6,820', type: 'club', category: 'Student Government', memberCount: 52 }
   },
 
   // 20: Latin American Student Association (ID 21)
@@ -990,59 +1017,12 @@ export const LigoEvents = [
     ],
     socialProof: { going: 384, connections: 26 },
     tags: ['Latin America', 'Culture', 'Fashion', 'Food', 'Live Performance', 'Georgetown'],
-    organizer: { name: 'Georgetown Latin American Student Association', desc: 'Promoting Latin American cultures through academic, cultural, social, and service programming.', upcoming: 6, followers: '3,180' }
+    organizer: { name: 'Georgetown Latin American Student Association', desc: 'Promoting Latin American cultures through academic, cultural, social, and service programming.', upcoming: 6, followers: '3,180', type: 'club', category: 'Cultural Organization', memberCount: 120 }
   },
 
   // ----------------------------------------------------
   // PRIVATE EVENTS FOR MY EVENTS / INVITES TAB
   // ----------------------------------------------------
-  {
-    id: 101,
-    title: "MAYA'S 20TH: AFTER HOURS",
-    subtitle: 'Invited by Maya Thompson',
-    image: '/Posh/Mayas20.png',
-    hostAvatar: 'MT',
-    hostAvatarColor: '#FF0055',
-    hostName: 'Maya Thompson',
-    location: 'Private residence, Burleith',
-    visibility: 'private',
-    currentUserStatus: 'pending',
-    relativeDays: 2,
-    time: '9:30 PM',
-    description: [
-      "Twenty deserves a proper night out — or in this case, a proper night in.",
-      "Come celebrate Maya's birthday with drinks, cake, music, and an apartment full of people she loves. The night starts upstairs with birthday drinks and dessert, then the rest of the house opens up and it gets loud. Dress like the pictures are getting posted.",
-      "This is a private party for friends and invited guests. Please respond so we can plan for numbers — and so the address doesn't have to float around publicly. The exact address and entry details unlock after your RSVP is confirmed."
-    ],
-    details: [
-      { label: "Dress code", value: "going-out attire" },
-      { label: "Bring", value: "nothing required — a bottle or mixer is welcome" },
-      { label: "Transport", value: "Walking or rideshare recommended; street parking in Burleith is a myth" }
-    ],
-    schedule: [
-      { label: "Cake & drinks", value: "9:30 PM" },
-      { label: "Music starts", value: "10:00 PM" },
-      { label: "Last entry", value: "11:30 PM" },
-      { label: "Ends", value: "~1:30 AM" }
-    ],
-    tickets: [
-      { name: 'Admission', price: 'Free', desc: 'Complimentary. No ticket — an accepted invitation is required for entry.' }
-    ],
-    rules: [
-      "Private event. Invitation required.",
-      "Georgetown students and personally invited guests only.",
-      "The street address stays hidden until you respond Going."
-    ],
-    guestPolicy: "Invitations are non-transferable. No open plus-ones — text Maya directly if you want to bring someone. Don't share the address or the invite link.",
-    socialProof: { going: 47, pending: 12, connections: 8 },
-    tags: ['Birthday', 'House Party', 'Private', 'Burleith', 'Nightlife'],
-    organizer: {
-      name: 'Maya Thompson',
-      desc: 'Georgetown sophomore studying Culture and Politics. Hosting dinners, birthdays, and any gathering that gives people a reason to dress up.',
-      upcoming: 3,
-      followers: '286' // Using followers as connections in EventDetailView
-    }
-  },
   {
     id: 102,
     title: "SAE WINTER FORMAL: MIDNIGHT IN MONACO",
@@ -1089,7 +1069,8 @@ export const LigoEvents = [
       name: 'Sigma Alpha Epsilon',
       desc: 'A private Georgetown social organization centered on brotherhood, campus life, and social programming.',
       upcoming: 4,
-      followers: '721'
+      followers: '721',
+      type: 'club', category: 'Greek Life'
     }
   },
   {
@@ -1139,7 +1120,8 @@ export const LigoEvents = [
       name: 'The 1789 Society',
       desc: 'A private Georgetown society preserving friendship, discretion, and campus tradition.',
       upcoming: 2,
-      followers: '96'
+      followers: '96',
+      type: 'club', category: 'Social Society'
     }
   },
   {
@@ -1188,7 +1170,8 @@ export const LigoEvents = [
       name: 'The Rose Committee',
       desc: 'A private Georgetown social collective hosting dinners, parties, and small-format cultural events.',
       upcoming: 5,
-      followers: '614'
+      followers: '614',
+      type: 'club', category: 'Social Society'
     }
   },
   {
@@ -1235,7 +1218,8 @@ export const LigoEvents = [
       name: 'Caroline Lee',
       desc: 'Georgetown sophomore studying Marketing and Art History. Usually planning the dinner, the trip, or the after-party.',
       upcoming: 4,
-      followers: '341' // Person-hosted
+      followers: '341', // Person-hosted
+      type: 'person', category: 'Student Host'
     }
   },
   {
@@ -1285,7 +1269,8 @@ export const LigoEvents = [
       name: 'GUASFCU',
       desc: 'A student-run financial institution providing leadership experience, financial services, and lifelong alumni connection.',
       upcoming: 7,
-      followers: '2,850'
+      followers: '2,850',
+      type: 'club', category: 'Finance & Professional'
     }
   }
 ];

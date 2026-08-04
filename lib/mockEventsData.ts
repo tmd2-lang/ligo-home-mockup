@@ -79,7 +79,7 @@ export type EventItem = {
   rules?: string[];
   socialProof?: { going: number; connections: number };
   tags?: string[];
-  organizer?: { name: string; desc: string; upcoming: number; followers: string };
+  organizer?: { name: string; desc: string; upcoming: number; followers: string; type?: 'club' | 'artist' | 'person'; category?: string; memberCount?: number; links?: { label: string; url: string; icon: string }[]; coverImage?: string };
   date?: string;
   timeFull?: string;
   
@@ -264,7 +264,7 @@ export const INITIAL_EVENTS: EventItem[] = LigoEvents.map(e => {
     visibility: e.visibility || (e.rules?.some((r: string) => r.toLowerCase().includes('invite')) ? 'invite_only' : 'public'),
     eligibleCampuses: ['georgetown'],
     source: 'campus',
-    currentUserStatus: e.currentUserStatus || (e.id === 5 || e.id === 20 ? 'invited' : null),
+    currentUserStatus: e.currentUserStatus || (e.id === 5 ? 'invited' : null),
     currentUserAccessReason: '',
     goingCount: e.socialProof?.going || Math.floor(Math.random() * 500),
     image: e.image,

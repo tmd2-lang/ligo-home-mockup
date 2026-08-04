@@ -16,13 +16,17 @@ export function HomeFeedView({
   user, 
   orgs, 
   onOpenEvent, 
-  onOpenOrgWorkspace
+  onOpenOrgWorkspace,
+  onOpenProfile,
+  onCreateProfile
 }: { 
   events: EventItem[], 
   user: MockUser, 
   orgs: Record<string, Organization>,
   onOpenEvent: (id: string) => void,
-  onOpenOrgWorkspace: (orgId: string) => void
+  onOpenOrgWorkspace: (orgId: string) => void,
+  onOpenProfile?: (orgId: string) => void,
+  onCreateProfile?: () => void
 }) {
   const [activeCategory, setActiveCategory] = useState<{ title: string, events: EventItem[] } | null>(null);
 
@@ -71,7 +75,15 @@ export function HomeFeedView({
           <EVI.Calendar style={{ width: 32, height: 32, color: 'rgba(20,17,13,0.3)' }} />
         </div>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 600, color: '#14110D', margin: '0 0 12px', letterSpacing: '-0.02em', textAlign: 'center' }}>No upcoming events</h2>
-        <p style={{ margin: 0, color: 'rgba(20,17,13,0.5)', fontSize: 16, lineHeight: 1.5, textAlign: 'center', maxWidth: 280 }}>It's quiet on campus right now. Check back later to see what's happening around Georgetown.</p>
+        <p style={{ margin: 0, color: 'rgba(20,17,13,0.5)', fontSize: 16, lineHeight: 1.5, textAlign: 'center', maxWidth: 280, marginBottom: 32 }}>It's quiet on campus right now. Check back later to see what's happening around Georgetown.</p>
+        {onCreateProfile && (
+          <button 
+            onClick={onCreateProfile}
+            style={{ padding: '16px 32px', background: 'var(--ink)', color: '#fff', fontSize: 15, fontWeight: 600, borderRadius: 100, border: 'none', cursor: 'pointer', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}
+          >
+            Create Host Profile
+          </button>
+        )}
       </div>
     );
   }
