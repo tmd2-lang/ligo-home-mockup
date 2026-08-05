@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useMemo, useRef } from "react";
-import { INITIAL_EVENTS, MOCK_ORGANIZATIONS, EventItem, MockUser, GPB_SEED_EVENTS } from "../lib/mockEventsData";
+import { INITIAL_EVENTS, MOCK_ORGANIZATIONS, EventItem, MockUser, Organization, GPB_SEED_EVENTS } from "../lib/mockEventsData";
 import { setUserRsvp, withResolvedStatuses, type UserRsvpStore } from "../lib/eventRsvps";
 import { HomeFeedView } from "./events/HomeFeedView";
 import { InvitesView } from "./events/InvitesView";
@@ -27,8 +27,11 @@ const DEMO_ORG_MEMBERS: Record<string, string[]> = {
   phantoms: ['sofia'],
 };
 
-export function EventsScreen({ onTab }: any) {
-  const [activeUserId] = usePersistentState('ligo:active_user', 'marcus');
+export function EventsScreen({ onTab, overrideUserId, siloMode }: { onTab?: any; overrideUserId?: string; siloMode?: boolean }) {
+  const [persistedUserId] = usePersistentState('ligo:active_user', 'marcus');
+  const activeUserId = overrideUserId || persistedUserId;
+  const [customOrgs, setCustomOrgs] = usePersistentState<Record<string, any>>('ligo:custom_orgs_v3', {});
+  const [customMemberships, setCustomMemberships] = usePersistentState<Record<string, any[]>>('ligo:custom_memberships_v3', {});
 
   // Dynamic user based on profile state
   const activeUser: MockUser = {
@@ -49,7 +52,6 @@ export function EventsScreen({ onTab }: any) {
     ] : []
   };
 
-  // Keep mock data as-is for Charlotte to see the new fixture events
   const dynamicInitialEvents = INITIAL_EVENTS;
 
   const [events, setEvents] = usePersistentState<EventItem[]>('ligo:all_events_v6', dynamicInitialEvents);
@@ -66,25 +68,36 @@ export function EventsScreen({ onTab }: any) {
   const [activeProfileOrgId, setActiveProfileOrgId] = useState<string | null>(null);
   const [profileReturnView, setProfileReturnView] = useState<EventsView>('main');
   
+  // Host & Registration modal states
+  const [hostActionSheetOpen, setHostActionSheetOpen] = useState(false);
+  const [createProfileType, setCreateProfileType] = useState<'artist' | 'club' | 'person' | null>(null);
+
   const [showSwipeableInvites, setShowSwipeableInvites] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [importContactsOpen, setImportContactsOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const lastViewedUserId = useRef<string | null>(null);
 
+  // Combine static orgs with custom-created orgs/artists
+  const allOrgs = useMemo<Record<string, Organization>>(() => ({
+    ...MOCK_ORGANIZATIONS,
+    ...customOrgs
+  }), [customOrgs]);
+
+  // Combine user orgs
+  const userOrgsList = useMemo(() => {
+    const base = activeUser.organizations || [];
+    const custom = customMemberships[activeUserId] || [];
+    return [...base, ...custom];
+  }, [activeUser.organizations, customMemberships, activeUserId]);
+
   // Per-user view of events (membership + invites + explicit RSVPs)
   const viewEvents = useMemo(
     () => withResolvedStatuses(events, activeUserId, activeUser, rsvpStore),
     [events, activeUserId, activeUser, rsvpStore],
   );
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
 
-  // Vercel (Linux) is case-sensitive; older cached rows can still point at `/posh/...`
-  // while files live under `/Posh/...`. Keep cover URLs in sync with source data.
-  // Also remap legacy hostOrganizationId values (e.g. GPB avatar code → program_board).
   React.useEffect(() => {
-    const kickoffCopy =
-      'Join the full Georgetown Program Board for our fall programming kickoff. We’ll walk through the semester calendar, assign initial event teams, review production timelines, and cover expectations for Programming, Marketing, and Production. Dinner will be provided, and all members should arrive ready to choose at least one September or October event to support.';
     const byId = new Map(INITIAL_EVENTS.map(e => [String(e.id), e]));
 
     const needsFix = events.some(e => {
@@ -96,7 +109,6 @@ export function EventsScreen({ onTab }: any) {
         && (e.hostOrganizationId === 'program_board' || e.hostOrganizationId === 'GPB');
       if (isKickoff && !(e.image || e.flyerUrl)) return true;
       if (isKickoff && !(e.description || e.summary)) return true;
-      // Created events saved flyerUrl but not image
       if (e.flyerUrl && !e.image) return true;
       if (e.summary && !e.description) return true;
       return false;
@@ -118,43 +130,38 @@ export function EventsScreen({ onTab }: any) {
         const isKickoff = (e.name || '').toLowerCase().includes('kickoff')
           && (hostOrganizationId === 'program_board');
         if (isKickoff) {
-          if (!image) image = e.flyerUrl || '/Posh/GPB2.png';
-          if (!description) description = e.summary || kickoffCopy;
+          if (!image) image = '/Posh/GPB.png';
+          if (!description) description = 'Georgetown Program Board Fall Kickoff meeting.';
         }
-
-        if (
-          image === e.image
-          && (e.flyerUrl || image) === e.flyerUrl
-          && description === e.description
-          && hostOrganizationId === e.hostOrganizationId
-          && (e.summary || description) === e.summary
-        ) {
-          return e;
-        }
-
         return {
           ...e,
-          image,
-          flyerUrl: e.flyerUrl || image,
-          description,
-          summary: e.summary || (typeof description === 'string' ? description : e.summary),
           hostOrganizationId,
+          image,
+          description: description || e.description,
+          summary: description || e.summary,
         };
       });
       const stillMissing = GPB_SEED_EVENTS.filter(seed => !fixed.some(e => e.id === seed.id));
-      return stillMissing.length ? [...fixed, ...stillMissing] : fixed;
+      return [...fixed, ...stillMissing];
     });
   }, [events, setEvents]);
 
-  const pendingInvites = viewEvents.filter(e =>
-    e.currentUserStatus === 'pending'
-    && ['private', 'members_only', 'invite_only'].includes(e.visibility)
-    && e.publishStatus !== 'draft'
-    && e.publishStatus !== 'planning'
-  );
+  // Invites pending swipe/decision
+  const pendingInvites = useMemo(() => {
+    return viewEvents.filter(e => {
+      const explicit = rsvpStore[String(e.id)]?.[activeUserId];
+      if (explicit) return false;
+      return e.currentUserStatus === 'invited' || e.currentUserStatus === 'pending';
+    });
+  }, [viewEvents, rsvpStore, activeUserId]);
 
   React.useEffect(() => {
-    // When active user changes, trigger stack if they have invites
+    // Siloed admin demos skip the consumer Pass / I'm In stack
+    if (siloMode) {
+      setShowSwipeableInvites(false);
+      return;
+    }
+    // When active user changes or on first mount, trigger stack if they have pending invites
     if (activeUserId !== lastViewedUserId.current) {
       if (pendingInvites.length > 0) {
         setShowSwipeableInvites(true);
@@ -164,111 +171,88 @@ export function EventsScreen({ onTab }: any) {
       lastViewedUserId.current = activeUserId;
       setLiveActivityEventId(null);
     }
-  }, [activeUserId, pendingInvites.length]);
+  }, [activeUserId, pendingInvites.length, siloMode]);
 
-  function flash(msg: string) { setToast(msg); setTimeout(() => setToast(null), 2600); }
+  const flash = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
 
-  function handleRsvp(id: string, action: 'going'|'maybe'|'declined'|null) {
-    const eventId = String(id);
-    // null = undo → clear explicit RSVP so membership invites fall back to pending
-    setRsvpStore(prev => setUserRsvp(prev, activeUserId, eventId, action));
-    if (action === 'going') {
-      setLiveActivityEventId(eventId);
-      flash(`You're in — Live Activity on`);
-    } else {
-      if (liveActivityEventId === eventId) setLiveActivityEventId(null);
-      if (action) flash(`RSVP updated to ${action}`);
-      else flash('RSVP removed');
+  const handleRsvp = (eventId: string, status: 'going' | 'declined' | 'maybe' | 'not_going' | 'pending' | 'hosting' | null) => {
+    const normStatus = status === 'not_going' ? 'declined' : status;
+    setRsvpStore(prev => setUserRsvp(prev, eventId, activeUserId, normStatus as any));
+    const evt = events.find(e => String(e.id) === String(eventId));
+    const title = evt?.name || 'Event';
+    if (normStatus === 'going') {
+      setLiveActivityEventId(String(eventId));
+      flash(`Going to ${title}`);
+    } else if (normStatus === 'declined') {
+      if (liveActivityEventId === String(eventId)) setLiveActivityEventId(null);
+      flash(`Declined ${title}`);
     }
-  }
+  };
 
-  function handlePublish(newEvent: Partial<EventItem>, isDraft: boolean) {
+  const handlePublish = (e: Partial<EventItem>, isDraft: boolean) => {
+    const hostOrgId = activeUser.organizations.find((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))?.organizationId || 'sigma_phi_epsilon';
+    const hostOrg = allOrgs[hostOrgId] || MOCK_ORGANIZATIONS.sigma_phi_epsilon;
+    const isMembersOnly = e.visibility === 'members_only';
+    const isInviteOnly = e.visibility === 'invite_only';
+    const orgRoster = DEMO_ORG_MEMBERS[hostOrgId] || [];
+
+    const newEvent: EventItem = {
+      id: `new-${Date.now()}`,
+      name: e.name || "Untitled Event",
+      summary: e.summary || "",
+      description: e.description || e.summary || "",
+      day: e.day || "FRI",
+      dateLabel: e.dateLabel || "OCT 25",
+      time: e.time || "10:00 PM",
+      venue: (e as any).venue || (e as any).location || "Georgetown Campus",
+      category: e.category || "Campus Event",
+      host: hostOrg.name,
+      hostOrganizationId: hostOrgId,
+      hostAvatar: hostOrg.initials,
+      hostAvatarColor: '#14110D',
+      color: e.color || "#14110D",
+      visibility: e.visibility || "public",
+      status: isDraft ? 'draft' : 'published',
+      publishedAt: isDraft ? undefined : new Date().toISOString(),
+      goingCount: 1,
+      currentUserStatus: 'hosting',
+      flyerUrl: e.flyerUrl,
+      image: e.flyerUrl || e.image,
+      isHost: true,
+      eligibleCampuses: ['georgetown'],
+      source: 'campus',
+      ...(e as any),
+    };
+
+    setEvents(prev => [newEvent, ...prev]);
     setSheetOpen(false);
+
     if (isDraft) {
       flash('Draft saved');
-      return;
-    }
-
-    let finalPendingCount = 0;
-    const finalEvent = newEvent as EventItem;
-    finalEvent.creatorId = activeUserId;
-    finalEvent.invitedUserIds = [];
-
-    const activeOrg = MOCK_ORGANIZATIONS[finalEvent.hostOrganizationId];
-    const demoMembers = DEMO_ORG_MEMBERS[finalEvent.hostOrganizationId] || [];
-
-    if (finalEvent.visibility === 'members_only') {
-      if (activeOrg.memberCount === 0) {
-        setImportContactsOpen(true);
-        return;
-      }
-      const subgroups = finalEvent.selectedSubgroups || [];
-      const allMembers = activeOrg.groups.find((g: any) => g.name === 'All Members');
-      if (allMembers && subgroups.includes(allMembers.id)) {
-        finalPendingCount = allMembers.memberCount;
-      } else {
-        let count = 0;
-        for (const sg of subgroups) {
-          const g = activeOrg.groups.find((x: any) => x.id === sg);
-          if (g) count += g.memberCount;
-        }
-        finalPendingCount = count;
-      }
-      // Invite other demo profiles in this org (membership also implies pending)
-      finalEvent.invitedUserIds = demoMembers.filter(id => id !== activeUserId);
-      finalEvent.goingCount = 1;
-      finalEvent.currentUserStatus = 'hosting';
-
-    } else if (finalEvent.visibility === 'invite_only') {
-      const guests = finalEvent.selectedGuests || [];
-      let count = 0;
-      const ids: string[] = [];
-      for (const g of guests) {
-        if (g.type === 'user') { count += 1; ids.push(g.id); }
-        if (g.type === 'org') {
-          const o = MOCK_ORGANIZATIONS[g.id];
-          if (o) count += o.memberCount;
-          const orgDemo = DEMO_ORG_MEMBERS[g.id] || [];
-          ids.push(...orgDemo.filter(id => id !== activeUserId));
-        }
-      }
-      finalPendingCount = count;
-      finalEvent.invitedUserIds = ids.filter((id, i) => ids.indexOf(id) === i);
-      finalEvent.goingCount = 1;
-      finalEvent.currentUserStatus = 'hosting';
-
     } else {
-      finalPendingCount = 0;
-      finalEvent.goingCount = 1;
-      finalEvent.currentUserStatus = 'hosting';
+      setActiveEventId(newEvent.id);
+      setView('publish-confirmation');
     }
-
-    finalEvent.pendingCount = finalPendingCount;
-
-    INITIAL_EVENTS.push(finalEvent);
-    setEvents(prev => [...prev, finalEvent]);
-    
-    setActiveEventId(finalEvent.id);
-    setSheetOpen(false);
-    setView('publish-confirmation');
-  }
+  };
 
   const simulateTimeJumpAndGoToDashboard = () => {
     if (activeEventId) {
-      setEvents(prev => prev.map(e => {
-        if (e.id === activeEventId) {
+      setEvents(prev => prev.map(evt => {
+        if (evt.id === activeEventId) {
           return {
-            ...e,
-            id: typeof e.id === 'string' ? e.id.replace('new-', 'jump-') : e.id, // Remove new- prefix so it gets established activity
-            goingCount: e.capacity ? Math.floor(e.capacity * 0.8) : 84,
-            pendingCount: 12,
-            declinedCount: 4,
+            ...evt,
+            id: `jump-${evt.id}`,
+            goingCount: (evt.goingCount || 0) + 14,
+            invitedCount: Math.max((evt as any).invitedCount || 0, 18),
+            relativeDays: 0,
+            time: 'LIVE NOW',
           };
         }
-        return e;
+        return evt;
       }));
-      // Wait a tick for state to update, or just change view immediately
-      // Actually we need to change activeEventId to the new 'jump-' prefix if we renamed it!
       const newId = typeof activeEventId === 'string' ? activeEventId.replace('new-', 'jump-') : activeEventId;
       setActiveEventId(newId);
     }
@@ -276,7 +260,7 @@ export function EventsScreen({ onTab }: any) {
   };
 
   const activeEvent = activeEventId ? viewEvents.find(e => e.id === activeEventId) : null;
-  const activeOrg = activeOrgId ? MOCK_ORGANIZATIONS[activeOrgId] : null;
+  const activeOrg = activeOrgId ? allOrgs[activeOrgId] : null;
   const liveActivityEvent = liveActivityEventId
     ? viewEvents.find(e => String(e.id) === liveActivityEventId && (e.currentUserStatus === 'going' || e.currentUserStatus === 'hosting'))
     : null;
@@ -285,7 +269,7 @@ export function EventsScreen({ onTab }: any) {
   const activeProfileEvent = activeProfileOrgId
     ? viewEvents.find(e => e.hostOrganizationId === activeProfileOrgId || String(e.id) === activeProfileOrgId)
     : null;
-  const activeProfileOrganizer = activeProfileEvent?.organizer || (activeProfileOrgId ? MOCK_ORGANIZATIONS[activeProfileOrgId] as any : null);
+  const activeProfileOrganizer = activeProfileEvent?.organizer || (activeProfileOrgId ? allOrgs[activeProfileOrgId] as any : null);
   const profileEvents = activeProfileOrgId
     ? viewEvents.filter(e => {
         const matchesOrg = e.hostOrganizationId === activeProfileOrgId;
@@ -295,29 +279,33 @@ export function EventsScreen({ onTab }: any) {
     : [];
 
   const openProfile = (eventOrOrgId: string, returnView?: EventsView) => {
-    // Find the event to extract organizer data
     const event = viewEvents.find(e => String(e.id) === eventOrOrgId || e.hostOrganizationId === eventOrOrgId);
     if (event?.organizer) {
       setActiveProfileOrgId(event.hostOrganizationId || eventOrOrgId);
       setProfileReturnView(returnView || view);
       setView('public-profile');
+    } else if (allOrgs[eventOrOrgId]) {
+      setActiveProfileOrgId(eventOrOrgId);
+      setProfileReturnView(returnView || view);
+      setView('public-profile');
     }
   };
 
-  const managedOrgs = activeUser.organizations
+  const managedOrgs = userOrgsList
     .filter((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))
-    .map((o: any) => MOCK_ORGANIZATIONS[o.organizationId])
+    .map((o: any) => allOrgs[o.organizationId])
     .filter(Boolean);
   const isAdmin = managedOrgs.length > 0;
-  const memberOrgs = activeUser.organizations
+  
+  const memberOrgs = userOrgsList
     .map((o: any) => ({
       ...o,
-      org: MOCK_ORGANIZATIONS[o.organizationId],
+      org: allOrgs[o.organizationId],
     }))
     .filter((o: any) => o.org);
   const hasClubs = memberOrgs.length > 0;
   const compactTabs = isAdmin || hasClubs;
-  
+
   return (
     <div className="screen" style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: 'var(--ligo-paper)' }}>
       
@@ -361,13 +349,15 @@ export function EventsScreen({ onTab }: any) {
                 <h1 style={{ fontSize: 32, fontWeight: 500, margin: 0, fontFamily: '"Bricolage Grotesque", sans-serif', letterSpacing: '-1px', color: '#111' }}>
                   What's Happening<br/>on Campus
                 </h1>
+                
+                {/* Header Action: Search */}
                 <div style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', color: '#111' }}>
                   <EVI.Search style={{ width: 24, height: 24 }} />
                 </div>
               </div>
             </div>
             
-            {/* Top Tab Bar */}
+            {/* Top Tab Bar: Explore | My Events | Clubs | (Manage) */}
             <div style={{ display: 'flex', gap: compactTabs ? 16 : 24, padding: '0 20px' }}>
               <button 
                 onClick={() => setMainTab('home')} 
@@ -388,14 +378,13 @@ export function EventsScreen({ onTab }: any) {
                 {mainTab === 'invites' && <div style={{ position: 'absolute', bottom: -1, left: 0, right: 0, height: 2, background: 'var(--ink)', borderRadius: 2 }} />}
               </button>
 
-              {hasClubs && (
-                <button 
-                  onClick={() => setMainTab('clubs')} 
-                  style={{ paddingBottom: 16, fontSize: compactTabs ? 15 : 16, fontWeight: 500, color: mainTab === 'clubs' ? 'var(--ink)' : 'rgba(20,17,13,0.4)', background: 'none', border: 'none', cursor: 'pointer', position: 'relative' }}>
-                  Clubs
-                  {mainTab === 'clubs' && <div style={{ position: 'absolute', bottom: -1, left: 0, right: 0, height: 2, background: 'var(--ink)', borderRadius: 2 }} />}
-                </button>
-              )}
+              {/* Clubs Tab is ALWAYS visible */}
+              <button 
+                onClick={() => setMainTab('clubs')} 
+                style={{ paddingBottom: 16, fontSize: compactTabs ? 15 : 16, fontWeight: 500, color: mainTab === 'clubs' ? 'var(--ink)' : 'rgba(20,17,13,0.4)', background: 'none', border: 'none', cursor: 'pointer', position: 'relative' }}>
+                Clubs
+                {mainTab === 'clubs' && <div style={{ position: 'absolute', bottom: -1, left: 0, right: 0, height: 2, background: 'var(--ink)', borderRadius: 2 }} />}
+              </button>
 
               {isAdmin && (
                 <button 
@@ -410,16 +399,20 @@ export function EventsScreen({ onTab }: any) {
               )}
             </div>
           </div>
+          
           <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
             {mainTab === 'home' && (
               <HomeFeedView 
                 events={activeUser.id === 'ligo' ? [] : viewEvents} 
                 user={activeUser} 
-                orgs={MOCK_ORGANIZATIONS}
+                orgs={allOrgs}
                 onOpenEvent={(id) => { setActiveEventId(id); setDetailReturnView('main'); setView('event-detail'); }}
                 onOpenOrgWorkspace={(id) => { setActiveOrgId(id); setSkipOrgWelcome(false); setView('organization'); }}
                 onOpenProfile={(orgId) => openProfile(orgId, 'main')}
-                onCreateProfile={() => setView('create-profile')}
+                onCreateProfile={() => {
+                  setCreateProfileType(null);
+                  setView('create-profile');
+                }}
               />
             )}
 
@@ -433,49 +426,248 @@ export function EventsScreen({ onTab }: any) {
             )}
 
             {mainTab === 'clubs' && (
-              <div className="screen-fade" style={{ padding: '8px 20px 120px' }}>
-                <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', fontWeight: 500, marginBottom: 20, marginTop: 8 }}>
-                  Your organizations on campus
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {memberOrgs.map(({ org, role }: any) => (
+              <div className="screen-fade" style={{ padding: '16px 20px 120px' }}>
+                {hasClubs ? (
+                  /* USER HAS CLUBS / DJ HUBS */
+                  <div>
+                    <div style={{ fontSize: 13, color: 'rgba(20,17,13,0.5)', fontWeight: 500, marginBottom: 16 }}>
+                      Your organizations & creator hubs
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {memberOrgs.map(({ org, role }: any) => {
+                        const isDjOrArtist = org.type === 'artist' || org.name.toLowerCase().includes('dj');
+                        return (
+                          <button
+                            key={org.id}
+                            onClick={() => {
+                              if (isDjOrArtist) {
+                                openProfile(org.id, 'main');
+                              } else {
+                                setActiveOrgId(org.id);
+                                setMemberClubScreen('home');
+                                setSkipClubWelcome(false);
+                                setView('member-club');
+                              }
+                            }}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 16,
+                              padding: 16,
+                              background: '#fff',
+                              borderRadius: 20,
+                              boxShadow: '0 4px 16px rgba(20,17,13,0.04)',
+                              border: '1px solid rgba(20,17,13,0.06)',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                            }}
+                          >
+                            <div style={{
+                              width: 48, height: 48, borderRadius: 14,
+                              background: org.avatarColor || '#14110D', color: '#fff',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontSize: isDjOrArtist ? 20 : 13, fontWeight: 600, letterSpacing: '0.04em', flexShrink: 0
+                            }}>
+                              {isDjOrArtist ? '🎧' : (org.initials || org.name.charAt(0))}
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <span style={{ fontSize: 16, fontWeight: 600, color: '#14110D' }}>{org.name}</span>
+                                {isDjOrArtist && (
+                                  <span style={{ fontSize: 11, fontWeight: 600, color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '2px 8px', borderRadius: 8 }}>
+                                    DJ Persona
+                                  </span>
+                                )}
+                              </div>
+                              <div style={{ fontSize: 13.5, color: 'rgba(20,17,13,0.5)', marginTop: 3 }}>
+                                {org.category || (isDjOrArtist ? 'Campus DJ' : 'Student Org')} · {String(role).replace('_', ' ')}
+                              </div>
+                            </div>
+                            <EVI.Chevron style={{ width: 16, height: 16, color: 'rgba(20,17,13,0.3)', transform: 'rotate(-90deg)' }} />
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Discreet bottom action to register another organization or DJ profile */}
                     <button
-                      key={org.id}
-                      onClick={() => {
-                        setActiveOrgId(org.id);
-                        setMemberClubScreen('home');
-                        setSkipClubWelcome(false);
-                        setView('member-club');
-                      }}
+                      onClick={() => setHostActionSheetOpen(true)}
                       style={{
+                        marginTop: 20,
+                        width: '100%',
+                        padding: '14px',
+                        borderRadius: 16,
+                        border: '1px dashed rgba(20,17,13,0.18)',
+                        background: 'rgba(255,255,255,0.6)',
+                        color: 'rgba(20,17,13,0.6)',
+                        fontSize: 13.5,
+                        fontWeight: 500,
+                        cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 16,
-                        padding: 16,
-                        background: '#fff',
-                        borderRadius: 20,
-                        boxShadow: '0 4px 16px rgba(20,17,13,0.04)',
-                        border: '1px solid rgba(20,17,13,0.06)',
-                        cursor: 'pointer',
-                        textAlign: 'left',
+                        justifyContent: 'center',
+                        gap: 8,
+                        transition: 'all 0.15s ease'
                       }}
                     >
-                      <div style={{ width: 48, height: 48, borderRadius: 12, background: '#14110D', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, letterSpacing: '0.04em', flexShrink: 0 }}>
-                        {org.initials}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 16, fontWeight: 600, color: '#14110D' }}>{org.name}</div>
-                        <div style={{ fontSize: 14, color: 'rgba(20,17,13,0.5)', marginTop: 2 }}>
-                          {org.category} · {org.memberCount} members · {String(role).replace('_', ' ')}
-                        </div>
-                      </div>
-                      <EVI.Chevron style={{ width: 16, height: 16, color: 'rgba(20,17,13,0.3)', transform: 'rotate(-90deg)' }} />
+                      <span style={{ fontSize: 16, fontWeight: 600 }}>+</span>
+                      <span>Register another club or DJ profile</span>
                     </button>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  /* CLEAN EMPTY STATE (e.g. Ligo user or new student without clubs) */
+                  <div className="fade-in">
+                    <div style={{ textAlign: 'center', padding: '32px 16px 24px' }}>
+                      <div style={{ width: 68, height: 68, borderRadius: '50%', background: 'rgba(249,115,22,0.1)', color: 'var(--ligo-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 30 }}>
+                        🏛️
+                      </div>
+                      <h2 style={{ fontSize: 24, fontWeight: 600, color: '#111', fontFamily: 'var(--font-display)', margin: '0 0 8px', letterSpacing: '-0.5px' }}>
+                        Campus Organizations & Hosts
+                      </h2>
+                      <p style={{ fontSize: 14.5, color: '#666', lineHeight: 1.5, margin: '0 auto 28px', maxWidth: 320 }}>
+                        Your hub for student clubs, Greek life, and campus DJs. Once you join a roster or register your host persona, you'll manage private chats, member rosters, and events here.
+                      </p>
+                    </div>
+
+                    {/* Registration Entry Cards */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                      <button
+                        onClick={() => {
+                          setCreateProfileType('artist');
+                          setView('create-profile');
+                        }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 16, padding: 18,
+                          background: '#fff', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)',
+                          boxShadow: '0 4px 16px rgba(0,0,0,0.03)', cursor: 'pointer', textAlign: 'left'
+                        }}
+                      >
+                        <div style={{ width: 50, height: 50, borderRadius: 14, background: 'rgba(239,68,68,0.1)', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>
+                          🎧
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 16, fontWeight: 600, color: '#111', marginBottom: 2 }}>
+                            Register as an Artist / DJ
+                          </div>
+                          <div style={{ fontSize: 13, color: '#666', lineHeight: 1.35 }}>
+                            Post live sets, link SoundCloud, and get booked for campus gigs & formals.
+                          </div>
+                        </div>
+                        <EVI.Chevron style={{ width: 16, height: 16, color: 'rgba(20,17,13,0.3)', transform: 'rotate(-90deg)', flexShrink: 0 }} />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setCreateProfileType('club');
+                          setView('create-profile');
+                        }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 16, padding: 18,
+                          background: '#fff', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)',
+                          boxShadow: '0 4px 16px rgba(0,0,0,0.03)', cursor: 'pointer', textAlign: 'left'
+                        }}
+                      >
+                        <div style={{ width: 50, height: 50, borderRadius: 14, background: 'rgba(59,130,246,0.1)', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>
+                          🏛️
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 16, fontWeight: 600, color: '#111', marginBottom: 2 }}>
+                            Register a Student Org or Club
+                          </div>
+                          <div style={{ fontSize: 13, color: '#666', lineHeight: 1.35 }}>
+                            Manage member rosters, private group chats, and publish events to Explore.
+                          </div>
+                        </div>
+                        <EVI.Chevron style={{ width: 16, height: 16, color: 'rgba(20,17,13,0.3)', transform: 'rotate(-90deg)', flexShrink: 0 }} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
+          </div>
+        </div>
+      )}
+
+      {/* TOP HEADER + ACTION SHEET */}
+      {hostActionSheetOpen && (
+        <div 
+          onClick={() => setHostActionSheetOpen(false)}
+          className="screen-fade" 
+          style={{ position: 'absolute', inset: 0, zIndex: 70, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}
+        >
+          <div 
+            onClick={e => e.stopPropagation()}
+            style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: '24px 20px max(env(safe-area-inset-bottom, 24px), 24px)', animation: 'slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            {/* Grab handle */}
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(0,0,0,0.15)', margin: '0 auto 20px' }} />
+            
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: 20, fontWeight: 600, color: '#111', fontFamily: 'var(--font-display)' }}>
+                  Host on Georgetown Ligo
+                </h3>
+                <p style={{ margin: '4px 0 0', fontSize: 13.5, color: '#666' }}>
+                  Register your DJ persona, band, or a student organization.
+                </p>
+              </div>
+              <button 
+                onClick={() => setHostActionSheetOpen(false)}
+                style={{ background: 'rgba(0,0,0,0.05)', border: 'none', width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {/* Option 1: Artist / DJ */}
+              <button
+                onClick={() => {
+                  setHostActionSheetOpen(false);
+                  setCreateProfileType('artist');
+                  setView('create-profile');
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 14, padding: 16,
+                  borderRadius: 18, background: '#FAFAF8', border: '1px solid rgba(0,0,0,0.06)',
+                  cursor: 'pointer', textAlign: 'left'
+                }}
+              >
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: '#14110D', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
+                  🎧
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: '#111' }}>Register as an Artist / DJ</div>
+                  <div style={{ fontSize: 12.5, color: '#666', marginTop: 2 }}>Post live sets, link SoundCloud & get booked</div>
+                </div>
+                <EVI.Chevron style={{ width: 14, height: 14, color: '#888', transform: 'rotate(-90deg)' }} />
+              </button>
+
+              {/* Option 2: Student Org / Greek */}
+              <button
+                onClick={() => {
+                  setHostActionSheetOpen(false);
+                  setCreateProfileType('club');
+                  setView('create-profile');
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 14, padding: 16,
+                  borderRadius: 18, background: '#FAFAF8', border: '1px solid rgba(0,0,0,0.06)',
+                  cursor: 'pointer', textAlign: 'left'
+                }}
+              >
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--ligo-orange)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
+                  🏛️
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: '#111' }}>Register a Student Org / Greek</div>
+                  <div style={{ fontSize: 12.5, color: '#666', marginTop: 2 }}>Rosters, private group chat & campus events</div>
+                </div>
+                <EVI.Chevron style={{ width: 14, height: 14, color: '#888', transform: 'rotate(-90deg)' }} />
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -484,26 +676,21 @@ export function EventsScreen({ onTab }: any) {
         <MemberClubHome
           org={activeOrg}
           events={viewEvents}
-          currentUserId={activeUserId}
-          currentUserRole={activeUser.organizations.find((o: any) => o.organizationId === activeOrgId)?.role || 'member'}
-          initialScreen={memberClubScreen}
           skipWelcome={skipClubWelcome}
-          onScreenChange={setMemberClubScreen}
-          onRsvp={handleRsvp}
-          onBack={() => { setActiveOrgId(null); setView('main'); setMainTab('clubs'); }}
-          onOpenEvent={(id) => {
-            setSkipClubWelcome(true);
+          onBack={() => { setActiveOrgId(null); setSkipClubWelcome(false); setView('main'); }}
+          onOpenEvent={(id: string) => {
             setActiveEventId(id);
             setDetailReturnView('member-club');
             setView('event-detail');
           }}
-          onOpenManage={
-            ['admin', 'officer', 'social_chair'].includes(
-              activeUser.organizations.find((o: any) => o.organizationId === activeOrgId)?.role || ''
-            )
-              ? () => { setSkipOrgWelcome(false); setView('organization'); }
-              : undefined
-          }
+          onOpenManage={() => {
+            setSkipOrgWelcome(false);
+            setView('organization');
+          }}
+          onRsvp={handleRsvp}
+          currentUserId={activeUserId}
+          currentUserRole={userOrgsList.find((o: any) => o.organizationId === activeOrgId)?.role || 'member'}
+          initialScreen={memberClubScreen}
         />
       )}
 
@@ -591,16 +778,41 @@ export function EventsScreen({ onTab }: any) {
 
       {view === 'create-profile' && (
         <CreateProfileFlow 
+          initialType={createProfileType}
           onCancel={() => setView('main')}
           onComplete={(profile) => {
-            // Mock injecting the new profile into MOCK_ORGANIZATIONS
-            MOCK_ORGANIZATIONS[profile.id] = {
+            const orgObj = {
               ...profile,
               groups: [{ id: 'all', name: 'All Members', memberCount: 1 }],
               workspaceFeatures: ['chat', 'events']
             };
+
+            // Save to in-memory MOCK_ORGANIZATIONS
+            MOCK_ORGANIZATIONS[profile.id] = orgObj;
             
-            // Add user as admin
+            // Save to persistent custom orgs
+            setCustomOrgs(prev => ({
+              ...prev,
+              [profile.id]: orgObj
+            }));
+
+            // Save user membership
+            setCustomMemberships(prev => {
+              const userList = prev[activeUserId] || [];
+              return {
+                ...prev,
+                [activeUserId]: [
+                  ...userList,
+                  {
+                    organizationId: profile.id,
+                    role: 'admin',
+                    groupIds: ['all']
+                  }
+                ]
+              };
+            });
+
+            // Also push to activeUser for immediate render
             activeUser.organizations.push({
               organizationId: profile.id,
               role: 'admin',
@@ -651,7 +863,7 @@ export function EventsScreen({ onTab }: any) {
 
       {sheetOpen && (
         <CreateEventSheet 
-          club={MOCK_ORGANIZATIONS[activeUser.organizations.find((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))?.organizationId || 'phantoms']} 
+          club={allOrgs[userOrgsList.find((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))?.organizationId || 'phantoms'] || MOCK_ORGANIZATIONS.phantoms} 
           currentUserId={activeUser.id}
           onClose={() => setSheetOpen(false)} 
           onPublish={handlePublish} 
@@ -660,16 +872,15 @@ export function EventsScreen({ onTab }: any) {
 
       {importContactsOpen && (
         <ImportContactsFlow
-          orgId={activeOrg?.id || activeUser.organizations.find((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))?.organizationId}
+          orgId={activeOrg?.id || userOrgsList.find((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))?.organizationId}
           orgName={
             activeOrg?.name
-            || MOCK_ORGANIZATIONS[
-              activeUser.organizations.find((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))?.organizationId || ''
+            || allOrgs[
+              userOrgsList.find((o: any) => ['officer', 'social_chair', 'admin'].includes(o.role))?.organizationId || ''
             ]?.name
           }
           onBack={() => {
             setImportContactsOpen(false);
-            // Stay on organization workspace if that's where invite was opened from
             if (activeOrgId) setView('organization');
           }}
           onClose={() => {
